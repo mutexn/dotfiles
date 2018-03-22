@@ -15,3 +15,13 @@ done
 
 # set prompt
 zsh -c "$(curl -fsSL https://raw.githubusercontent.com/el1t/statusline/master/prezto/install)"
+
+# dotfile link
+for f in .??*; do
+    [ "$f" = ".git" ] && continue
+    [ "$f" = ".gitconfig.local.template" ] && continue
+    [ "$f" = ".require_oh-my-zsh" ] && continue
+    [ "$f" = ".gitmodules" ] && continue
+
+    ln -snfv ~/dotfiles/"$f" ~/
+done

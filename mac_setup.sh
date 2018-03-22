@@ -1,6 +1,8 @@
 
 # mac_setup.sh
 
+su
+
 # mac setup
 defaults write -g InitalKeyRepeat -int 0
 defaults write -g KeyRepeat -int 0
@@ -20,11 +22,12 @@ update_xcode_plugins
 update_xcode_plugins --unsign
 
 # xvim2 install
-cd ~/Library/Application\ Support/Developer/Shared/Xcode/Plug-ins/
-git clone git://github.com/XVimProject/XVim2 XVim2
-cd XVim2
+
 make
 cd ~
+
+git config --global user.name "po-lar"
+git config --global user.email k.shoma.0810.mf@gmail.com
 
 # homebrew install 
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" 

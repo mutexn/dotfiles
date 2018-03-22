@@ -6,7 +6,6 @@ tap "homebrew/core"
 tap "homebrew/bundle"
 tap "caskroom/cask"
 tap "caskroom/fonts"
-tap "beeftornado/rmtree"
 
 
 brew "git"
