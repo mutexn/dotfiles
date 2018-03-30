@@ -1,1 +1,0 @@
-/Users/po-lar/.zprezto/runcoms/zlogin
