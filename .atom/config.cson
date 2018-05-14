@@ -1,0 +1,28 @@
+"*":
+  core:
+    disabledPackages: [
+      "wrap-guide"
+    ]
+    openEmptyEditorOnStart: false
+    projectHome: "/Users/po-lar/"
+  editor:
+    fontFamily: "Ricty Diminished Discord "
+    fontSize: 16
+    invisibles: {}
+    softWrap: true
+    softWrapAtPreferredLineLength: true
+  emmet:
+    extensionsPath: "~/.atom/emmet"
+  "exception-reporting":
+    userId: "32fb31d3-4be3-4325-aa1d-79a2d8bd7f3e"
+  welcome:
+    showOnStartup: false
+".basic.html.text":
+  editor:
+    showIndentGuide: false
+    softWrap: true
+    softWrapAtPreferredLineLength: true
+".css.source":
+  editor:
+    softWrap: true
+    softWrapAtPreferredLineLength: true

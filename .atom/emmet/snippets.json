@@ -1,0 +1,11 @@
+{
+	"variables": {
+		"lang": "ja",
+		"locale": "ja-JP"
+	},
+	"html": {
+		"abbreviations": {
+			"doc": "html>(head>meta[charset=${charset}]+meta[name=\"viewport\" content=\"width=device-width, initial-scale=1\"]+title{${1:Document}}+meta[name=description content]+meta[name=keywords content]+link[rel=stylesheet type=text/css ])+body"
+		}
+	}
+}
