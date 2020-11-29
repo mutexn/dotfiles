@@ -2,6 +2,7 @@
 # Brewfile
 
 cask_args appdir: "/Applications"
+tap "homebrew/cask"
 
 brew "git"
 brew "zsh"
