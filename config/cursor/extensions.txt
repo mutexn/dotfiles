@@ -1,0 +1,12 @@
+# Cursor の拡張機能。1 行に 1 つ、拡張機能の ID を書く。# から始まる行は無視する
+# ./install.sh editor で、足りないものだけを入れる（docs/editors.md）
+anthropic.claude-code
+anysphere.remote-containers
+anysphere.remote-ssh
+astro-build.astro-vscode
+github.vscode-github-actions
+mermaidchart.vscode-mermaid-chart
+mhutchie.git-graph
+ms-vscode.live-server
+prettier.prettier-vscode
+shd101wyy.markdown-preview-enhanced

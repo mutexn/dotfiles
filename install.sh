@@ -8,14 +8,14 @@
 #   ./install.sh security        # ファイアウォールと Touch ID で sudo（パスワードを聞かれる）
 #   ./install.sh check           # 実機がリポジトリどおりかを確かめる（何も変更しない）
 #
-# ステップ: clt brew bundle link runtime macos security check
+# ステップ: clt brew bundle link runtime editor macos security check
 set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DRY_RUN=0
 # 置き換える前のファイルの退避先。元の場所の隣に置くと、ツールが読み込んでしまうことがあるため 1 か所にまとめる
 BACKUP_DIR="$HOME/.local/state/dotfiles/backup/$(date +%Y%m%d%H%M%S)"
-ALL_STEPS=(clt brew bundle link runtime macos security)
+ALL_STEPS=(clt brew bundle link runtime editor macos security)
 
 log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$*" >&2; }
@@ -64,14 +64,6 @@ step_clt() {
 }
 
 step_brew() {
-  log "セキュリティ"
-  local fw=/usr/libexec/ApplicationFirewall/socketfilterfw
-  fdesetup status 2>/dev/null | grep -q 'On' && pass "FileVault（ディスクの暗号化）が有効" || fail "FileVault が無効（システム設定 > プライバシーとセキュリティ）"
-  "$fw" --getglobalstate 2>/dev/null | grep -q 'enabled' && pass "ファイアウォールが有効" || fail "ファイアウォールが無効（./install.sh security）"
-  "$fw" --getstealthmode 2>/dev/null | grep -qE 'enabled|is on' && pass "ステルスモードが有効" || fail "ステルスモードが無効（./install.sh security）"
-  grep -qE '^auth[[:space:]]+sufficient[[:space:]]+pam_tid\.so' /etc/pam.d/sudo_local 2>/dev/null \
-    && pass "Touch ID で sudo が有効" || fail "Touch ID で sudo が無効（./install.sh security）"
-
   log "Homebrew"
   if [[ -x /opt/homebrew/bin/brew ]]; then
     echo "    インストール済み"
@@ -113,6 +105,11 @@ LINKS=(
   "config/ghostty/config|$HOME/Library/Application Support/com.mitchellh.ghostty/config"
   # Karabiner-Elements はファイル単位のリンクだと GUI 保存時に壊れるため、ディレクトリごとリンクする
   "config/karabiner|$HOME/.config/karabiner"
+  # エディタ（docs/editors.md）
+  "config/vscode/settings.json|$HOME/Library/Application Support/Code/User/settings.json"
+  "config/vscode/keybindings.json|$HOME/Library/Application Support/Code/User/keybindings.json"
+  "config/cursor/settings.json|$HOME/Library/Application Support/Cursor/User/settings.json"
+  "config/cursor/keybindings.json|$HOME/Library/Application Support/Cursor/User/keybindings.json"
   # Claude Code（docs/claude.md）。~/.claude 全体ではなく、自分で書いたものだけをリンクする
   "claude/CLAUDE.md|$HOME/.claude/CLAUDE.md"
   "claude/settings.json|$HOME/.claude/settings.json"
@@ -147,6 +144,40 @@ step_runtime() {
   else
     run /bin/bash -c "curl -fsSL https://get.pnpm.io/install.sh | sh -"
   fi
+}
+
+# エディタの拡張機能の一覧（コメントと空行を除く）
+editor_extensions() {
+  grep -vE '^[[:space:]]*(#|$)' "$DOTFILES/config/$1/extensions.txt"
+}
+
+# 一覧にあって、まだ入っていない拡張機能を返す
+missing_extensions() {
+  local dir="$1" cli="$2" installed
+  installed=" $("$cli" --list-extensions 2>/dev/null | tr '[:upper:]' '[:lower:]' | tr '\n' ' ') "
+  editor_extensions "$dir" | while read -r id; do
+    [[ "$installed" == *" $(tr '[:upper:]' '[:lower:]' <<<"$id") "* ]] || echo "$id"
+  done
+}
+
+step_editor() {
+  log "エディタの拡張機能（config/vscode・config/cursor の extensions.txt）"
+  local pair dir cli id missing
+  for pair in "vscode|code" "cursor|cursor"; do
+    dir="${pair%%|*}" cli="${pair#*|}"
+    if ! command -v "$cli" >/dev/null; then
+      echo "    $cli コマンドがないためスキップ（アプリを入れてから再実行する）"
+      continue
+    fi
+    missing="$(missing_extensions "$dir" "$cli")"
+    if [[ -z "$missing" ]]; then
+      echo "    $dir: すべて入っている"
+      continue
+    fi
+    while read -r id; do
+      run "$cli" --install-extension "$id"
+    done <<<"$missing"
+  done
 }
 
 step_macos() {
@@ -245,6 +276,18 @@ step_check() {
   else
     skip "Karabiner-Elements が入っていない"
   fi
+
+  log "エディタ"
+  local pair dir cli missing
+  for pair in "vscode|code" "cursor|cursor"; do
+    dir="${pair%%|*}" cli="${pair#*|}"
+    if ! command -v "$cli" >/dev/null; then
+      skip "$cli コマンドがない"
+      continue
+    fi
+    missing="$(missing_extensions "$dir" "$cli" | tr '\n' ' ')"
+    [[ -z "${missing// /}" ]] && pass "$dir の拡張機能がすべて入っている" || fail "$dir に入っていない拡張機能: ${missing}（./install.sh editor）"
+  done
 
   log "セキュリティ"
   local fw=/usr/libexec/ApplicationFirewall/socketfilterfw

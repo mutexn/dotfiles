@@ -1,0 +1,9 @@
+{
+    "git.autofetch": true,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": true,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": true,
+    "editor.formatOnSave": true,
+    "window.autoDetectColorScheme": false,
+    "workbench.preferredLightColorTheme": "Cursor Dark",
+    "workbench.preferredHighContrastLightColorTheme": "Cursor Dark"
+}

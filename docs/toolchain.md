@@ -28,6 +28,7 @@
 | Python 本体・仮想環境・パッケージ | uv | 全体：`config/uv/uv.toml`、プロジェクト：`.python-version`・`pyproject.toml`・`uv.lock` |
 | Node 製のコマンド（Homebrew にないもの） | mise の `npm:` 指定 | `config/mise/config.toml` |
 | Python 製のコマンド（Homebrew にないもの） | `uv tool install` | `install.sh` |
+| エディタの設定・拡張機能 | この dotfiles（`config/vscode`、`config/cursor`） | `extensions.txt`、`settings.json`、`keybindings.json` |
 | その他の言語（Go、Rust、Ruby、Java など） | 必要になったら mise | `config/mise/config.toml` またはプロジェクトの `mise.toml` |
 | 秘密情報 | 1Password、`~/.config/zsh/local.zsh` | リポジトリには入れない |
 
@@ -66,12 +67,7 @@ node = "24"
 | uv 本体 | 2025-12 の版で古い | `brew upgrade uv` |
 | 既存プロジェクト 1 件の `.venv` | Homebrew の Python で作られている | uv で作り直す（[python.md](python.md)） |
 | corepack | mise の Node 24 に同梱されている | 有効にしなければ害はない。何もしない |
-| エディタの拡張機能 | VS Code 2 個、Cursor 10 個。どこにも記録していない | 下記「未決定」 |
-
-## 未決定
-
-- **エディタの設定と拡張機能の管理方法。** 各エディタの同期機能（VS Code の設定同期など）に任せるか、
-  dotfiles に一覧を持つかを決める。Brewfile には `vscode "拡張機能ID"` と書く方法もある
+| エディタの拡張機能 | 2026-09-23 に `config/vscode`・`config/cursor` の `extensions.txt` で管理を始めた | 完了（[editors.md](editors.md)） |
 
 ## この方針をどこに置くか
 

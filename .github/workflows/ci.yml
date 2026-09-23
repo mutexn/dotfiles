@@ -89,4 +89,9 @@ jobs:
         run: |
           export HOME="$RUNNER_TEMP/home2"
           mkdir -p "$HOME"
-          /bin/bash ./install.sh --dry-run clt brew link runtime macos security
+          out="$(/bin/bash ./install.sh --dry-run clt brew link runtime editor macos security)"
+          echo "$out"
+          # 導入の手順に、check の確認結果（色付きの ok / NG）が混ざっていないか
+          if grep -q $'\033\[3[12]m\(ok\|NG\)' <<<"$out"; then
+            echo "導入の手順に確認処理が混ざっている"; exit 1
+          fi
