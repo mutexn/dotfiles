@@ -1,0 +1,30 @@
+# テーマ設定
+theme = TokyoNight
+
+# フォント（引用符で囲む）
+# Nerd Font + 日本語フォールバック
+font-family = "BlexMono Nerd Font Mono", "Hiragino Sans"
+
+# ウィンドウ内の余白
+window-padding-x = 10
+window-padding-y = 10
+window-padding-balance = true
+
+# クイックターミナルの設定ｗ
+quick-terminal-position = top
+quick-terminal-screen = main
+quick-terminal-animation-duration = 0.2
+quick-terminal-autohide = true
+
+# グローバルキーバインド
+keybind = global:ctrl+@=toggle_quick_terminal
+
+# 非アクティブペインを暗く
+unfocused-split-opacity = 0.7
+
+# タブに自動で採番する
+macos-titlebar-style = tabs
+macos-titlebar-proxy-icon = hidden
+
+# デスクトップ通知
+desktop-notifications = true

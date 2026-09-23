@@ -1,0 +1,9 @@
+# ~/.zshenv — すべての zsh（スクリプト実行時も含む）で最初に読まれる。詳細は docs/zsh.md
+
+# PATH の重複を自動で取り除く（シェルを入れ子で起動しても PATH が伸びない）
+typeset -U path PATH
+
+# Volta: package.json の volta キーで Node を固定している旧プロジェクト用。移行後に撤去予定。
+# mise と standalone pnpm を優先するため、PATH の末尾に追加する
+export VOLTA_HOME="$HOME/.volta"
+path+=("$VOLTA_HOME/bin")

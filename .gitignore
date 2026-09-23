@@ -10,3 +10,4 @@ config/zsh/local.zsh
 
 # install.sh が退避したバックアップ
 *.backup-*
+config/karabiner/automatic_backups/
