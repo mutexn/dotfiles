@@ -21,7 +21,7 @@ export PSQL_HISTORY="$XDG_STATE_HOME/psql_history"
 # macOS 標準のターミナル用のセッション保存（~/.zsh_sessions）を使わない
 export SHELL_SESSIONS_DISABLE=1
 
-# Volta: package.json の volta キーで Node を固定している旧プロジェクト用。移行後に撤去予定。
+# Volta: package.json の volta キーで Node を固定している旧プロジェクト用（撤去は見送り）。
 # mise と standalone pnpm を優先するため、PATH の末尾に追加する
 export VOLTA_HOME="$HOME/.volta"
 path+=("$VOLTA_HOME/bin")
