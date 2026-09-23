@@ -77,6 +77,23 @@ export GITHUB_PAT="$(gh auth token)"
 # export SOME_API_KEY="$(op read 'op://Private/Some API/credential')"
 ```
 
+### GITHUB_PAT（2026-09-23 に決定）
+
+`~/.zshrc.local` で、GitHub CLI のログイン情報からトークンを取り出している。
+
+```zsh
+export GITHUB_PAT="$(gh auth token 2>/dev/null)"
+```
+
+| 観点 | 内容 |
+| --- | --- |
+| 良い点 | トークンの値がディスクに平文で残らない。値は macOS のキーチェーンにあり、`gh auth login` をやり直しても自動で追従する |
+| 注意点 | 権限は `gh auth login` と同じで、アクセスできる全リポジトリへの読み書き（repo、read:org、gist、workflow）。期限もない。特定のリポジトリだけに絞りたい用途には、別に専用トークンを作る |
+| 起動時間 | シェル起動のたびに約 0.06 秒かかる |
+
+2026-09-23 時点で、`GITHUB_PAT` を読んでいるツールは見つかっていない。
+Codex の GitHub プラグインが読むのは別名の `GITHUB_PAT_TOKEN`。
+
 ## PATH の優先順位（新しいターミナルを開いた直後）
 
 ```
