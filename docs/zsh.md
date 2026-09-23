@@ -52,14 +52,24 @@ Volta の pnpm が standalone 版より先に使われる不具合があった�
 | 設定 | 意味 |
 | --- | --- |
 | `PATH="$HOME/.local/bin:$PATH"` | 自分で入れたコマンド（Claude Code など）の置き場所を PATH に追加 |
-| p10k instant prompt | 前回のプロンプトを先に表示し、体感の起動時間を短くする。入力待ちをする処理はこれより上に書く |
-| `source ~/powerlevel10k/...` | プロンプトのテーマ Powerlevel10k を読み込む。`install.sh prompt` で `~/powerlevel10k` に取得される |
+| プロンプトの切り替え | `~/.config/starship.toml` があり starship が入っていれば starship、そうでなければ Powerlevel10k を使う。starship は試用中（2026-09-23 開始） |
+| p10k instant prompt | Powerlevel10k のときだけ。前回のプロンプトを先に表示し、体感の起動時間を短くする |
+| `source ~/powerlevel10k/...` | Powerlevel10k のときだけ。`install.sh prompt` で `~/powerlevel10k` に取得される |
 | `alias ls / ll / la` | `-G` で色付き、`-F` で種別記号（`/` はフォルダ、`*` は実行ファイル）、`-h` でサイズを読みやすく表示 |
 | `direnv hook zsh` | フォルダに入ると、そこの `.envrc` の環境変数を自動で読み込み、出ると戻す |
 | LM Studio の PATH | LM Studio の CLI（`lms`）を使えるようにする |
 | `# pnpm` 〜 `# pnpm end` | standalone 版 pnpm を PATH に追加する。この目印の 2 行は、pnpm のインストーラが既存の設定を見分けるのに使うので変えない |
 | `mise activate zsh` | フォルダ移動のたびに `mise.toml` を見て Node などを切り替える。PATH の先頭を取る必要があるので、PATH を触る設定の中で最後に置く |
 | `source ~/.zshrc.local` | 秘密情報やマシン固有の設定を読み込む（ファイルがなければ何もしない） |
+
+### プロンプトを戻すとき
+
+starship の試用をやめるときは、設定ファイルを消すだけで Powerlevel10k に戻る。
+
+```bash
+rm ~/.config/starship.toml
+exec zsh
+```
 
 ### home/p10k.zsh
 
