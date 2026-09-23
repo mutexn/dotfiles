@@ -135,7 +135,7 @@ ls -la ~/.zshrc
 | 項目 | 状態 | 説明 |
 | --- | --- | --- |
 | 今の設定の取り込み | 完了 | 挙動を変えずに取り込んだ |
-| アプリの見直し | Brewfile に反映済み。実機のアンインストールは未実施 | [docs/apps.md](docs/apps.md) |
+| アプリの見直し | 完了（Shottr は試用中） | [docs/apps.md](docs/apps.md) |
 | モダン CLI（fzf、zoxide、ripgrep、fd、bat、eza、git-delta、zsh-autosuggestions） | 未着手 | |
 | git の推奨設定（既定ブランチ main、pull 時 rebase など） | 未着手 | |
 | プロンプトを starship に移行 | 未着手 | Powerlevel10k は保守がほぼ止まっている |
