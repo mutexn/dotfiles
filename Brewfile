@@ -113,9 +113,9 @@ cask "shottr"         # スクリーンショットの撮影・注釈・文字�
 mas "Microsoft Word", id: 462054704
 mas "Microsoft Excel", id: 462058435
 mas "Microsoft PowerPoint", id: 462062816
-mas "Keynote", id: 409183694
-mas "Pages", id: 409201541
-mas "Numbers", id: 409203825
+mas "Keynote", id: 361285480   # 2026-09 に ID が変わった（旧 409183694）
+mas "Pages", id: 361309726     # 同上（旧 409201541）
+mas "Numbers", id: 361304891   # 同上（旧 409203825）
 mas "iMovie", id: 408981434
 mas "LINE", id: 539883307
 mas "Goodnotes", id: 1444383602
