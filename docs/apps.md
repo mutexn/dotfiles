@@ -18,7 +18,8 @@
 | | Firefox | 表示確認用 | 残す | |
 | エディタ / AI IDE | VS Code / Cursor / Antigravity | 3 つ併存 | 残す | |
 | AI | ChatGPT Classic | 旧版アプリの残りの可能性 | 残す | |
-| ローカル LLM | ollama / LM Studio / Jan | 3 つ併存 | 残す | |
+| ローカル LLM | ollama / LM Studio | | 残す | ollama はほとんど使わないため、サーバーは常駐させず必要なときに `ollama serve` で起動する |
+| | Jan | 3 つ目のローカル LLM アプリ | **削除済み** | 不要のため 2026-09-23 に削除。付属のコマンド `~/.local/bin/jan` もゴミ箱へ。データ（`~/Library/Application Support/Jan`）は残している |
 | パスワード管理 | 1Password / Bitwarden | 2 つ併存 | 残す | |
 | スクリーンショット | Gyazo（本体・Menu・Video）/ Shottr | macOS 標準（⌘⇧5）で足りるか | 両方残す | Gyazo は URL で共有、Shottr は撮影・注釈・文字認識。2026-09-23 に Shottr を Brewfile に追加 |
 | オフィス | LibreOffice | 他のオフィスソフトと併存 | **削除済み** | |
@@ -126,3 +127,4 @@ brew uninstall --force openvpn
 | 2026-09-23 | Arc・LibreOffice・flux・FileMaker Pro 18 を削除。Dia・Spotify を Homebrew 管理下へ。Docker Desktop の移行に失敗しアプリが削除された（データは無事） |
 | 2026-09-23 | Docker Desktop を入れ直し、Google Drive を管理下へ移し、openvpn を削除。Brewfile と実機が一致（試用中の Shottr を除く） |
 | 2026-09-23 | Shottr を採用し Brewfile に追加。Gyazo も残す |
+| 2026-09-23 | `brew upgrade` を実施。Jan を削除 |

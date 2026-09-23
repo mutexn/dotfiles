@@ -68,7 +68,6 @@ cask "claude"
 cask "chatgpt"
 cask "typeless"       # 音声入力
 cask "lm-studio"      # ローカル LLM
-cask "jan"            # ローカル LLM
 
 # --- パスワード管理 ---
 cask "1password-cli"
