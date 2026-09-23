@@ -16,12 +16,32 @@ gh auth login                   # GitHub にログイン（git push に必要）
 ./install.sh check              # 正しく設定されたかを確かめる
 ```
 
+`./install.sh` は 1 時間ほどかかる。アプリのダウンロード中は表示が止まって見えるが、そのまま待つ。
+途中でアプリのインストーラが管理者パスワードを求めるので、ときどき画面を見る。
+
 一部だけ実行することもできる。
 
 ```bash
 ./install.sh link               # 設定ファイルのリンクだけ
 ./install.sh bundle macos       # アプリと macOS 設定だけ
 ```
+
+### うまくいかないときは
+
+- **一部のアプリが失敗した。** 警告を出して残りの手順は続き、最後に失敗した手順を表示する。
+  通信の切断などが原因のことが多いので、`brew bundle --file=Brewfile` を実行し直すと、失敗したものだけ入る
+- **`brew: command not found` と出る。** `link` を実行する前は、シェルに Homebrew の場所が設定されていない。
+  `install.sh` は自分で設定するので影響しないが、自分で `brew` を打つときは次を実行する。`link` 後にターミナルを開き直せば不要になる
+
+  ```bash
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  ```
+
+- **App Store のアプリが `No apps found in the App Store for ADAM ID` で入らない。** そのアプリの ID が変わっている。
+  `mas search <アプリ名>` で新しい ID を調べ、Brewfile を更新する（2026-09 に Keynote・Pages・Numbers で発生）
+- **Gyazo が入らない。** インストーラを手で開く必要がある。`open /opt/homebrew/Caskroom/gyazo/*/Gyazo-*.pkg`
+- **セットアップ後に手で行うこと。** Chrome リモートデスクトップの自動起動を止める（[docs/apps.md](docs/apps.md)）。
+  Karabiner-Elements や AltTab などは、初回起動時にシステム設定で「入力監視」「アクセシビリティ」を許可する
 
 | ステップ | 内容 |
 | --- | --- |
