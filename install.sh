@@ -12,7 +12,8 @@ set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DRY_RUN=0
-BACKUP_SUFFIX="backup-$(date +%Y%m%d%H%M%S)"
+# 置き換える前のファイルの退避先。元の場所の隣に置くと、ツールが読み込んでしまうことがあるため 1 か所にまとめる
+BACKUP_DIR="$HOME/.local/state/dotfiles/backup/$(date +%Y%m%d%H%M%S)"
 ALL_STEPS=(clt brew bundle link prompt runtime macos)
 
 log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
@@ -28,7 +29,7 @@ run() {
 }
 
 # リポジトリ内のファイルを実機の場所へシンボリックリンクする。
-# 既存ファイルがあれば <名前>.backup-<日時> に退避してから置き換える
+# 既存ファイルがあれば $BACKUP_DIR の下に、ホームからの相対パスのまま退避してから置き換える
 link() {
   local src="$DOTFILES/$1" dest="$2"
   if [[ ! -e "$src" ]]; then
@@ -41,8 +42,10 @@ link() {
   fi
   [[ -d "$(dirname "$dest")" ]] || run mkdir -p "$(dirname "$dest")"
   if [[ -e "$dest" || -L "$dest" ]]; then
-    printf '    backup %s -> %s.%s\n' "$dest" "$dest" "$BACKUP_SUFFIX"
-    run mv "$dest" "$dest.$BACKUP_SUFFIX"
+    local backup="$BACKUP_DIR/${dest#"$HOME"/}"
+    printf '    backup %s -> %s\n' "$dest" "$backup"
+    run mkdir -p "$(dirname "$backup")"
+    run mv "$dest" "$backup"
   fi
   printf '    link  %s -> %s\n' "$dest" "$src"
   run ln -s "$src" "$dest"
@@ -100,6 +103,10 @@ LINKS=(
   "config/ghostty/config|$HOME/Library/Application Support/com.mitchellh.ghostty/config"
   # Karabiner-Elements はファイル単位のリンクだと GUI 保存時に壊れるため、ディレクトリごとリンクする
   "config/karabiner|$HOME/.config/karabiner"
+  # Claude Code（docs/claude.md）。~/.claude 全体ではなく、自分で書いたものだけをリンクする
+  "claude/CLAUDE.md|$HOME/.claude/CLAUDE.md"
+  "claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
+  "claude/skills/setup-claude-settings|$HOME/.claude/skills/setup-claude-settings"
 )
 
 step_link() {

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  // このファイルは .gitignore に追加してチームと共有しないこと。
+  // シークレット・トークン・個人情報は絶対に書かないこと。
+
+  // --- このプロジェクトで有効にする MCP サーバー ---
+  // enableAllProjectMcpServers が false のため、ここで明示的に許可する。
+  // .mcp.json に定義されているサーバー名を列挙する。
+  "enabledMcpjsonServers": [
+    // "notion",
+    // "vibe_kanban",
+    // "context7"
+  ],
+
+  // --- モデルの上書き（省略時は User 設定の claude-sonnet-4-6 を使用）---
+  // コスト重視: "claude-haiku-4-5-20251001"
+  // 最高品質:   "claude-opus-4-6"
+  // "model": "claude-sonnet-4-6",
+
+  // --- サンドボックス設定（Docker が必要）---
+  // "sandbox": {
+  //   "enabled": true,
+  //   "network": {
+  //     "allowedDomains": [
+  //       "registry.npmjs.org",
+  //       "pypi.org"
+  //     ]
+  //   }
+  // },
+
+  "permissions": {
+    "allow": [
+      // --- 個人的な WebFetch 追加許可 ---
+      // "WebFetch(domain:example.com)"
+    ],
+    "deny": []
+  }
+}

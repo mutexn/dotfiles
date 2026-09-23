@@ -46,5 +46,5 @@ gh auth login
 ## 戻し方
 
 ```bash
-rm ~/.gitconfig && mv ~/.gitconfig.backup-<日時> ~/.gitconfig
+rm ~/.gitconfig && mv ~/.local/state/dotfiles/backup/<日時>/.gitconfig ~/.gitconfig
 ```

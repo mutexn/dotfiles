@@ -28,7 +28,7 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `clt` | Xcode Command Line Tools |
 | `brew` | Homebrew 本体 |
 | `bundle` | Brewfile のアプリとコマンド |
-| `link` | 設定ファイルを実機の場所へリンク（元のファイルは `*.backup-<日時>` に退避） |
+| `link` | 設定ファイルを実機の場所へリンク（元のファイルは `~/.local/state/dotfiles/backup/<日時>/` に退避） |
 | `prompt` | プロンプトテーマ Powerlevel10k |
 | `runtime` | mise で Node、uv で Python、standalone 版 pnpm |
 | `macos` | macOS の設定 |
@@ -55,6 +55,7 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `config/ghostty/config` | `~/Library/Application Support/com.mitchellh.ghostty/config` | [docs/terminal-and-input.md](docs/terminal-and-input.md) |
 | `config/karabiner/` | `~/.config/karabiner/` | [docs/terminal-and-input.md](docs/terminal-and-input.md) |
 | `macos/defaults.sh` | macOS のシステム設定 | [docs/macos.md](docs/macos.md) |
+| `claude/CLAUDE.md` など | `~/.claude/` の一部 | [docs/claude.md](docs/claude.md) |
 | `Brewfile` | Homebrew のインストール一覧 | [docs/brew.md](docs/brew.md)、[docs/apps.md](docs/apps.md) |
 
 ### ファイル名のドットについて
@@ -111,7 +112,9 @@ zsh や git は今までどおり `~/.zshrc` や `~/.gitconfig` を読む。
     └── docs/
 ```
 
-既存のファイルがあった場所には、退避したファイルが `~/.zshrc.backup-20260923120000` のような名前で残る。
+置き換える前のファイルは `~/.local/state/dotfiles/backup/<日時>/` の下に、ホームからの相対パスのまま退避される。
+例：`~/.zshrc` は `~/.local/state/dotfiles/backup/20260923120000/.zshrc` になる。
+元の場所の隣に置かないのは、`~/.claude/skills` のように、ツールがフォルダ内のものをすべて読み込んでしまう場所があるため。
 問題なく動くことを確認したら削除してよい。
 
 ## 動作確認（install.sh check）
@@ -178,5 +181,5 @@ ls -la ~/.zshrc
 | ホームのドットファイル集約 | 未着手 | [docs/xdg.md](docs/xdg.md) |
 | Python を uv に集約 | 完了（既存プロジェクト 1 件の仮想環境の作り直しは残り） | [docs/python.md](docs/python.md) |
 | Volta 撤去 | 未着手 | [docs/mise.md](docs/mise.md) |
-| Claude Code の設定を管理 | 未着手 | |
+| Claude Code の設定を管理 | 一部完了。CLAUDE.md・ステータスライン・自作スキルを管理。settings.json は検討中 | [docs/claude.md](docs/claude.md) |
 | CI で install.sh を検証 | 未着手 | `install.sh check` を CI でも使う予定 |

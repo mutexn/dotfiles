@@ -116,8 +116,8 @@ echo $PATH | tr : '\n'   # PATH を 1 行ずつ表示
 
 ## 戻し方
 
-`install.sh` がリンクを作るとき、元のファイルは `~/.zshrc.backup-<日時>` のように退避される。
+`install.sh` がリンクを作るとき、元のファイルは `~/.local/state/dotfiles/backup/<日時>/.zshrc` のように退避される。
 
 ```bash
-rm ~/.zshrc && mv ~/.zshrc.backup-<日時> ~/.zshrc
+rm ~/.zshrc && mv ~/.local/state/dotfiles/backup/<日時>/.zshrc ~/.zshrc
 ```
