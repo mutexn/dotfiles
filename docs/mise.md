@@ -29,6 +29,8 @@ mise は、今いるフォルダから上へたどって `mise.toml`・`.node-ve
 | 本番（Vercel）の Node | `package.json` の `engines.node`。Vercel は mise.toml を読まないため必須 |
 | 依存パッケージ | `pnpm-lock.yaml` をコミット |
 
+Python は mise で管理せず uv に任せる（[python.md](python.md)）。
+
 **corepack は使わない。** 2026-07 に、brew の corepack が作った pnpm の入口ファイルが
 古い Node を指したまま残り、`pnpm: command not found` になる障害が起きたため。
 
