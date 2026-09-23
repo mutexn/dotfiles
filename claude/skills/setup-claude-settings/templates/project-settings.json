@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(git merge --no-ff *)",
+      "Bash(git worktree add *)",
+      "Bash(git worktree remove *)",
+
+      // --- Node.js / TypeScript（該当する場合にコメントアウトを外す）---
+      // "Bash(node *)",
+      // "Bash(npm run *)",
+      // "Bash(npx *)",
+      // "Bash(tsc *)",
+      // "Bash(jest *)",
+      // "Bash(vitest *)",
+      // "Bash(eslint *)",
+      // "Bash(prettier *)",
+      // "Bash(biome *)",
+
+      // --- Yarn（npm の代わりに使う場合）---
+      // "Bash(yarn *)",
+
+      // --- pnpm（npm の代わりに使う場合）---
+      // "Bash(pnpm *)",
+
+      // --- Bun（npm の代わりに使う場合）---
+      // "Bash(bun *)",
+
+      // --- Python（該当する場合にコメントアウトを外す）---
+      // "Bash(python *)",
+      // "Bash(python3 *)",
+      // "Bash(pytest *)",
+      // "Bash(ruff *)",
+      // "Bash(mypy *)",
+      // "Bash(uv run *)",
+      // "Bash(poetry run *)",
+
+      // --- Rust（該当する場合にコメントアウトを外す）---
+      // "Bash(cargo *)",
+
+      // --- Go（該当する場合にコメントアウトを外す）---
+      // "Bash(go *)",
+
+      // --- Make（Makefile がある場合）---
+      // "Bash(make *)",
+
+      // --- Docker（チーム全員が Docker を使う場合のみ）---
+      // "Bash(docker ps *)",
+      // "Bash(docker logs *)",
+      // "Bash(docker inspect *)",
+      // "Bash(docker-compose up *)",
+      // "Bash(docker-compose down *)",
+      // "Bash(docker-compose logs *)"
+    ],
+    "deny": [
+      // --- プロジェクト固有の保護ルールをここに追加 ---
+      // 例: 本番設定ファイルの保護
+      // "Edit(config/production.yml)",
+      // "Edit(infra/terraform/prod/**)",
+
+      // 例: main ブランチへの直接 push を禁止
+      // "Bash(git push origin main)"
+    ]
+  },
+  "env": {
+    // --- プロジェクト固有の環境変数 ---
+    // "NODE_ENV": "development"
+  }
+}
