@@ -20,7 +20,7 @@
 | AI | ChatGPT Classic | 旧版アプリの残りの可能性 | 残す | |
 | ローカル LLM | ollama / LM Studio / Jan | 3 つ併存 | 残す | |
 | パスワード管理 | 1Password / Bitwarden | 2 つ併存 | 残す | |
-| スクリーンショット | Gyazo（本体・Menu・Video） | macOS 標準（⌘⇧5）で足りるか | **検討中** | ShareX を検討。ただし ShareX は Windows 専用で Mac 版がない。Mac の代替候補は下記 |
+| スクリーンショット | Gyazo（本体・Menu・Video） | macOS 標準（⌘⇧5）で足りるか | **検証中** | ShareX は Windows 専用のため、Mac 向けの Shottr を 2026-09-23 から試用中。結果が出るまで Gyazo も残す |
 | オフィス | LibreOffice | 他のオフィスソフトと併存 | **削除** | |
 | デザイン | Adobe XD | Adobe が開発を終了 | 残す | |
 | WordPress 開発 | Local / DevKinsta | 同じ用途が 2 つ | 残す | |
@@ -47,6 +47,10 @@ ShareX は Windows 専用のため Mac では使えない。Mac で ShareX に�
 
 Gyazo の「撮ってすぐ URL で共有」を重視するなら CleanShot X、撮影と注釈だけなら Shottr が向いている。
 決まるまでは Gyazo を残す。
+
+**Shottr の試用（2026-09-23 開始）**：`brew install --cask shottr` でインストール済み。Brewfile にはまだ入れていない。
+初回起動時に、システム設定 > プライバシーとセキュリティ > 画面収録 で Shottr を許可する。
+採用なら Brewfile に `cask "shottr"` を追加して Gyazo を削除し、不採用なら `brew uninstall --cask shottr` する。
 
 ## Homebrew 以外で入れていたもの
 
@@ -89,3 +93,4 @@ brew install --cask --adopt docker-desktop thebrowsercompany-dia spotify google-
 | --- | --- |
 | 2026-09-23 | 一覧を作成 |
 | 2026-09-23 | 見直し結果を Brewfile に反映。Arc・LibreOffice・openvpn・python@3.13・flux・FileMaker Pro 18 を削除対象に。Dia・Docker Desktop・Spotify・Google Drive と App Store アプリ 10 個を Brewfile に追加。Gyazo は代替を検討中 |
+| 2026-09-23 | Shottr の試用を開始 |
