@@ -90,7 +90,7 @@ LINKS=(
   "home/zprofile|$HOME/.config/zsh/.zprofile"
   "home/zshrc|$HOME/.config/zsh/.zshrc"
   # git（docs/git.md）
-  "home/gitconfig|$HOME/.gitconfig"
+  "config/git/config|$HOME/.config/git/config"
   "config/git/ignore|$HOME/.config/git/ignore"
   # mise（docs/mise.md）
   "config/mise/config.toml|$HOME/.config/mise/config.toml"
@@ -178,8 +178,10 @@ step_check() {
   p="$(shell_which python3)"; [[ "$p" == "$HOME/.local/bin/"* ]]        && pass "python3 は uv: $p"    || fail "python3 が uv ではない: ${p:-見つからない}"
 
   log "git / GitHub CLI"
-  [[ "$(git config --show-origin user.name 2>/dev/null)" == "file:$HOME/.gitconfig"* ]] \
-    && pass "git が ~/.gitconfig を読んでいる" || fail "git が ~/.gitconfig を読んでいない"
+  [[ "$(git config --show-origin user.name 2>/dev/null)" == "file:$HOME/.config/git/config"* ]] \
+    && pass "git が ~/.config/git/config を読んでいる" || fail "git が ~/.config/git/config を読んでいない"
+  [[ ! -e "$HOME/.gitconfig" ]] \
+    && pass "~/.gitconfig がない（あると ~/.config/git/config より優先される）" || fail "~/.gitconfig が残っている。中身を config/git/config に移して消す"
   # 一時的なリポジトリを作り、共通の無視設定が実際に効くかを試す
   local tmp
   tmp="$(mktemp -d)"

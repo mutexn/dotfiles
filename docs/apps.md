@@ -20,7 +20,7 @@
 | AI | ChatGPT Classic | 旧版アプリの残りの可能性 | 残す | |
 | ローカル LLM | ollama / LM Studio / Jan | 3 つ併存 | 残す | |
 | パスワード管理 | 1Password / Bitwarden | 2 つ併存 | 残す | |
-| スクリーンショット | Gyazo（本体・Menu・Video） | macOS 標準（⌘⇧5）で足りるか | **検証中** | ShareX は Windows 専用のため、Mac 向けの Shottr を 2026-09-23 から試用中。結果が出るまで Gyazo も残す |
+| スクリーンショット | Gyazo（本体・Menu・Video）/ Shottr | macOS 標準（⌘⇧5）で足りるか | 両方残す | Gyazo は URL で共有、Shottr は撮影・注釈・文字認識。2026-09-23 に Shottr を Brewfile に追加 |
 | オフィス | LibreOffice | 他のオフィスソフトと併存 | **削除済み** | |
 | デザイン | Adobe XD | Adobe が開発を終了 | 残す | |
 | WordPress 開発 | Local / DevKinsta | 同じ用途が 2 つ | 残す | |
@@ -125,3 +125,4 @@ brew uninstall --force openvpn
 | 2026-09-23 | Python を uv に集約。python@3.13 を削除 |
 | 2026-09-23 | Arc・LibreOffice・flux・FileMaker Pro 18 を削除。Dia・Spotify を Homebrew 管理下へ。Docker Desktop の移行に失敗しアプリが削除された（データは無事） |
 | 2026-09-23 | Docker Desktop を入れ直し、Google Drive を管理下へ移し、openvpn を削除。Brewfile と実機が一致（試用中の Shottr を除く） |
+| 2026-09-23 | Shottr を採用し Brewfile に追加。Gyazo も残す |

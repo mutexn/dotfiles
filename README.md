@@ -45,7 +45,7 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `home/zshenv` | `~/.zshenv` | [docs/zsh.md](docs/zsh.md) |
 | `home/zprofile` | `~/.config/zsh/.zprofile` | [docs/zsh.md](docs/zsh.md) |
 | `home/zshrc` | `~/.config/zsh/.zshrc` | [docs/zsh.md](docs/zsh.md) |
-| `home/gitconfig` | `~/.gitconfig` | [docs/git.md](docs/git.md) |
+| `config/git/config` | `~/.config/git/config` | [docs/git.md](docs/git.md) |
 | `config/git/ignore` | `~/.config/git/ignore` | [docs/git.md](docs/git.md) |
 | `config/gh/config.yml` | `~/.config/gh/config.yml` | [docs/git.md](docs/git.md) |
 | `config/mise/config.toml` | `~/.config/mise/config.toml` | [docs/mise.md](docs/mise.md) |
@@ -65,10 +65,10 @@ gh auth login                   # GitHub にログイン（git push に必要）
 ```
 リポジトリ内（元ファイル）                 実機（install.sh が作るリンク）
 ~/Dev/Github/dotfiles/home/zshenv   ←──   ~/.zshenv
-~/Dev/Github/dotfiles/home/gitconfig ←──  ~/.gitconfig
+~/Dev/Github/dotfiles/config/git/config ←──  ~/.config/git/config
 ```
 
-zsh や git は今までどおり `~/.zshenv` や `~/.gitconfig` を読む。
+zsh は今までどおり `~/.zshenv` を読む。
 リンク先のリポジトリ内ファイルを編集すれば、そのまま実機に反映される。
 リポジトリ側でドットを外しているのは、`ls` や GitHub の画面で隠れずに見えるようにするため。
 
@@ -79,13 +79,14 @@ zsh や git は今までどおり `~/.zshenv` や `~/.gitconfig` を読む。
 ```
 ~/
 ├── .zshenv    → ~/Dev/Github/dotfiles/home/zshenv   # ホームに残す zsh のファイルはこれだけ
-├── .gitconfig → ~/Dev/Github/dotfiles/home/gitconfig
 ├── .config/
 │   ├── zsh/
 │   │   ├── .zprofile     → ~/Dev/Github/dotfiles/home/zprofile
 │   │   ├── .zshrc        → ~/Dev/Github/dotfiles/home/zshrc
 │   │   └── local.zsh              # 秘密情報・マシン固有の設定用。リンクではなく実機だけに置く
-│   ├── git/ignore        → ~/Dev/Github/dotfiles/config/git/ignore
+│   ├── git/
+│   │   ├── config        → ~/Dev/Github/dotfiles/config/git/config
+│   │   └── ignore        → ~/Dev/Github/dotfiles/config/git/ignore
 │   ├── gh/
 │   │   ├── config.yml    → ~/Dev/Github/dotfiles/config/gh/config.yml
 │   │   └── hosts.yml              # gh auth login が作るログイン情報。リンクしない
@@ -117,7 +118,7 @@ zsh や git は今までどおり `~/.zshenv` や `~/.gitconfig` を読む。
 ```
 
 置き換える前のファイルは `~/.local/state/dotfiles/backup/<日時>/` の下に、ホームからの相対パスのまま退避される。
-例：`~/.gitconfig` は `~/.local/state/dotfiles/backup/20260923120000/.gitconfig` になる。
+例：`~/.config/git/config` は `~/.local/state/dotfiles/backup/20260923120000/.config/git/config` になる。
 元の場所の隣に置かないのは、`~/.claude/skills` のように、ツールがフォルダ内のものをすべて読み込んでしまう場所があるため。
 問題なく動くことを確認したら削除してよい。
 
@@ -130,7 +131,7 @@ zsh や git は今までどおり `~/.zshenv` や `~/.gitconfig` を読む。
 | --- | --- |
 | リンク | 対応表のすべての場所が、リポジトリ内のファイルへのリンクになっているか |
 | zsh | 設定ファイルに文法エラーがないか。新しいシェルで node・pnpm・python3 が mise・standalone 版・uv から使われるか |
-| git / GitHub CLI | git が `~/.gitconfig` を読むか。共通の無視設定が実際に効くか。gh が設定を読むか |
+| git / GitHub CLI | git が `~/.config/git/config` を読むか。`~/.gitconfig` が残っていないか。共通の無視設定が実際に効くか。gh が設定を読むか |
 | mise / uv | mise が全体設定を読むか。uv が自分で入れた Python を使うか |
 | アプリ | Ghostty の設定にエラーがないか。Karabiner が設定を読めているか |
 | Homebrew | Brewfile のコマンドとアプリがすべて入っているか。新しい版があるかどうかは見ない。App Store アプリは見ない |
@@ -151,7 +152,7 @@ ls -la ~/.zshenv
 - 取引先の名前、社内リポジトリの名前、仕事のプロジェクト名。例として挙げるときは「旧プロジェクト 2 件」のように一般的に書く
 - 社内のサーバー名、IP アドレス、社内 URL
 
-設定ファイルはリポジトリへのリンクなので、ツールが zsh の設定や `~/.gitconfig` に書き込んだ内容はそのままリポジトリの変更になる。
+設定ファイルはリポジトリへのリンクなので、ツールが zsh や git の設定に書き込んだ内容はそのままリポジトリの変更になる。
 コミット前に `git diff` で、意図しない行が追加されていないかを確認する。
 
 ### GitHub 側の設定（2026-09-23）
@@ -178,11 +179,11 @@ zsh の設定などはリポジトリへのリンクなので、master に入っ
 | 項目 | 状態 | 説明 |
 | --- | --- | --- |
 | 今の設定の取り込み | 完了 | 挙動を変えずに取り込み、2026-09-23 に実機をリンクへ置き換えた |
-| アプリの見直し | 完了（Shottr は試用中） | [docs/apps.md](docs/apps.md) |
+| アプリの見直し | 完了 | [docs/apps.md](docs/apps.md) |
 | モダン CLI（fzf、zoxide、ripgrep、fd、bat、eza、git-delta、zsh-autosuggestions） | 採用（2026-09-23） | [docs/cli-tools.md](docs/cli-tools.md) |
-| git の推奨設定（既定ブランチ main、pull 時 rebase など） | 試用中（2026-09-23 開始）。設定は実機の `~/.config/git/config` だけに置いている | |
+| git の推奨設定（既定ブランチ main、pull 時 rebase など） | 採用（2026-09-23） | [docs/git.md](docs/git.md) |
 | プロンプトを starship に移行 | 採用（2026-09-23）。Powerlevel10k の見た目を再現し、Powerlevel10k は撤去 | [docs/zsh.md](docs/zsh.md#プロンプトstarship) |
-| ホームのドットファイル集約 | 試用中（2026-09-23 開始）。zsh と各種履歴を移動 | [docs/xdg.md](docs/xdg.md) |
+| ホームのドットファイル集約 | 採用（2026-09-23）。zsh・git の設定と各種履歴を移動 | [docs/xdg.md](docs/xdg.md) |
 | Python を uv に集約 | 完了（既存プロジェクト 1 件の仮想環境の作り直しは残り） | [docs/python.md](docs/python.md) |
 | Volta 撤去 | 見送り（2026-09-23）。移行できないプロジェクトがあるため残す | [docs/mise.md](docs/mise.md) |
 | Claude Code の設定を管理 | 完了。CLAUDE.md・settings.json・ステータスライン・自作スキルを管理 | [docs/claude.md](docs/claude.md) |

@@ -1,0 +1,63 @@
+# ~/.config/git/config — git の全体設定。詳細は docs/git.md
+# 以前は ~/.gitconfig に置いていた。git はこの場所も標準で読む（docs/xdg.md）
+
+[user]
+	name = mutexn
+	email = k.shoma.0810.mf@gmail.com
+
+# GitHub への https 接続の認証を GitHub CLI（gh）に任せる。空の helper = は、それより前の設定を打ち消すため
+[credential "https://github.com"]
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[init]
+	# 新しく git init したリポジトリの最初のブランチ名を main にする（既存のリポジトリは変わらない）
+	defaultBranch = main
+
+[fetch]
+	# fetch / pull のとき、GitHub で消えたブランチの参照を手元からも消す
+	prune = true
+
+[pull]
+	# pull で手元のコミットとぶつかったとき、マージコミットを作らず、手元のコミットを上に積み直す
+	rebase = true
+
+[rebase]
+	# 未コミットの変更があっても rebase できるよう、自動で退避して戻す
+	autoStash = true
+
+[push]
+	# 新しいブランチの初回 push で -u origin <ブランチ名> を毎回書かなくてよくする
+	autoSetupRemote = true
+
+[diff]
+	# 差分の計算方法を、変更点がより自然に見えるものにする
+	algorithm = histogram
+	# 移動しただけの行を、追加・削除とは別の色で表示する
+	colorMoved = default
+
+[merge]
+	# 競合したとき、元の内容も一緒に表示して、どちらを採るか判断しやすくする
+	conflictStyle = zdiff3
+
+[rerere]
+	# 一度解決した競合の解き方を覚え、同じ競合が起きたら自動で同じように解決する
+	enabled = true
+
+[branch]
+	# git branch の一覧を、最近使った順に並べる
+	sort = -committerdate
+
+[commit]
+	# コミットメッセージを書く画面に、コミットする差分も表示する
+	verbose = true
+
+[interactive]
+	# git add -p などで、差分を delta で色付き表示する
+	diffFilter = delta --color-only
+
+[delta]
+	# delta で n / N を押すと、次・前のファイルへ移動できる
+	navigate = true
