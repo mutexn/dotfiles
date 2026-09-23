@@ -72,7 +72,8 @@ node = "24"
 
 ## この Mac 固有の状態（2026-09-23 時点）
 
-- brew の node は**意図的に残している**。bitwarden-cli の依存で、Marp CLI も `npm -g` で入っている。PATH で mise が先に来るので影響はない
+- brew の node は bitwarden-cli の依存として残る。直接は使わない。PATH で mise が先に来るので影響はない
+- Marp CLI は 2026-09-23 に brew の node の `npm -g` から Homebrew の `marp-cli` に移した
 - Volta も**残している**。`keanhealth_flora-hp` と `withbeauty_production` が package.json の `volta` キーで Node を固定中。この 2 つを mise 方式に移せば撤去できる
 - corepack の入口ファイル（`/opt/homebrew/bin/pnpm`、`pnpx`）は削除済み
 
