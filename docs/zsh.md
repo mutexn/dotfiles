@@ -9,13 +9,13 @@ zsh は macOS 標準のシェル。起動の種類に応じて、決まった順
 | `home/zshenv` | `~/.zshenv` | **すべての** zsh 起動時（スクリプト実行も含む）。最初に読まれる |
 | `home/zprofile` | `~/.zprofile` | ログインシェル起動時（ターミナルアプリで新しいウインドウを開いたとき） |
 | `home/zshrc` | `~/.zshrc` | 対話シェル起動時（プロンプトが出るとき） |
-| `home/p10k.zsh` | `~/.p10k.zsh` | `.zshrc` から読まれる。プロンプトの見た目 |
+| `config/starship.toml` | `~/.config/starship.toml` | `.zshrc` から起動する starship が読む。プロンプトの見た目 |
 | なし | `~/.zshrc.local` | `.zshrc` の最後に読まれる。**秘密情報とマシン固有の設定専用**。リポジトリに入れない |
 
 ターミナルで新しいウインドウを開くと、次の順で読まれる。
 
 ```
-.zshenv  →  .zprofile  →  .zshrc  →  (.p10k.zsh)  →  .zshrc.local
+.zshenv  →  .zprofile  →  .zshrc  →  .zshrc.local
 ```
 
 `zsh script.sh` のようにスクリプトを実行したときは `.zshenv` だけが読まれる。
@@ -52,9 +52,7 @@ Volta の pnpm が standalone 版より先に使われる不具合があった�
 | 設定 | 意味 |
 | --- | --- |
 | `PATH="$HOME/.local/bin:$PATH"` | 自分で入れたコマンド（Claude Code など）の置き場所を PATH に追加 |
-| プロンプトの切り替え | `~/.config/starship.toml` があり starship が入っていれば starship、そうでなければ Powerlevel10k を使う。starship は試用中（2026-09-23 開始） |
-| p10k instant prompt | Powerlevel10k のときだけ。前回のプロンプトを先に表示し、体感の起動時間を短くする |
-| `source ~/powerlevel10k/...` | Powerlevel10k のときだけ。`install.sh prompt` で `~/powerlevel10k` に取得される |
+| `starship init zsh` | プロンプトを starship にする。starship が入っていないときは zsh 標準のプロンプトのまま |
 | `alias ls / ll / la` | `-G` で色付き、`-F` で種別記号（`/` はフォルダ、`*` は実行ファイル）、`-h` でサイズを読みやすく表示 |
 | `direnv hook zsh` | フォルダに入ると、そこの `.envrc` の環境変数を自動で読み込み、出ると戻す |
 | LM Studio の PATH | LM Studio の CLI（`lms`）を使えるようにする |
@@ -63,19 +61,42 @@ Volta の pnpm が standalone 版より先に使われる不具合があった�
 | モダン CLI | fzf、zoxide、delta、eza の別名、zsh-autosuggestions を、入っているときだけ有効にする（[cli-tools.md](cli-tools.md)） |
 | `source ~/.zshrc.local` | 秘密情報やマシン固有の設定を読み込む（ファイルがなければ何もしない） |
 
-### プロンプトを戻すとき
+## プロンプト（starship）
 
-starship の試用をやめるときは、設定ファイルを消すだけで Powerlevel10k に戻る。
+2026-09-23 に Powerlevel10k から starship に移行した。Powerlevel10k は開発がほぼ止まっているため。
+見た目は以前の Powerlevel10k（classic、dark、2 行、右端に枠線）を、starship の標準機能だけで再現している。
 
-```bash
-rm ~/.config/starship.toml
-exec zsh
+```
+ ~/Dev/Github/dotfiles   master ·························· ✘ 1  5s   18:53:37  ─╮
+❯                                                                                  ─╯
 ```
 
-### home/p10k.zsh
+### config/starship.toml の意味
 
-`p10k configure` の質問に答えると自動生成されるファイル。手で編集するより、
-`p10k configure` をもう一度実行する方が安全。
+| 設定 | 意味 |
+| --- | --- |
+| `format` | 1 行目の並び。左にフォルダと git、`$fill` で間を埋め、右に状態と時刻、行末に `─╮`。2 行目は入力欄 |
+| `right_format` | 2 行目の右端の `─╯` |
+| `add_newline = false` | コマンドの間に空行を入れない（Powerlevel10k と同じ） |
+| `[fill]` | 左右の間を `·`（色 240）で埋める |
+| 各項目の `style` の `bg:236` | 濃いグレーの帯。Powerlevel10k の背景色と同じ番号 |
+| `` / `` | 帯の端の矢印と、項目の間の細い区切り（Nerd Font の記号） |
+| `[directory]` | フォルダ。色 31、git リポジトリの根元は色 39 の太字、途中は色 103。4 階層を超えると `…/` で省略 |
+| `[git_branch]` / `[git_status]` | ブランチ名（色 76）と変更の状態（色 178） |
+| `[status]` | 直前のコマンドが失敗したときだけ `✘ 終了コード` を赤（色 160）で表示 |
+| `[cmd_duration]` | 3 秒以上かかったコマンドの実行時間 |
+| `[jobs]` / `[direnv]` | バックグラウンドのジョブ数、direnv の読み込み状態。該当するときだけ表示 |
+| `[python]` / `[nodejs]` | そのフォルダが Python・Node のプロジェクトのときだけバージョンを表示 |
+| `[time]` | 時刻（色 66） |
+| `[character]` | 入力欄の `❯`。直前が成功なら緑（76）、失敗なら赤（196） |
+
+色の番号は 256 色の番号。記号は Nerd Font の文字なので、ターミナルのフォントが Nerd Font（Ghostty の設定では BlexMono Nerd Font）でないと四角く表示される。
+
+### 変えるとき
+
+`config/starship.toml` を編集すると、次にプロンプトが表示されるときから反映される。設定の一覧は `starship print-config` で見られる。
+
+撤去した Powerlevel10k の設定（`~/.p10k.zsh`）とテーマ本体（`~/powerlevel10k`）は、`~/.local/state/dotfiles/backup/` に退避してある。
 
 ## 秘密情報の扱い
 

@@ -35,7 +35,7 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"   # .zshrc などを ~/.config/zsh/ から
 | `.zsh_history` | `HISTFILE=$XDG_STATE_HOME/zsh/history` | 未検証 |
 | `.zsh_sessions/` | `SHELL_SESSIONS_DISABLE=1`。macOS 標準のターミナル用の機能なので Ghostty では不要 | 未検証 |
 | `.gitconfig` | `~/.config/git/config`。git が標準で読むので、ファイルを移すだけ | 未検証 |
-| `.p10k.zsh` | starship に移行する場合は不要になる | 未検証 |
+| `.p10k.zsh` | starship への移行で不要になり、2026-09-23 に撤去 | 完了 |
 | `.vim/` `.viminfo` | `~/.config/vim/`（vim 9.1 以降が対応） | 未検証 |
 | `.lesshst` | `LESSHISTFILE=$XDG_STATE_HOME/less/history` | 未検証 |
 | `.node_repl_history` | `NODE_REPL_HISTORY=$XDG_STATE_HOME/node_repl_history` | 未検証 |

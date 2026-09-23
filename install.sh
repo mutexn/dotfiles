@@ -7,14 +7,14 @@
 #   ./install.sh link macos      # 指定したステップだけ実行
 #   ./install.sh check           # 実機がリポジトリどおりかを確かめる（何も変更しない）
 #
-# ステップ: clt brew bundle link prompt runtime macos check
+# ステップ: clt brew bundle link runtime macos check
 set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DRY_RUN=0
 # 置き換える前のファイルの退避先。元の場所の隣に置くと、ツールが読み込んでしまうことがあるため 1 か所にまとめる
 BACKUP_DIR="$HOME/.local/state/dotfiles/backup/$(date +%Y%m%d%H%M%S)"
-ALL_STEPS=(clt brew bundle link prompt runtime macos)
+ALL_STEPS=(clt brew bundle link runtime macos)
 
 log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$*" >&2; }
@@ -89,12 +89,13 @@ LINKS=(
   "home/zshenv|$HOME/.zshenv"
   "home/zprofile|$HOME/.zprofile"
   "home/zshrc|$HOME/.zshrc"
-  "home/p10k.zsh|$HOME/.p10k.zsh"
   # git（docs/git.md）
   "home/gitconfig|$HOME/.gitconfig"
   "config/git/ignore|$HOME/.config/git/ignore"
   # mise（docs/mise.md）
   "config/mise/config.toml|$HOME/.config/mise/config.toml"
+  # starship（docs/zsh.md）
+  "config/starship.toml|$HOME/.config/starship.toml"
   # uv（docs/python.md）
   "config/uv/uv.toml|$HOME/.config/uv/uv.toml"
   # GitHub CLI。認証情報の hosts.yml はリンクしない（docs/git.md）
@@ -116,15 +117,6 @@ step_link() {
   for entry in "${LINKS[@]}"; do
     link "${entry%%|*}" "${entry#*|}"
   done
-}
-
-step_prompt() {
-  log "Powerlevel10k"
-  if [[ -d "$HOME/powerlevel10k" ]]; then
-    echo "    インストール済み"
-  else
-    run git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/powerlevel10k"
-  fi
 }
 
 step_runtime() {
