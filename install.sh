@@ -181,7 +181,7 @@ step_check() {
   [[ "$(git config --show-origin user.name 2>/dev/null)" == "file:$HOME/.config/git/config"* ]] \
     && pass "git が ~/.config/git/config を読んでいる" || fail "git が ~/.config/git/config を読んでいない"
   [[ ! -e "$HOME/.gitconfig" ]] \
-    && pass "~/.gitconfig がない（あると ~/.config/git/config より優先される）" || fail "~/.gitconfig が残っている。中身を config/git/config に移して消す"
+    && pass "ホームに ~/.gitconfig がない（あると ~/.config/git/config より優先される）" || fail "ホームに ~/.gitconfig が残っている。中身を config/git/config に移して消す"
   # 一時的なリポジトリを作り、共通の無視設定が実際に効くかを試す
   local tmp
   tmp="$(mktemp -d)"
