@@ -31,6 +31,7 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `link` | 設定ファイルを実機の場所へリンク（元のファイルは `~/.local/state/dotfiles/backup/<日時>/` に退避） |
 | `runtime` | mise で Node、uv で Python、Claude Code、standalone 版 pnpm |
 | `macos` | macOS の設定 |
+| `security` | ファイアウォール、ステルスモード、Touch ID で sudo。管理者パスワードを聞かれる |
 | `check` | 実機がリポジトリどおりかを確かめる。何も変更しない。すべてのステップを実行するときには含まれない |
 
 ## 基本方針
@@ -134,6 +135,7 @@ zsh は今までどおり `~/.zshenv` を読む。
 | git / GitHub CLI | git が `~/.config/git/config` を読むか。`~/.gitconfig` が残っていないか。共通の無視設定が実際に効くか。gh が設定を読むか |
 | mise / uv | mise が全体設定を読むか。uv が自分で入れた Python を使うか |
 | アプリ | Ghostty の設定にエラーがないか。Karabiner が設定を読めているか |
+| セキュリティ | FileVault、ファイアウォール、ステルスモード、Touch ID で sudo が有効か |
 | Homebrew | Brewfile のコマンドとアプリがすべて入っているか。新しい版があるかどうかは見ない。App Store アプリは見ない |
 
 リンクを個別に確かめるときは `ls -la` を使う。

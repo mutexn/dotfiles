@@ -106,15 +106,36 @@ diff before.txt after.txt
 | `-g AppleShowAllExtensions -bool true` | すべての拡張子を表示 | 未検証 |
 | `-g NSAutomaticQuoteSubstitutionEnabled -bool false` | `"` を “ ” に自動変換しない。コードを書くときに便利 | 未検証 |
 
-## 設定ではなく手作業で確認すること
+## セキュリティ設定（macos/security.sh）
 
-以下はセキュリティのためコマンドで一括設定しない。新しい Mac では手で確認する。
-
-- **FileVault**（ディスク暗号化）：システム設定 > プライバシーとセキュリティ。`fdesetup status` で確認
-- **ファイアウォール**：システム設定 > ネットワーク > ファイアウォール
-- **Touch ID で sudo**：`/etc/pam.d/sudo_local` を作る方式なら OS アップデートで消えない
+管理者権限が必要なので、`defaults.sh` とは分けている。実行すると途中でパスワードを聞かれる。
+すでに設定済みの項目は何もしないので、何度実行してもよい。
 
 ```bash
-sudo cp /etc/pam.d/sudo_local.template /etc/pam.d/sudo_local
-sudo sed -i '' 's/^#auth/auth/' /etc/pam.d/sudo_local
+./install.sh security
 ```
+
+| 設定 | 意味 | システム設定での場所 |
+| --- | --- | --- |
+| ファイアウォール | 外から Mac への接続を、許可したアプリ以外は受け付けない。公衆 Wi-Fi で特に重要 | ネットワーク > ファイアウォール |
+| ステルスモード | 外からの問い合わせ（ping など）に応答せず、ネットワーク上で見つかりにくくする | ネットワーク > ファイアウォール > オプション |
+| Touch ID で sudo | 管理者パスワードの代わりに指紋で認証できる。`/etc/pam.d/sudo_local` に書くので、macOS のアップデートで消えない | 画面設定なし |
+
+Touch ID で sudo は、macOS 付属のひな形 `/etc/pam.d/sudo_local.template` の `pam_tid.so` の行を有効にして作る。
+`/etc/pam.d/sudo_local` が別の内容で既にある場合は、上書きせずに警告だけ出す。
+
+ファイアウォールを有効にすると、サーバーとして動くアプリ（Ollama、Docker、LM Studio など）の初回起動時に「接続を許可しますか」と聞かれることがある。自分で使うアプリなら許可する。
+
+### 元に戻す
+
+```bash
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate off
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode off
+sudo rm /etc/pam.d/sudo_local
+```
+
+## 設定ではなく手作業で確認すること
+
+- **FileVault**（ディスクの暗号化）：システム設定 > プライバシーとセキュリティ。`fdesetup status` で確認。`./install.sh check` でも確認する
+- **画面ロック**：システム設定 > ロック画面。画面が消えたらすぐパスワードを求める設定にする
+- **バックアップ**：Time Machine は使わない（2026-09-23 決定）。コードは GitHub、設定はこの dotfiles にある
