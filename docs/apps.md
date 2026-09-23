@@ -113,7 +113,7 @@ brew uninstall --force openvpn
 | AI | Claude、ChatGPT、Typeless（音声入力） |
 | 入力・操作 | Raycast、AltTab、Karabiner-Elements、KeyboardCleanTool、Google 日本語入力 |
 | 仕事 | Slack、Zoom、Notion、Obsidian、Anki、Figma、Adobe Creative Cloud |
-| 開発 | gcloud CLI、Cyberduck、Chrome Remote Desktop、gh、mise、direnv、uv、neovim、tmux、libpq、poppler |
+| 開発 | gcloud CLI、Cyberduck、gh、mise、direnv、uv、neovim、tmux、libpq、poppler |
 | ユーティリティ | AppCleaner、1Password CLI |
 
 ## 見直しの記録
@@ -128,3 +128,4 @@ brew uninstall --force openvpn
 | 2026-09-23 | Docker Desktop を入れ直し、Google Drive を管理下へ移し、openvpn を削除。Brewfile と実機が一致（試用中の Shottr を除く） |
 | 2026-09-23 | Shottr を採用し Brewfile に追加。Gyazo も残す |
 | 2026-09-23 | `brew upgrade` を実施。Jan を削除 |
+| 2026-09-23 | Chrome リモートデスクトップを削除（使っておらず、この Mac を遠隔操作する入口が常駐していたため）。Ollama の自動起動設定（`~/Library/LaunchAgents/homebrew.mxcl.ollama.plist`）を退避し、ログイン時に常駐しないようにした |

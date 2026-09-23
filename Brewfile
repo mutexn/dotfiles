@@ -96,7 +96,6 @@ cask "docker-desktop"
 cask "cyberduck"      # FTP / S3 クライアント
 cask "local"          # WordPress ローカル環境
 cask "openvpn-connect"
-cask "chrome-remote-desktop-host"
 
 # --- ユーティリティ ---
 cask "google-drive"
