@@ -113,7 +113,7 @@ brew uninstall --force openvpn
 | AI | Claude、ChatGPT、Typeless（音声入力） |
 | 入力・操作 | Raycast、AltTab、Karabiner-Elements、KeyboardCleanTool、Google 日本語入力 |
 | 仕事 | Slack、Zoom、Notion、Obsidian、Anki、Figma、Adobe Creative Cloud |
-| 開発 | gcloud CLI、Cyberduck、gh、mise、direnv、uv、neovim、tmux、libpq、poppler |
+| 開発 | gcloud CLI、Cyberduck、Chrome Remote Desktop（自動起動は停止）、gh、mise、direnv、uv、neovim、tmux、libpq、poppler |
 | ユーティリティ | AppCleaner、1Password CLI |
 
 ## 見直しの記録
@@ -128,4 +128,22 @@ brew uninstall --force openvpn
 | 2026-09-23 | Docker Desktop を入れ直し、Google Drive を管理下へ移し、openvpn を削除。Brewfile と実機が一致（試用中の Shottr を除く） |
 | 2026-09-23 | Shottr を採用し Brewfile に追加。Gyazo も残す |
 | 2026-09-23 | `brew upgrade` を実施。Jan を削除 |
-| 2026-09-23 | Chrome リモートデスクトップを削除（使っておらず、この Mac を遠隔操作する入口が常駐していたため）。Ollama の自動起動設定（`~/Library/LaunchAgents/homebrew.mxcl.ollama.plist`）を退避し、ログイン時に常駐しないようにした |
+| 2026-09-23 | Chrome リモートデスクトップはアプリを残し、ログイン時の自動起動だけを止めた（普段は使っておらず、遠隔操作の入口を常駐させないため）。Ollama の自動起動設定（`~/Library/LaunchAgents/homebrew.mxcl.ollama.plist`）を退避し、ログイン時に常駐しないようにした |
+
+### Chrome リモートデスクトップの自動起動を戻すとき
+
+止め方：ログイン時に起動する `org.chromium.chromoting`（`/Library/LaunchAgents`）を `launchctl disable` で無効にした。
+もう 1 つの `org.chromium.chromoting.broker`（`/Library/LaunchDaemons`）は、呼ばれたときだけ起動する作りなので、そのままでも常駐しない。
+
+使うときは、自動起動を有効に戻してから、ブラウザで remotedesktop.google.com/access を開いて遠隔操作を有効にする。
+
+```bash
+launchctl enable gui/$(id -u)/org.chromium.chromoting
+```
+
+新しい Mac では、Brewfile で入れたあとに同じ方法で止める。
+
+```bash
+launchctl disable gui/$(id -u)/org.chromium.chromoting
+```
+

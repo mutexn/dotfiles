@@ -96,6 +96,7 @@ cask "docker-desktop"
 cask "cyberduck"      # FTP / S3 クライアント
 cask "local"          # WordPress ローカル環境
 cask "openvpn-connect"
+cask "chrome-remote-desktop-host"  # 遠隔操作の受け側。ログイン時の自動起動は止めている（docs/apps.md）
 
 # --- ユーティリティ ---
 cask "google-drive"
