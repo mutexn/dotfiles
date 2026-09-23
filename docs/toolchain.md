@@ -51,7 +51,7 @@ node = "24"
 | `pip install`（仮想環境の外）、`sudo pip` | macOS や Homebrew の Python を壊す | uv |
 | `brew install node` / `brew install python` をプロジェクト用に使う | `brew upgrade` で勝手に上がる | mise / uv |
 | macOS 標準の Ruby・Python・Java を使う | 古く、更新できない | 必要なら mise / uv |
-| Volta を新しく使う | 撤去予定 | mise |
+| Volta を新しく使う | 旧プロジェクトのためだけに残している | mise |
 | 公式以外の `curl ... \| sh` でのインストール | 中身を確認しづらい | Homebrew。Homebrew 本体と pnpm の公式インストーラだけは例外 |
 
 ## 今の Mac でずれているところ（2026-09-23 時点）
@@ -60,7 +60,7 @@ node = "24"
 | --- | --- | --- |
 | Marp CLI | 2026-09-23 に Homebrew の `marp-cli` へ移行済み | 完了 |
 | Homebrew の node | bitwarden-cli の依存として残る | 直接は使わない。`npm -g` で入れたものはもうない |
-| Volta | 2 プロジェクトが `volta` キーで Node を固定 | 2 プロジェクトを mise に移して撤去（[mise.md](mise.md)） |
+| Volta | 2 プロジェクトが `volta` キーで Node を固定 | 移行できないため残す。新しいプロジェクトでは使わない（[mise.md](mise.md)） |
 | `~/.composer` | 2026-09-23 にゴミ箱へ移動済み | 完了 |
 | uv 本体 | 2025-12 の版で古い | `brew upgrade uv` |
 | 既存プロジェクト 1 件の `.venv` | Homebrew の Python で作られている | uv で作り直す（[python.md](python.md)） |

@@ -38,7 +38,7 @@ zsh は macOS 標準のシェル。起動の種類に応じて、決まった順
 | `LESSHISTFILE` などの `*_HISTORY` | less・node・psql の履歴を `~/.local/state/` に置く |
 | `SHELL_SESSIONS_DISABLE=1` | macOS 標準のターミナル用のセッション保存（`~/.zsh_sessions`）を使わない |
 | `typeset -U path PATH` | PATH の重複を自動で取り除く。`exec zsh` や tmux でシェルを入れ子に起動しても PATH が伸びない |
-| `VOLTA_HOME` と `path+=(...)` | Volta を PATH の**末尾**に追加する。Volta は package.json の `volta` キーで Node を固定している旧プロジェクト用で、撤去予定（[mise.md](mise.md)） |
+| `VOLTA_HOME` と `path+=(...)` | Volta を PATH の**末尾**に追加する。Volta は package.json の `volta` キーで Node を固定している旧プロジェクト用。撤去は見送り（[mise.md](mise.md)） |
 
 Volta を末尾に置く理由：以前は先頭に追加していた。そのため `exec zsh` でシェルを開き直すと、
 Volta の pnpm が standalone 版より先に使われる不具合があった（2026-09-23 に修正）。
@@ -131,7 +131,7 @@ GitHub CLI のログイン情報はキーチェーンに保管されたまま使
 3. 自分で入れたコマンド         ~/.local/bin
 4. Homebrew                    /opt/homebrew/bin
 5. macOS 標準                  /usr/bin など
-6. Volta（撤去予定）            ~/.volta/bin
+6. Volta（旧プロジェクト用）     ~/.volta/bin
 ```
 
 確認コマンド：
