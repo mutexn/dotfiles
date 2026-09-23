@@ -23,7 +23,7 @@ jobs:
       - name: シェルスクリプト（shellcheck）
         run: |
           shellcheck --version | head -2
-          shellcheck --severity=warning install.sh macos/defaults.sh
+          shellcheck --severity=warning install.sh macos/defaults.sh macos/security.sh
           # ステータスラインは手書きのスクリプトなので、文法エラーだけを見る
           shellcheck --severity=error claude/statusline-command.sh
 
@@ -67,7 +67,7 @@ jobs:
         run: zsh -n home/zshenv home/zprofile home/zshrc
 
       - name: install.sh の文法（macOS 標準の bash 3.2）
-        run: /bin/bash -n install.sh && /bin/bash -n macos/defaults.sh
+        run: /bin/bash -n install.sh && /bin/bash -n macos/defaults.sh && /bin/bash -n macos/security.sh
 
       - name: Brewfile を Homebrew が読めるか
         env:
@@ -89,4 +89,4 @@ jobs:
         run: |
           export HOME="$RUNNER_TEMP/home2"
           mkdir -p "$HOME"
-          /bin/bash ./install.sh --dry-run clt brew link runtime macos
+          /bin/bash ./install.sh --dry-run clt brew link runtime macos security

@@ -5,16 +5,17 @@
 #   ./install.sh                 # すべてのステップを実行
 #   ./install.sh --dry-run       # 実行せずに、行う操作だけを表示
 #   ./install.sh link macos      # 指定したステップだけ実行
+#   ./install.sh security        # ファイアウォールと Touch ID で sudo（パスワードを聞かれる）
 #   ./install.sh check           # 実機がリポジトリどおりかを確かめる（何も変更しない）
 #
-# ステップ: clt brew bundle link runtime macos check
+# ステップ: clt brew bundle link runtime macos security check
 set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DRY_RUN=0
 # 置き換える前のファイルの退避先。元の場所の隣に置くと、ツールが読み込んでしまうことがあるため 1 か所にまとめる
 BACKUP_DIR="$HOME/.local/state/dotfiles/backup/$(date +%Y%m%d%H%M%S)"
-ALL_STEPS=(clt brew bundle link runtime macos)
+ALL_STEPS=(clt brew bundle link runtime macos security)
 
 log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$*" >&2; }
@@ -63,6 +64,14 @@ step_clt() {
 }
 
 step_brew() {
+  log "セキュリティ"
+  local fw=/usr/libexec/ApplicationFirewall/socketfilterfw
+  fdesetup status 2>/dev/null | grep -q 'On' && pass "FileVault（ディスクの暗号化）が有効" || fail "FileVault が無効（システム設定 > プライバシーとセキュリティ）"
+  "$fw" --getglobalstate 2>/dev/null | grep -q 'enabled' && pass "ファイアウォールが有効" || fail "ファイアウォールが無効（./install.sh security）"
+  "$fw" --getstealthmode 2>/dev/null | grep -qE 'enabled|is on' && pass "ステルスモードが有効" || fail "ステルスモードが無効（./install.sh security）"
+  grep -qE '^auth[[:space:]]+sufficient[[:space:]]+pam_tid\.so' /etc/pam.d/sudo_local 2>/dev/null \
+    && pass "Touch ID で sudo が有効" || fail "Touch ID で sudo が無効（./install.sh security）"
+
   log "Homebrew"
   if [[ -x /opt/homebrew/bin/brew ]]; then
     echo "    インストール済み"
@@ -149,6 +158,15 @@ step_macos() {
   fi
 }
 
+step_security() {
+  log "セキュリティ設定（ファイアウォール、ステルスモード、Touch ID で sudo）"
+  if [[ $DRY_RUN -eq 1 ]]; then
+    echo "    [dry-run] macos/security.sh を実行（管理者パスワードを聞かれる）"
+  else
+    "$DOTFILES/macos/security.sh"
+  fi
+}
+
 # --- check: 実機がリポジトリどおりになっているかを確かめる（読み取りだけで、何も変更しない）---
 CHECK_FAILED=0
 pass() { printf '    \033[32mok\033[0m    %s\n' "$*"; }
@@ -228,6 +246,14 @@ step_check() {
     skip "Karabiner-Elements が入っていない"
   fi
 
+  log "セキュリティ"
+  local fw=/usr/libexec/ApplicationFirewall/socketfilterfw
+  fdesetup status 2>/dev/null | grep -q 'On' && pass "FileVault（ディスクの暗号化）が有効" || fail "FileVault が無効（システム設定 > プライバシーとセキュリティ）"
+  "$fw" --getglobalstate 2>/dev/null | grep -q 'enabled' && pass "ファイアウォールが有効" || fail "ファイアウォールが無効（./install.sh security）"
+  "$fw" --getstealthmode 2>/dev/null | grep -qE 'enabled|is on' && pass "ステルスモードが有効" || fail "ステルスモードが無効（./install.sh security）"
+  grep -qE '^auth[[:space:]]+sufficient[[:space:]]+pam_tid\.so' /etc/pam.d/sudo_local 2>/dev/null \
+    && pass "Touch ID で sudo が有効" || fail "Touch ID で sudo が無効（./install.sh security）"
+
   log "Homebrew"
   if command -v brew >/dev/null; then
     # 入っているかだけを見る。新しい版があるかどうかは問わない（更新は brew upgrade で別に行う）
@@ -264,7 +290,7 @@ main() {
   for arg in "$@"; do
     case "$arg" in
       --dry-run) DRY_RUN=1 ;;
-      -h|--help) sed -n '2,10p' "$0"; exit 0 ;;
+      -h|--help) sed -n '2,11p' "$0"; exit 0 ;;
       *) steps+=("$arg") ;;
     esac
   done
