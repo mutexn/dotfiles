@@ -40,3 +40,12 @@ Apple Silicon の Mac では `/opt/homebrew` に入る。PATH への追加は `h
 | e-Gov 電子申請、e-Tax、JPKI 利用者ソフト、ELPKI | 各公式サイトから手動でダウンロード |
 | Adobe Illustrator / Photoshop | Creative Cloud アプリから |
 | DevKinsta、ovice | 公式サイトから手動でダウンロード |
+
+### 公式のインストーラで入れるコマンド
+
+| コマンド | 入れ方 | 理由 |
+| --- | --- | --- |
+| Claude Code | `install.sh runtime` が公式インストーラで入れる | 自動で更新されるため（[claude.md](claude.md)） |
+| pnpm | `install.sh runtime` が公式インストーラで入れる | standalone 版を使う方針のため（[mise.md](mise.md)） |
+| Cursor の CLI（`cursor-agent`） | 必要なときに手動で `curl https://cursor.com/install -fsS \| bash` | ほとんど使わないため、`install.sh` には入れていない |
+| Volta | 入れない（この Mac にだけ残っている） | 旧プロジェクト用。新しい Mac では使わない |

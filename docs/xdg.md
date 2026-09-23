@@ -45,7 +45,7 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"   # .zshrc などを ~/.config/zsh/ から
 | `.docker/` | `DOCKER_CONFIG=$XDG_CONFIG_HOME/docker` | 見送り。Docker Desktop はシェルの環境変数を読まず、`~/.docker` を前提に動く |
 | `.boto` | `BOTO_CONFIG=$XDG_CONFIG_HOME/gcloud/boto` | 見送り。Google Cloud の認証情報を含む可能性があるため触らない |
 | `.composer/` | PHP を使っていないため、2026-09-23 にゴミ箱へ移動済み | 完了 |
-| `.volta/` | Volta を撤去するときに削除 | 未検証 |
+| `.volta/` | Volta の置き場所。移行できない旧プロジェクトのため Volta を残すので、このまま | 見送り |
 | `.profile` | bash 用で、中身は `zshrc` と重複していたため退避 | 完了 |
 
 ## 動かさないもの

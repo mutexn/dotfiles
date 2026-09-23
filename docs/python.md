@@ -85,11 +85,13 @@ uv python install 3.14 --default  # 既定の python / python3 を切り替え�
 
 `--default` は uv ではまだ試験的な機能。実行すると警告が出るが、動作に問題はない。
 
+Python の新しい修正版が出たら、`uv python upgrade 3.14` で上げる。uv 本体は `brew upgrade` で更新される。
+
 ## この Mac の状態（2026-09-23 時点）
 
 | Python | 状態 |
 | --- | --- |
-| uv の 3.14.2 | 既定の `python` と `python3` |
+| uv の 3.14 系（2026-09-23 時点で 3.14.7） | 既定の `python` と `python3`。`uv python upgrade 3.14` で同じ系列の最新版に上がる |
 | uv の 3.13.5、3.11.14 | 入っている。プロジェクトの指定に応じて使われる |
 | Homebrew の python@3.14 | Homebrew のツール専用。`/opt/homebrew/bin/python3` にあるが、PATH で uv の方が先に使われる |
 | Homebrew の python@3.13 | 2026-09-23 に削除 |
@@ -98,7 +100,6 @@ uv python install 3.14 --default  # 既定の python / python3 を切り替え�
 ### 対応が残っているもの
 
 - **既存プロジェクト 1 件の `.venv`**：Homebrew の Python 3.14 で作られている。上の「requirements.txt だけのプロジェクト」の手順で作り直す
-- **uv 本体が古い**：Homebrew の uv は 0.9.18（2025-12）。そのため Python も 3.14.2 までしか入らない。`brew upgrade uv` のあと `uv python install 3.14 --default` で最新にできる
 
 ## 確認コマンド
 

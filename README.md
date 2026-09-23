@@ -57,6 +57,7 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `config/karabiner/` | `~/.config/karabiner/` | [docs/terminal-and-input.md](docs/terminal-and-input.md) |
 | `config/vscode/`、`config/cursor/` | 各エディタの `settings.json`・`keybindings.json` | [docs/editors.md](docs/editors.md) |
 | `macos/defaults.sh` | macOS のシステム設定 | [docs/macos.md](docs/macos.md) |
+| `macos/security.sh` | ファイアウォール、ステルスモード、Touch ID で sudo | [docs/macos.md](docs/macos.md#セキュリティ設定macossecuritysh) |
 | `claude/CLAUDE.md` など | `~/.claude/` の一部 | [docs/claude.md](docs/claude.md) |
 | `Brewfile` | Homebrew のインストール一覧 | [docs/brew.md](docs/brew.md)、[docs/apps.md](docs/apps.md) |
 
@@ -97,12 +98,21 @@ zsh は今までどおり `~/.zshenv` を読む。
 │   ├── starship.toml     → ~/Dev/Github/dotfiles/config/starship.toml
 │   ├── uv/uv.toml        → ~/Dev/Github/dotfiles/config/uv/uv.toml
 │   └── karabiner/        → ~/Dev/Github/dotfiles/config/karabiner/   # フォルダごとリンク
+├── .claude/                       # Claude Code。自分で書いたものだけリンク
+│   ├── CLAUDE.md         → ~/Dev/Github/dotfiles/claude/CLAUDE.md
+│   ├── settings.json     → ~/Dev/Github/dotfiles/claude/settings.json
+│   ├── statusline-command.sh → ~/Dev/Github/dotfiles/claude/statusline-command.sh
+│   └── skills/setup-claude-settings/ → ~/Dev/Github/dotfiles/claude/skills/setup-claude-settings/
 ├── Library/
-│   ├── Application Support/com.mitchellh.ghostty/
-│   │   └── config        → ~/Dev/Github/dotfiles/config/ghostty/config
+│   ├── Application Support/
+│   │   ├── com.mitchellh.ghostty/config → ~/Dev/Github/dotfiles/config/ghostty/config
+│   │   ├── Code/User/settings.json など   → ~/Dev/Github/dotfiles/config/vscode/
+│   │   └── Cursor/User/settings.json など → ~/Dev/Github/dotfiles/config/cursor/
 │   └── pnpm/                      # install.sh runtime が入れる standalone 版 pnpm
 ├── .local/
-│   ├── bin/python3                # uv が作る既定の Python へのリンク
+│   ├── bin/
+│   │   ├── python3                # uv が作る既定の Python へのリンク
+│   │   └── claude                 # install.sh runtime が入れる Claude Code
 │   ├── share/
 │   │   ├── mise/                  # mise が入れた Node
 │   │   ├── uv/python/             # uv が入れた Python
@@ -114,9 +124,11 @@ zsh は今までどおり `~/.zshenv` を読む。
 └── Dev/Github/dotfiles/           # このリポジトリ（リンクの実体）
     ├── install.sh
     ├── Brewfile
-    ├── macos/defaults.sh
+    ├── macos/                     # defaults.sh（macOS の設定）、security.sh（セキュリティ設定）
     ├── home/                      # ホーム直下に置くファイル（ドットなしの名前）
     ├── config/                    # ~/.config などに置くファイル
+    ├── claude/                    # ~/.claude に置くファイル
+    ├── .github/workflows/ci.yml   # CI
     └── docs/
 ```
 

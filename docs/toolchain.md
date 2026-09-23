@@ -64,7 +64,7 @@ node = "24"
 | Homebrew の node | bitwarden-cli の依存として残る | 直接は使わない。`npm -g` で入れたものはもうない |
 | Volta | 2 プロジェクトが `volta` キーで Node を固定 | 移行できないため残す。新しいプロジェクトでは使わない（[mise.md](mise.md)） |
 | `~/.composer` | 2026-09-23 にゴミ箱へ移動済み | 完了 |
-| uv 本体 | 2025-12 の版で古い | `brew upgrade uv` |
+| uv 本体 | 2026-09-23 に 0.12.18 へ更新済み | 完了。以後は `brew upgrade` で更新 |
 | 既存プロジェクト 1 件の `.venv` | Homebrew の Python で作られている | uv で作り直す（[python.md](python.md)） |
 | corepack | mise の Node 24 に同梱されている | 有効にしなければ害はない。何もしない |
 | エディタの拡張機能 | 2026-09-23 に `config/vscode`・`config/cursor` の `extensions.txt` で管理を始めた | 完了（[editors.md](editors.md)） |

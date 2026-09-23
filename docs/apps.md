@@ -33,12 +33,13 @@
 | その他 | flux（brew） | InfluxDB 用の言語。f.lux と間違えて入れた可能性 | **削除済み** | |
 | 旧ソフト | FileMaker Pro 18 Advanced | | **削除済み** | ゴミ箱へ移動 |
 | | Canon Utilities | | 残す | |
-| 設定 | Karabiner の「Default profile (copy)」 | 使われていないプロファイル | **削除** | `config/karabiner/karabiner.json` から削除済み。実機には `./install.sh link` 実行時に反映 |
-| 設定 | `home/vimrc` | 旧 dotfiles の vim 設定。使われていない | **削除** | リポジトリから削除済み |
+| 設定 | Karabiner の「Default profile (copy)」 | 使われていないプロファイル | **削除済み** | `config/karabiner/karabiner.json` から削除し、実機にも反映済み |
+| 設定 | `home/vimrc` | 旧 dotfiles の vim 設定。使われていない | **削除済み** | リポジトリから削除 |
 
-### Gyazo の代替候補（Mac 用）
+### スクリーンショットのアプリ（2026-09-23 決定）
 
-ShareX は Windows 専用のため Mac では使えない。Mac で ShareX に近いことができるもの：
+Gyazo と Shottr を両方使う。Gyazo は撮ってすぐ URL で共有するため、Shottr は撮影・注釈・文字認識のため。
+検討のときに ShareX の名前が挙がったが、Windows 専用で Mac では使えない。比較した候補は次のとおり。
 
 | アプリ | 特徴 | 価格 | Homebrew |
 | --- | --- | --- | --- |
@@ -46,12 +47,7 @@ ShareX は Windows 専用のため Mac では使えない。Mac で ShareX に�
 | Shottr | 軽量。注釈・OCR・スクロール撮影 | 基本無料 | `cask "shottr"` |
 | macOS 標準（⌘⇧5） | 撮影と画面収録。共有リンクは作れない | 無料 | 不要 |
 
-Gyazo の「撮ってすぐ URL で共有」を重視するなら CleanShot X、撮影と注釈だけなら Shottr が向いている。
-決まるまでは Gyazo を残す。
-
-**Shottr の試用（2026-09-23 開始）**：`brew install --cask shottr` でインストール済み。Brewfile にはまだ入れていない。
-初回起動時に、システム設定 > プライバシーとセキュリティ > 画面収録 で Shottr を許可する。
-採用なら Brewfile に `cask "shottr"` を追加して Gyazo を削除し、不採用なら `brew uninstall --cask shottr` する。
+Shottr は初回起動時に、システム設定 > プライバシーとセキュリティ > 画面収録 で許可する。
 
 ## Homebrew 以外で入れていたもの
 
