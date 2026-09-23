@@ -13,6 +13,7 @@ cd ~/Dev/Github/dotfiles
 ./install.sh --dry-run          # 何が行われるかを確認
 ./install.sh                    # 実行
 gh auth login                   # GitHub にログイン（git push に必要）
+./install.sh check              # 正しく設定されたかを確かめる
 ```
 
 一部だけ実行することもできる。
@@ -31,6 +32,7 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `prompt` | プロンプトテーマ Powerlevel10k |
 | `runtime` | mise で Node、uv で Python、standalone 版 pnpm |
 | `macos` | macOS の設定 |
+| `check` | 実機がリポジトリどおりかを確かめる。何も変更しない。すべてのステップを実行するときには含まれない |
 
 ## 基本方針
 
@@ -112,7 +114,21 @@ zsh や git は今までどおり `~/.zshrc` や `~/.gitconfig` を読む。
 既存のファイルがあった場所には、退避したファイルが `~/.zshrc.backup-20260923120000` のような名前で残る。
 問題なく動くことを確認したら削除してよい。
 
-リンクになっているかは `ls -la` で確認できる。
+## 動作確認（install.sh check）
+
+実機がリポジトリどおりになっているかを、読み取りだけで確かめる。設定を変えたあとや、新しい Mac のセットアップ後に実行する。
+問題があれば `NG` と表示され、終了コードが 1 になる。
+
+| 確かめる対象 | 内容 |
+| --- | --- |
+| リンク | 対応表のすべての場所が、リポジトリ内のファイルへのリンクになっているか |
+| zsh | 設定ファイルに文法エラーがないか。新しいシェルで node・pnpm・python3 が mise・standalone 版・uv から使われるか |
+| git / GitHub CLI | git が `~/.gitconfig` を読むか。共通の無視設定が実際に効くか。gh が設定を読むか |
+| mise / uv | mise が全体設定を読むか。uv が自分で入れた Python を使うか |
+| アプリ | Ghostty の設定にエラーがないか。Karabiner が設定を読めているか |
+| Homebrew | Brewfile のコマンドとアプリがすべて入っているか。新しい版があるかどうかは見ない。App Store アプリは見ない |
+
+リンクを個別に確かめるときは `ls -la` を使う。
 
 ```bash
 ls -la ~/.zshrc
@@ -134,7 +150,7 @@ ls -la ~/.zshrc
 
 | 項目 | 状態 | 説明 |
 | --- | --- | --- |
-| 今の設定の取り込み | 完了 | 挙動を変えずに取り込んだ |
+| 今の設定の取り込み | 完了 | 挙動を変えずに取り込み、2026-09-23 に実機をリンクへ置き換えた |
 | アプリの見直し | 完了（Shottr は試用中） | [docs/apps.md](docs/apps.md) |
 | モダン CLI（fzf、zoxide、ripgrep、fd、bat、eza、git-delta、zsh-autosuggestions） | 未着手 | |
 | git の推奨設定（既定ブランチ main、pull 時 rebase など） | 未着手 | |
@@ -143,4 +159,4 @@ ls -la ~/.zshrc
 | Python を uv に集約 | 完了（gini-slides の仮想環境の作り直しは残り） | [docs/python.md](docs/python.md) |
 | Volta 撤去 | 未着手 | [docs/mise.md](docs/mise.md) |
 | Claude Code の設定を管理 | 未着手 | |
-| CI で install.sh を検証 | 未着手 | |
+| CI で install.sh を検証 | 未着手 | `install.sh check` を CI でも使う予定 |
