@@ -16,6 +16,7 @@ DRY_RUN=0
 # 置き換える前のファイルの退避先。元の場所の隣に置くと、ツールが読み込んでしまうことがあるため 1 か所にまとめる
 BACKUP_DIR="$HOME/.local/state/dotfiles/backup/$(date +%Y%m%d%H%M%S)"
 ALL_STEPS=(clt brew bundle link runtime editor macos security)
+FAILED_STEPS=()
 
 log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$*" >&2; }
@@ -79,8 +80,11 @@ step_bundle() {
   log "Brewfile のアプリ・コマンドをインストール"
   if [[ $DRY_RUN -eq 1 ]]; then
     brew bundle check --file="$DOTFILES/Brewfile" --verbose || true
-  else
-    brew bundle --file="$DOTFILES/Brewfile"
+  elif ! brew bundle --file="$DOTFILES/Brewfile"; then
+    # 1 つの失敗（通信の切断など）で残りの手順まで止めないよう、警告だけ出して先に進む
+    FAILED_STEPS+=("bundle")
+    warn "Brewfile の一部のインストールに失敗しました。残りの手順は続けます"
+    warn "あとで brew bundle --file=\"$DOTFILES/Brewfile\" を実行し直すと、失敗したものだけ入れ直せます"
   fi
 }
 
@@ -339,6 +343,12 @@ main() {
   done
   [[ ${#steps[@]} -eq 0 ]] && steps=("${ALL_STEPS[@]}")
 
+  # Homebrew が入っていれば、どのステップから実行しても brew・mise・uv などが使えるようにする。
+  # 新しい Mac では、link を実行するまでシェルに Homebrew の PATH がないため
+  if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
+
   for s in "${steps[@]}"; do
     if ! declare -F "step_$s" >/dev/null; then
       warn "不明なステップ: ${s}（使えるもの: ${ALL_STEPS[*]} check）"
@@ -346,7 +356,14 @@ main() {
     fi
     "step_$s"
   done
-  [[ " ${steps[*]} " == *" check "* ]] || log "完了。新しいターミナルを開くか exec zsh で反映してください"
+  if [[ " ${steps[*]} " == *" check "* ]]; then
+    return
+  fi
+  if [[ ${#FAILED_STEPS[@]} -gt 0 ]]; then
+    warn "一部が失敗しました: ${FAILED_STEPS[*]}。表示されたエラーを確認し、そのステップだけ実行し直してください"
+    exit 1
+  fi
+  log "完了。新しいターミナルを開くか exec zsh で反映してください"
 }
 
 main "$@"
