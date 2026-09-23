@@ -1,1 +1,0 @@
-/Users/po-lar/.dotfiles/.zsh/.zprezto/runcoms/zshrc
