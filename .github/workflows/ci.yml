@@ -1,0 +1,92 @@
+# dotfiles の CI。何を確かめているかは docs/ci.md
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+# 既定では読み取りだけ。書き込みが必要なジョブはない
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: 文法・書式の検査
+    runs-on: ubuntu-latest
+    steps:
+      # 外部の部品はバージョン名ではなくコミットの ID で固定する（改ざん対策）
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: シェルスクリプト（shellcheck）
+        run: |
+          shellcheck --version | head -2
+          shellcheck --severity=warning install.sh macos/defaults.sh
+          # ステータスラインは手書きのスクリプトなので、文法エラーだけを見る
+          shellcheck --severity=error claude/statusline-command.sh
+
+      - name: JSON と TOML の書式
+        run: |
+          python3 - <<'PY'
+          import json, tomllib, sys
+          bad = 0
+          # スキルのテンプレート（claude/skills/**/templates）はコメント入りの JSONC なので対象外
+          for p in ["config/karabiner/karabiner.json", "claude/settings.json"]:
+              try: json.load(open(p)); print("ok  ", p)
+              except Exception as e: print("NG  ", p, e); bad += 1
+          for p in ["config/starship.toml", "config/mise/config.toml", "config/uv/uv.toml"]:
+              try: tomllib.load(open(p, "rb")); print("ok  ", p)
+              except Exception as e: print("NG  ", p, e); bad += 1
+          sys.exit(bad)
+          PY
+
+  secrets:
+    name: 秘密情報の検査
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      # 今回の push・プルリクエストで追加されたコミットに、トークンなどが含まれていないかを調べる
+      - uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  macos:
+    name: macOS での動作確認
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: zsh の文法
+        run: zsh -n home/zshenv home/zprofile home/zshrc
+
+      - name: install.sh の文法（macOS 標準の bash 3.2）
+        run: /bin/bash -n install.sh && /bin/bash -n macos/defaults.sh
+
+      - name: Brewfile を Homebrew が読めるか
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+        run: brew bundle list --file=Brewfile --all
+
+      - name: 空のホームで link を実行し、2 回目は何も変わらないか
+        run: |
+          export HOME="$RUNNER_TEMP/home"
+          mkdir -p "$HOME"
+          /bin/bash ./install.sh link
+          second="$(/bin/bash ./install.sh link)"
+          echo "$second"
+          if grep -qE '^ +(link|backup) ' <<<"$second"; then
+            echo "2 回目の実行で変更が起きた（冪等になっていない）"; exit 1
+          fi
+
+      - name: 全ステップの dry-run
+        run: |
+          export HOME="$RUNNER_TEMP/home2"
+          mkdir -p "$HOME"
+          /bin/bash ./install.sh --dry-run clt brew link runtime macos
