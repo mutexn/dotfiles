@@ -1,4 +1,8 @@
-# ~/.zshrc — 対話シェル起動時に読まれる。詳細は docs/zsh.md
+# ~/.config/zsh/.zshrc — 対話シェル起動時に読まれる。詳細は docs/zsh.md
+
+# コマンド履歴の保存先。macOS 標準の /etc/zshrc が ~/.zsh_history を指定するので、ここで上書きする
+HISTFILE="$XDG_STATE_HOME/zsh/history"
+[[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
 
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -54,4 +58,4 @@ if (( $+commands[eza] )); then
 fi
 
 # マシン固有の設定・秘密情報（トークン等）。リポジトリには含めない
-[[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
+[[ ! -f "$ZDOTDIR/local.zsh" ]] || source "$ZDOTDIR/local.zsh"

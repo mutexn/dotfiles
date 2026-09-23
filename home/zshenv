@@ -1,7 +1,25 @@
 # ~/.zshenv — すべての zsh（スクリプト実行時も含む）で最初に読まれる。詳細は docs/zsh.md
+# ホームに残す zsh のファイルはこれだけ。ほかの設定は ~/.config/zsh/ に置く（docs/xdg.md）
 
 # PATH の重複を自動で取り除く（シェルを入れ子で起動しても PATH が伸びない）
 typeset -U path PATH
+
+# --- 置き場所のルール（XDG Base Directory）---
+export XDG_CONFIG_HOME="$HOME/.config"      # 設定
+export XDG_DATA_HOME="$HOME/.local/share"   # データ
+export XDG_STATE_HOME="$HOME/.local/state"  # 履歴などの状態
+export XDG_CACHE_HOME="$HOME/.cache"        # キャッシュ
+
+# zsh の .zprofile / .zshrc を ~/.config/zsh/ から読む
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+
+# 各ツールの履歴ファイルを ~/.local/state/ に置く
+export LESSHISTFILE="$XDG_STATE_HOME/less_history"
+export NODE_REPL_HISTORY="$XDG_STATE_HOME/node_repl_history"
+export PSQL_HISTORY="$XDG_STATE_HOME/psql_history"
+
+# macOS 標準のターミナル用のセッション保存（~/.zsh_sessions）を使わない
+export SHELL_SESSIONS_DISABLE=1
 
 # Volta: package.json の volta キーで Node を固定している旧プロジェクト用。移行後に撤去予定。
 # mise と standalone pnpm を優先するため、PATH の末尾に追加する

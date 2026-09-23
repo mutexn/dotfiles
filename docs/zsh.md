@@ -7,15 +7,15 @@ zsh は macOS 標準のシェル。起動の種類に応じて、決まった順
 | リポジトリ | 実機の場所 | いつ読まれるか |
 | --- | --- | --- |
 | `home/zshenv` | `~/.zshenv` | **すべての** zsh 起動時（スクリプト実行も含む）。最初に読まれる |
-| `home/zprofile` | `~/.zprofile` | ログインシェル起動時（ターミナルアプリで新しいウインドウを開いたとき） |
-| `home/zshrc` | `~/.zshrc` | 対話シェル起動時（プロンプトが出るとき） |
+| `home/zprofile` | `~/.config/zsh/.zprofile` | ログインシェル起動時（ターミナルアプリで新しいウインドウを開いたとき） |
+| `home/zshrc` | `~/.config/zsh/.zshrc` | 対話シェル起動時（プロンプトが出るとき） |
 | `config/starship.toml` | `~/.config/starship.toml` | `.zshrc` から起動する starship が読む。プロンプトの見た目 |
-| なし | `~/.zshrc.local` | `.zshrc` の最後に読まれる。**秘密情報とマシン固有の設定専用**。リポジトリに入れない |
+| なし | `~/.config/zsh/local.zsh` | `.zshrc` の最後に読まれる。**秘密情報とマシン固有の設定専用**。リポジトリに入れない |
 
 ターミナルで新しいウインドウを開くと、次の順で読まれる。
 
 ```
-.zshenv  →  .zprofile  →  .zshrc  →  .zshrc.local
+~/.zshenv  →  ~/.config/zsh/.zprofile  →  ~/.config/zsh/.zshrc  →  ~/.config/zsh/local.zsh
 ```
 
 `zsh script.sh` のようにスクリプトを実行したときは `.zshenv` だけが読まれる。
@@ -33,6 +33,10 @@ zsh は macOS 標準のシェル。起動の種類に応じて、決まった順
 
 | 設定 | 意味 |
 | --- | --- |
+| `XDG_*` | 設定・データ・状態・キャッシュの置き場所（[xdg.md](xdg.md)） |
+| `ZDOTDIR` | zsh の `.zprofile` と `.zshrc` を `~/.config/zsh/` から読む。これでホームに残る zsh のファイルは `~/.zshenv` だけになる |
+| `LESSHISTFILE` などの `*_HISTORY` | less・node・psql の履歴を `~/.local/state/` に置く |
+| `SHELL_SESSIONS_DISABLE=1` | macOS 標準のターミナル用のセッション保存（`~/.zsh_sessions`）を使わない |
 | `typeset -U path PATH` | PATH の重複を自動で取り除く。`exec zsh` や tmux でシェルを入れ子に起動しても PATH が伸びない |
 | `VOLTA_HOME` と `path+=(...)` | Volta を PATH の**末尾**に追加する。Volta は package.json の `volta` キーで Node を固定している旧プロジェクト用で、撤去予定（[mise.md](mise.md)） |
 
@@ -59,7 +63,8 @@ Volta の pnpm が standalone 版より先に使われる不具合があった�
 | `# pnpm` 〜 `# pnpm end` | standalone 版 pnpm を PATH に追加する。この目印の 2 行は、pnpm のインストーラが既存の設定を見分けるのに使うので変えない |
 | `mise activate zsh` | フォルダ移動のたびに `mise.toml` を見て Node などを切り替える。PATH の先頭を取る必要があるので、PATH を触る設定の中で最後に置く |
 | モダン CLI | fzf、zoxide、delta、eza の別名、zsh-autosuggestions を、入っているときだけ有効にする（[cli-tools.md](cli-tools.md)） |
-| `source ~/.zshrc.local` | 秘密情報やマシン固有の設定を読み込む（ファイルがなければ何もしない） |
+| 履歴の保存先 `HISTFILE` | `~/.local/state/zsh/history`。macOS 標準の `/etc/zshrc` が `~/.zsh_history` を指定するので、`.zshrc` の先頭で上書きする |
+| `source $ZDOTDIR/local.zsh` | 秘密情報やマシン固有の設定を読み込む（ファイルがなければ何もしない） |
 
 ## プロンプト（starship）
 
@@ -100,16 +105,16 @@ Volta の pnpm が standalone 版より先に使われる不具合があった�
 
 ## 秘密情報の扱い
 
-トークンや API キーは `home/zshrc` に**絶対に書かない**。書く場合は `~/.zshrc.local` に置く。
+トークンや API キーは `home/zshrc` に**絶対に書かない**。書く場合は `~/.config/zsh/local.zsh` に置く。
 
 ```zsh
-# ~/.zshrc.local の例: 値を直接書かず、1Password から取り出す
+# ~/.config/zsh/local.zsh の例: 値を直接書かず、1Password から取り出す
 # export SOME_API_KEY="$(op read 'op://Private/Some API/credential')"
 ```
 
 ### GITHUB_PAT（2026-09-23 に削除）
 
-以前は `~/.zshrc.local` で GitHub のトークンを `GITHUB_PAT` に入れていた。次の理由で削除した。
+以前は `~/.zshrc.local`（現在の `~/.config/zsh/local.zsh`）で GitHub のトークンを `GITHUB_PAT` に入れていた。次の理由で削除した。
 
 - この変数を読んでいるツールが見つからなかった（Codex の GitHub プラグインが読むのは別名の `GITHUB_PAT_TOKEN`）
 - 環境変数に入れると、この Mac で動くすべてのプログラム（npm のインストール処理や AI エージェントなど）が読める。
@@ -138,8 +143,8 @@ echo $PATH | tr : '\n'   # PATH を 1 行ずつ表示
 
 ## 戻し方
 
-`install.sh` がリンクを作るとき、元のファイルは `~/.local/state/dotfiles/backup/<日時>/.zshrc` のように退避される。
+`install.sh` がリンクを作るとき、元のファイルは `~/.local/state/dotfiles/backup/<日時>/.zshenv` のように退避される。
 
 ```bash
-rm ~/.zshrc && mv ~/.local/state/dotfiles/backup/<日時>/.zshrc ~/.zshrc
+rm ~/.zshenv && mv ~/.local/state/dotfiles/backup/<日時>/.zshenv ~/.zshenv
 ```

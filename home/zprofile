@@ -1,4 +1,4 @@
-# ~/.zprofile — ログインシェル起動時に .zshrc より先に読まれる。詳細は docs/zsh.md
+# ~/.config/zsh/.zprofile — ログインシェル起動時に .zshrc より先に読まれる。詳細は docs/zsh.md
 
 # Homebrew の PATH と環境変数を設定する
 eval "$(/opt/homebrew/bin/brew shellenv)"

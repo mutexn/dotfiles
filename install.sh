@@ -87,8 +87,8 @@ step_bundle() {
 LINKS=(
   # zsh（docs/zsh.md）
   "home/zshenv|$HOME/.zshenv"
-  "home/zprofile|$HOME/.zprofile"
-  "home/zshrc|$HOME/.zshrc"
+  "home/zprofile|$HOME/.config/zsh/.zprofile"
+  "home/zshrc|$HOME/.config/zsh/.zshrc"
   # git（docs/git.md）
   "home/gitconfig|$HOME/.gitconfig"
   "config/git/ignore|$HOME/.config/git/ignore"
@@ -113,6 +113,8 @@ LINKS=(
 
 step_link() {
   log "設定ファイルをリンク"
+  # tig は ~/.local/share/tig があると、履歴をそこに保存する（docs/xdg.md）
+  [[ -d "$HOME/.local/share/tig" ]] || run mkdir -p "$HOME/.local/share/tig"
   local entry
   for entry in "${LINKS[@]}"; do
     link "${entry%%|*}" "${entry#*|}"
