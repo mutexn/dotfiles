@@ -139,6 +139,16 @@ ls -la ~/.zshrc
 
 トークンや API キーはリポジトリに入れない。`~/.zshrc.local` に置く（[docs/zsh.md](docs/zsh.md#秘密情報の扱い)）。
 
+このリポジトリは**公開**している。次のものも書かない。
+
+- 取引先の名前、社内リポジトリの名前、仕事のプロジェクト名。例として挙げるときは「旧プロジェクト 2 件」のように一般的に書く
+- 社内のサーバー名、IP アドレス、社内 URL
+
+設定ファイルはリポジトリへのリンクなので、ツールが `~/.zshrc` や `~/.gitconfig` に書き込んだ内容はそのままリポジトリの変更になる。
+コミット前に `git diff` で、意図しない行が追加されていないかを確認する。
+
+GitHub の秘密情報スキャンとプッシュ保護を有効にしている（2026-09-23）。トークンなどを含む push は GitHub が止める。
+
 ## 実機で検証してから標準化する
 
 新しい設定は次の手順で取り入れる。
@@ -156,7 +166,7 @@ ls -la ~/.zshrc
 | git の推奨設定（既定ブランチ main、pull 時 rebase など） | 未着手 | |
 | プロンプトを starship に移行 | 未着手 | Powerlevel10k は保守がほぼ止まっている |
 | ホームのドットファイル集約 | 未着手 | [docs/xdg.md](docs/xdg.md) |
-| Python を uv に集約 | 完了（gini-slides の仮想環境の作り直しは残り） | [docs/python.md](docs/python.md) |
+| Python を uv に集約 | 完了（既存プロジェクト 1 件の仮想環境の作り直しは残り） | [docs/python.md](docs/python.md) |
 | Volta 撤去 | 未着手 | [docs/mise.md](docs/mise.md) |
 | Claude Code の設定を管理 | 未着手 | |
 | CI で install.sh を検証 | 未着手 | `install.sh check` を CI でも使う予定 |

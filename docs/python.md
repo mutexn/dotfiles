@@ -97,7 +97,7 @@ uv python install 3.14 --default  # 既定の python / python3 を切り替え�
 
 ### 対応が残っているもの
 
-- **gini-slides の `.venv`**：Homebrew の Python 3.14 で作られている。上の「requirements.txt だけのプロジェクト」の手順で作り直す
+- **既存プロジェクト 1 件の `.venv`**：Homebrew の Python 3.14 で作られている。上の「requirements.txt だけのプロジェクト」の手順で作り直す
 - **uv 本体が古い**：Homebrew の uv は 0.9.18（2025-12）。そのため Python も 3.14.2 までしか入らない。`brew upgrade uv` のあと `uv python install 3.14 --default` で最新にできる
 
 ## 確認コマンド
