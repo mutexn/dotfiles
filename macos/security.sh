@@ -21,6 +21,21 @@ else
   echo "    ステルスモード: 有効にした"
 fi
 
+# --- Chrome リモートデスクトップ：ログイン時の自動起動を止める（docs/apps.md）---
+# アプリは残す。使うときは launchctl enable で戻す
+CRD=org.chromium.chromoting
+if [[ -f "/Library/LaunchAgents/$CRD.plist" ]]; then
+  if launchctl print-disabled "gui/$(id -u)" 2>/dev/null | grep -q "\"$CRD\" => disabled"; then
+    echo "    リモートデスクトップの自動起動: 停止済み"
+  else
+    launchctl bootout "gui/$(id -u)/$CRD" 2>/dev/null || true
+    launchctl disable "gui/$(id -u)/$CRD"
+    echo "    リモートデスクトップの自動起動: 停止した"
+  fi
+else
+  echo "    リモートデスクトップ: 入っていないため何もしない"
+fi
+
 # --- Touch ID で sudo：管理者パスワードの代わりに指紋を使えるようにする ---
 # /etc/pam.d/sudo_local は macOS のアップデートで消えない。macOS 付属のひな形の 1 行を有効にして作る
 SUDO_LOCAL=/etc/pam.d/sudo_local

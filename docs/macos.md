@@ -140,6 +140,7 @@ diff before.txt after.txt
 | ファイアウォール | 外から Mac への接続を、許可したアプリ以外は受け付けない。公衆 Wi-Fi で特に重要 | ネットワーク > ファイアウォール |
 | ステルスモード | 外からの問い合わせ（ping など）に応答せず、ネットワーク上で見つかりにくくする | ネットワーク > ファイアウォール > オプション |
 | Touch ID で sudo | 管理者パスワードの代わりに指紋で認証できる。`/etc/pam.d/sudo_local` に書くので、macOS のアップデートで消えない | 画面設定なし |
+| リモートデスクトップの自動起動停止 | Chrome リモートデスクトップがログイン時に常駐しないようにする。アプリは残す（[apps.md](apps.md)） | 画面設定なし |
 
 Touch ID で sudo は、macOS 付属のひな形 `/etc/pam.d/sudo_local.template` の `pam_tid.so` の行を有効にして作る。
 `/etc/pam.d/sudo_local` が別の内容で既にある場合は、上書きせずに警告だけ出す。
@@ -152,6 +153,7 @@ Touch ID で sudo は、macOS 付属のひな形 `/etc/pam.d/sudo_local.template
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate off
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode off
 sudo rm /etc/pam.d/sudo_local
+launchctl enable gui/$(id -u)/org.chromium.chromoting   # リモートデスクトップを使えるようにする
 ```
 
 ## 設定ではなく手作業で確認すること
