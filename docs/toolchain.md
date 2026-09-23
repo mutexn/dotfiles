@@ -23,6 +23,7 @@
 | コマンドラインツール | Homebrew（formula） | `Brewfile` |
 | Node 本体 | mise | 全体：`config/mise/config.toml`、プロジェクト：`mise.toml` |
 | pnpm 本体 | standalone 版 | `install.sh`。バージョンは各プロジェクトの `packageManager` |
+| Claude Code 本体 | 公式のインストーラ（自動で更新される） | `install.sh` |
 | JavaScript のパッケージ | pnpm | 各プロジェクトの `package.json` と `pnpm-lock.yaml` |
 | Python 本体・仮想環境・パッケージ | uv | 全体：`config/uv/uv.toml`、プロジェクト：`.python-version`・`pyproject.toml`・`uv.lock` |
 | Node 製のコマンド（Homebrew にないもの） | mise の `npm:` 指定 | `config/mise/config.toml` |
@@ -52,7 +53,7 @@ node = "24"
 | `brew install node` / `brew install python` をプロジェクト用に使う | `brew upgrade` で勝手に上がる | mise / uv |
 | macOS 標準の Ruby・Python・Java を使う | 古く、更新できない | 必要なら mise / uv |
 | Volta を新しく使う | 旧プロジェクトのためだけに残している | mise |
-| 公式以外の `curl ... \| sh` でのインストール | 中身を確認しづらい | Homebrew。Homebrew 本体と pnpm の公式インストーラだけは例外 |
+| 公式以外の `curl ... \| sh` でのインストール | 中身を確認しづらい | Homebrew。Homebrew 本体・pnpm・Claude Code の公式インストーラだけは例外 |
 
 ## 今の Mac でずれているところ（2026-09-23 時点）
 
