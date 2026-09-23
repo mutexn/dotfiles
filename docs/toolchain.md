@@ -28,7 +28,7 @@
 | Node 製のコマンド（Homebrew にないもの） | mise の `npm:` 指定 | `config/mise/config.toml` |
 | Python 製のコマンド（Homebrew にないもの） | `uv tool install` | `install.sh` |
 | その他の言語（Go、Rust、Ruby、Java など） | 必要になったら mise | `config/mise/config.toml` またはプロジェクトの `mise.toml` |
-| 秘密情報 | 1Password、`~/.zshrc.local` | リポジトリには入れない |
+| 秘密情報 | 1Password、`~/.config/zsh/local.zsh` | リポジトリには入れない |
 
 ### コマンドを入れるときの優先順位
 

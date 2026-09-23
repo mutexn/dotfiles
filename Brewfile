@@ -103,7 +103,8 @@ cask "chrome-remote-desktop-host"
 cask "google-drive"
 cask "spotify"
 cask "appcleaner"     # アプリを関連ファイルごと削除
-cask "gyazo"          # スクリーンショット共有。代替を検討中（docs/apps.md）
+cask "gyazo"          # スクリーンショットを撮ってすぐ URL で共有
+cask "shottr"         # スクリーンショットの撮影・注釈・文字認識
 
 # ============================================================
 # App Store アプリ（mas）
