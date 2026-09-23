@@ -58,10 +58,10 @@ node = "24"
 
 | 項目 | 状態 | 対応案 |
 | --- | --- | --- |
-| Marp CLI | Homebrew の Node に `npm -g` で入っている | `brew install marp-cli` に移し、`/opt/homebrew/bin/npm uninstall -g @marp-team/marp-cli` |
-| Homebrew の node | bitwarden-cli の依存として残る | 直接は使わない。Marp を移せば、Homebrew の node で `npm -g` を使うものはなくなる |
+| Marp CLI | 2026-09-23 に Homebrew の `marp-cli` へ移行済み | 完了 |
+| Homebrew の node | bitwarden-cli の依存として残る | 直接は使わない。`npm -g` で入れたものはもうない |
 | Volta | 2 プロジェクトが `volta` キーで Node を固定 | 2 プロジェクトを mise に移して撤去（[mise.md](mise.md)） |
-| `~/.composer` | PHP の Composer の残り。PHP は入っていない | 削除候補 |
+| `~/.composer` | 2026-09-23 にゴミ箱へ移動済み | 完了 |
 | uv 本体 | 2025-12 の版で古い | `brew upgrade uv` |
 | gini-slides の `.venv` | Homebrew の Python で作られている | uv で作り直す（[python.md](python.md)） |
 | corepack | mise の Node 24 に同梱されている | 有効にしなければ害はない。何もしない |
@@ -87,4 +87,4 @@ node = "24"
 gini-harness は AI 活用ガイドラインと Claude Code 用のリポジトリで範囲が違うため、移す先には向かない。
 
 `~/Dev/Github/TOOLCHAIN.md` は [mise.md](mise.md) に統合済み。二重管理を避けるため、
-元のファイルは「dotfiles の docs/mise.md に移動した」という 1 行だけにする。
+2026-09-23 に「dotfiles の docs/mise.md に移動した」という案内だけにした。

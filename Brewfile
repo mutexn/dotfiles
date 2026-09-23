@@ -27,6 +27,7 @@ brew "ranger"         # ファイラー
 # --- AI / その他 ---
 brew "ollama"         # ローカル LLM の実行環境
 brew "poppler"        # PDF ツール（pdftotext など）
+brew "marp-cli"       # Markdown からスライドを作る
 brew "bitwarden-cli"  # Bitwarden の CLI
 brew "mas"            # App Store アプリをコマンドで入れる
 

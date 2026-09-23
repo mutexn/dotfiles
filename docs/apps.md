@@ -13,7 +13,7 @@
 | | cmux | AI エージェント並行作業向け | 残す | |
 | | Warp | 3 つ目のターミナル | 残す | |
 | ブラウザ | Chrome | | 残す | |
-| | Arc | 開発元が Dia に移行し、Arc は保守のみ | **削除** | Dia に移行 |
+| | Arc | 開発元が Dia に移行し、Arc は保守のみ | **削除済み** | Dia に移行 |
 | | Dia | Arc の後継 | 残す | Brewfile に追加 |
 | | Firefox | 表示確認用 | 残す | |
 | エディタ / AI IDE | VS Code / Cursor / Antigravity | 3 つ併存 | 残す | |
@@ -21,16 +21,16 @@
 | ローカル LLM | ollama / LM Studio / Jan | 3 つ併存 | 残す | |
 | パスワード管理 | 1Password / Bitwarden | 2 つ併存 | 残す | |
 | スクリーンショット | Gyazo（本体・Menu・Video） | macOS 標準（⌘⇧5）で足りるか | **検証中** | ShareX は Windows 専用のため、Mac 向けの Shottr を 2026-09-23 から試用中。結果が出るまで Gyazo も残す |
-| オフィス | LibreOffice | 他のオフィスソフトと併存 | **削除** | |
+| オフィス | LibreOffice | 他のオフィスソフトと併存 | **削除済み** | |
 | デザイン | Adobe XD | Adobe が開発を終了 | 残す | |
 | WordPress 開発 | Local / DevKinsta | 同じ用途が 2 つ | 残す | |
 | VPN | OpenVPN Connect（アプリ） | | 残す | |
-| | openvpn（コマンド） | アプリと重複 | **削除** | アプリで足りる |
+| | openvpn（コマンド） | アプリと重複 | **削除（途中）** | 本体ファイルが root 所有のため、管理者権限での削除が必要。下記「残っている作業」 |
 | git の画面操作 | lazygit / gitui / tig | 3 つ併存 | 残す | |
 | ファイラー | nnn / ranger | 2 つ併存 | 残す | |
 | Python | python@3.13（brew） | uv や mise で管理できる | **削除済み** | 依存しているものがないことを確認して 2026-09-23 に削除。Python は uv で管理する（[python.md](python.md)） |
-| その他 | flux（brew） | InfluxDB 用の言語。f.lux と間違えて入れた可能性 | **削除** | |
-| 旧ソフト | FileMaker Pro 18 Advanced | | **削除** | Homebrew 管理外なので手動で削除 |
+| その他 | flux（brew） | InfluxDB 用の言語。f.lux と間違えて入れた可能性 | **削除済み** | |
+| 旧ソフト | FileMaker Pro 18 Advanced | | **削除済み** | ゴミ箱へ移動 |
 | | Canon Utilities | | 残す | |
 | 設定 | Karabiner の「Default profile (copy)」 | 使われていないプロファイル | **削除** | `config/karabiner/karabiner.json` から削除済み。実機には `./install.sh link` 実行時に反映 |
 | 設定 | `home/vimrc` | 旧 dotfiles の vim 設定。使われていない | **削除** | リポジトリから削除済み |
@@ -77,6 +77,34 @@ brew install --cask --adopt docker-desktop thebrowsercompany-dia spotify google-
 `--adopt` は、入っているアプリと同じバージョンなら置き換えずに管理下に移す。
 バージョンが違う場合は失敗するので、そのアプリはいったん最新版に更新してから再実行する。
 
+**注意：管理者パスワードが必要な cask は、必ず自分のターミナルで実行する。**
+2026-09-23 に docker-desktop を Claude Code から `--adopt` したところ、パスワードを入力できずに失敗し、
+Homebrew の後始末で既存の Docker.app が削除された。データ（`~/Library/Containers/com.docker.docker`）は無事だった。
+パスワードが必要かは、`brew info --cask <名前>` で pkg を使うか、特権ヘルパーを入れるかで見分けられる。
+
+### 管理下への移行の結果（2026-09-23）
+
+| アプリ | 結果 |
+| --- | --- |
+| Dia | 移行済み |
+| Spotify | 移行済み |
+| Docker Desktop | **失敗し、アプリ本体が削除された**。データは無事。入れ直しが必要 |
+| Google Drive | 失敗。アプリは残っている。管理者パスワードが必要 |
+
+### 残っている作業（自分のターミナルで実行する）
+
+```bash
+# Docker Desktop を入れ直す（コンテナやイメージのデータはそのまま使われる）
+brew install --cask docker-desktop
+
+# Google Drive を Homebrew の管理下に移す
+brew install --cask --adopt google-drive
+
+# openvpn の残りを消す（root 所有のファイルが残っている）
+sudo rm -rf /opt/homebrew/Cellar/openvpn/2.7.5/sbin
+brew uninstall --force openvpn
+```
+
 ## 問題なく使っているもの
 
 | カテゴリ | アプリ |
@@ -95,3 +123,4 @@ brew install --cask --adopt docker-desktop thebrowsercompany-dia spotify google-
 | 2026-09-23 | 見直し結果を Brewfile に反映。Arc・LibreOffice・openvpn・python@3.13・flux・FileMaker Pro 18 を削除対象に。Dia・Docker Desktop・Spotify・Google Drive と App Store アプリ 10 個を Brewfile に追加。Gyazo は代替を検討中 |
 | 2026-09-23 | Shottr の試用を開始 |
 | 2026-09-23 | Python を uv に集約。python@3.13 を削除 |
+| 2026-09-23 | Arc・LibreOffice・flux・FileMaker Pro 18 を削除。Dia・Spotify を Homebrew 管理下へ。Docker Desktop の移行に失敗しアプリが削除された（データは無事） |
