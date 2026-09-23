@@ -18,6 +18,16 @@ brew "lazygit"        # git の画面操作（TUI）
 brew "gitui"          # git の画面操作（TUI）
 brew "tig"            # git の履歴ビューア
 
+# --- モダン CLI（docs/cli-tools.md）---
+brew "ripgrep"             # rg: grep の高速版
+brew "fd"                  # find の簡単版
+brew "bat"                 # cat の色付き版
+brew "eza"                 # ls の色付き・git 対応版（le / lt）
+brew "fzf"                 # あいまい検索（ctrl+r / ctrl+t / alt+c）
+brew "zoxide"              # よく行くフォルダへ移動（z / zi）
+brew "git-delta"           # git の差分を見やすく表示
+brew "zsh-autosuggestions" # 入力候補を履歴から表示
+
 # --- ファイル操作・ターミナル ---
 brew "neovim"         # エディタ
 brew "tmux"           # ターミナル多重化

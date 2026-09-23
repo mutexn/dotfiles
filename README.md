@@ -175,9 +175,9 @@ ls -la ~/.zshrc
 | --- | --- | --- |
 | 今の設定の取り込み | 完了 | 挙動を変えずに取り込み、2026-09-23 に実機をリンクへ置き換えた |
 | アプリの見直し | 完了（Shottr は試用中） | [docs/apps.md](docs/apps.md) |
-| モダン CLI（fzf、zoxide、ripgrep、fd、bat、eza、git-delta、zsh-autosuggestions） | 試用中（2026-09-23 開始）。設定は実機の `~/.zshrc.local` だけに置いている | |
+| モダン CLI（fzf、zoxide、ripgrep、fd、bat、eza、git-delta、zsh-autosuggestions） | 採用（2026-09-23） | [docs/cli-tools.md](docs/cli-tools.md) |
 | git の推奨設定（既定ブランチ main、pull 時 rebase など） | 未着手 | |
-| プロンプトを starship に移行 | 試用中（2026-09-23 開始）。設定は実機の `~/.config/starship.toml` だけに置いている | [docs/zsh.md](docs/zsh.md) |
+| プロンプトを starship に移行 | 試用中（2026-09-23 開始）。Powerlevel10k の見た目に合わせて調整済み。設定は実機の `~/.config/starship.toml` だけに置いている | [docs/zsh.md](docs/zsh.md) |
 | ホームのドットファイル集約 | 未着手 | [docs/xdg.md](docs/xdg.md) |
 | Python を uv に集約 | 完了（既存プロジェクト 1 件の仮想環境の作り直しは残り） | [docs/python.md](docs/python.md) |
 | Volta 撤去 | 未着手 | [docs/mise.md](docs/mise.md) |
