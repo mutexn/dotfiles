@@ -9,7 +9,7 @@
 # --- 開発の基盤 ---
 brew "mise"           # Node などのランタイム管理（docs/mise.md）
 brew "direnv"         # ディレクトリごとに .envrc の環境変数を読み込む
-brew "uv"             # Python のパッケージ・プロジェクト管理
+brew "uv"             # Python の本体・仮想環境・パッケージ管理（docs/python.md）
 brew "gh"             # GitHub CLI（git の認証ヘルパーにも使用）
 brew "libpq"          # PostgreSQL クライアント（psql）
 

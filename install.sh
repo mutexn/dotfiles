@@ -91,6 +91,8 @@ step_link() {
   link config/git/ignore "$HOME/.config/git/ignore"
   # mise（docs/mise.md）
   link config/mise/config.toml "$HOME/.config/mise/config.toml"
+  # uv（docs/python.md）
+  link config/uv/uv.toml "$HOME/.config/uv/uv.toml"
   # GitHub CLI。認証情報の hosts.yml はリンクしない（docs/git.md）
   link config/gh/config.yml "$HOME/.config/gh/config.yml"
   # Ghostty

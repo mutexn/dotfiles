@@ -1,0 +1,5 @@
+# uv の全体設定。詳細は docs/python.md
+
+# uv が入れた Python だけを使う。Homebrew や macOS 標準の Python は使わない。
+# brew upgrade で Python が上がっても、プロジェクトの仮想環境が壊れないようにするため
+python-preference = "only-managed"

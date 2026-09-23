@@ -44,6 +44,7 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `config/git/ignore` | `~/.config/git/ignore` | [docs/git.md](docs/git.md) |
 | `config/gh/config.yml` | `~/.config/gh/config.yml` | [docs/git.md](docs/git.md) |
 | `config/mise/config.toml` | `~/.config/mise/config.toml` | [docs/mise.md](docs/mise.md) |
+| `config/uv/uv.toml` | `~/.config/uv/uv.toml` | [docs/python.md](docs/python.md) |
 | `config/ghostty/config` | `~/Library/Application Support/com.mitchellh.ghostty/config` | [docs/terminal-and-input.md](docs/terminal-and-input.md) |
 | `config/karabiner/` | `~/.config/karabiner/` | [docs/terminal-and-input.md](docs/terminal-and-input.md) |
 | `macos/defaults.sh` | macOS のシステム設定 | [docs/macos.md](docs/macos.md) |
@@ -83,12 +84,17 @@ zsh や git は今までどおり `~/.zshrc` や `~/.gitconfig` を読む。
 │   │   ├── config.yml    → ~/Dev/Github/dotfiles/config/gh/config.yml
 │   │   └── hosts.yml              # gh auth login が作るログイン情報。リンクしない
 │   ├── mise/config.toml  → ~/Dev/Github/dotfiles/config/mise/config.toml
+│   ├── uv/uv.toml        → ~/Dev/Github/dotfiles/config/uv/uv.toml
 │   └── karabiner/        → ~/Dev/Github/dotfiles/config/karabiner/   # フォルダごとリンク
 ├── Library/
 │   ├── Application Support/com.mitchellh.ghostty/
 │   │   └── config        → ~/Dev/Github/dotfiles/config/ghostty/config
 │   └── pnpm/                      # install.sh runtime が入れる standalone 版 pnpm
-├── .local/share/mise/             # mise が入れた Node など
+├── .local/
+│   ├── bin/python3                # uv が作る既定の Python へのリンク
+│   └── share/
+│       ├── mise/                  # mise が入れた Node
+│       └── uv/python/             # uv が入れた Python
 └── Dev/Github/dotfiles/           # このリポジトリ（リンクの実体）
     ├── install.sh
     ├── Brewfile
@@ -129,6 +135,7 @@ ls -la ~/.zshrc
 | git の推奨設定（既定ブランチ main、pull 時 rebase など） | 未着手 | |
 | プロンプトを starship に移行 | 未着手 | Powerlevel10k は保守がほぼ止まっている |
 | ホームのドットファイル集約 | 未着手 | [docs/xdg.md](docs/xdg.md) |
-| Volta 撤去・Python を uv に集約 | 未着手 | [docs/mise.md](docs/mise.md) |
+| Python を uv に集約 | 完了（gini-slides の仮想環境の作り直しは残り） | [docs/python.md](docs/python.md) |
+| Volta 撤去 | 未着手 | [docs/mise.md](docs/mise.md) |
 | Claude Code の設定を管理 | 未着手 | |
 | CI で install.sh を検証 | 未着手 | |

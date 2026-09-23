@@ -28,7 +28,7 @@
 | | openvpn（コマンド） | アプリと重複 | **削除** | アプリで足りる |
 | git の画面操作 | lazygit / gitui / tig | 3 つ併存 | 残す | |
 | ファイラー | nnn / ranger | 2 つ併存 | 残す | |
-| Python | python@3.13（brew） | uv や mise で管理できる | **削除** | 依存しているものがないことを確認済み。`python3` コマンドは mlx・ollama・ranger の依存で入る python@3.14 が引き続き提供する |
+| Python | python@3.13（brew） | uv や mise で管理できる | **削除済み** | 依存しているものがないことを確認して 2026-09-23 に削除。Python は uv で管理する（[python.md](python.md)） |
 | その他 | flux（brew） | InfluxDB 用の言語。f.lux と間違えて入れた可能性 | **削除** | |
 | 旧ソフト | FileMaker Pro 18 Advanced | | **削除** | Homebrew 管理外なので手動で削除 |
 | | Canon Utilities | | 残す | |
@@ -94,3 +94,4 @@ brew install --cask --adopt docker-desktop thebrowsercompany-dia spotify google-
 | 2026-09-23 | 一覧を作成 |
 | 2026-09-23 | 見直し結果を Brewfile に反映。Arc・LibreOffice・openvpn・python@3.13・flux・FileMaker Pro 18 を削除対象に。Dia・Docker Desktop・Spotify・Google Drive と App Store アプリ 10 個を Brewfile に追加。Gyazo は代替を検討中 |
 | 2026-09-23 | Shottr の試用を開始 |
+| 2026-09-23 | Python を uv に集約。python@3.13 を削除 |
