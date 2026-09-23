@@ -1,6 +1,6 @@
 # Brewfile — Homebrew で入れるコマンドとアプリの一覧。詳細は docs/brew.md
-# 2026-09-23 時点の実機の構成をそのまま書き出したもの。
-# 見直し中の項目は docs/apps.md で採否を決めてから、この一覧に反映する。
+# 2026-09-23 に実機の構成を書き出し、アプリ見直しの結果を反映したもの。
+# 採否の理由は docs/apps.md に記録している。
 
 # ============================================================
 # コマンドラインツール（formula）
@@ -10,27 +10,24 @@
 brew "mise"           # Node などのランタイム管理（docs/mise.md）
 brew "direnv"         # ディレクトリごとに .envrc の環境変数を読み込む
 brew "uv"             # Python のパッケージ・プロジェクト管理
-brew "python@3.13"    # 見直し候補: uv / mise に寄せるか検討
 brew "gh"             # GitHub CLI（git の認証ヘルパーにも使用）
 brew "libpq"          # PostgreSQL クライアント（psql）
 
 # --- git の画面操作（TUI）---
-brew "lazygit"        # 見直し候補: 3 つ併存
-brew "gitui"          # 見直し候補
-brew "tig"            # 見直し候補
+brew "lazygit"        # git の画面操作（TUI）
+brew "gitui"          # git の画面操作（TUI）
+brew "tig"            # git の履歴ビューア
 
 # --- ファイル操作・ターミナル ---
 brew "neovim"         # エディタ
 brew "tmux"           # ターミナル多重化
-brew "nnn"            # 見直し候補: ファイラーが 2 つ併存
-brew "ranger"         # 見直し候補
+brew "nnn"            # ファイラー
+brew "ranger"         # ファイラー
 
 # --- AI / その他 ---
 brew "ollama"         # ローカル LLM の実行環境
 brew "poppler"        # PDF ツール（pdftotext など）
-brew "bitwarden-cli"  # 見直し候補: 1Password と併存
-brew "openvpn"        # 見直し候補: OpenVPN Connect アプリと重複
-brew "flux"           # 見直し候補: InfluxDB 用の言語。f.lux（画面色温度）とは別物
+brew "bitwarden-cli"  # Bitwarden の CLI
 brew "mas"            # App Store アプリをコマンドで入れる
 
 # ============================================================
@@ -38,30 +35,30 @@ brew "mas"            # App Store アプリをコマンドで入れる
 # ============================================================
 
 # --- ターミナル ---
-cask "ghostty"        # メイン候補
+cask "ghostty"        # メインのターミナル（config/ghostty）
 cask "cmux"           # AI エージェント向けターミナル
-cask "warp"           # 見直し候補
+cask "warp"
 
 # --- ブラウザ ---
 cask "google-chrome"
-cask "arc"            # 見直し候補: 開発縮小
-cask "firefox"        # 見直し候補
+cask "thebrowsercompany-dia"  # Dia
+cask "firefox"
 
 # --- エディタ / AI IDE ---
 cask "visual-studio-code"
 cask "cursor"
-cask "antigravity"    # 見直し候補
+cask "antigravity"
 
 # --- AI ---
 cask "claude"
 cask "chatgpt"
 cask "typeless"       # 音声入力
-cask "lm-studio"      # 見直し候補: ローカル LLM アプリが複数
-cask "jan"            # 見直し候補
+cask "lm-studio"      # ローカル LLM
+cask "jan"            # ローカル LLM
 
 # --- パスワード管理 ---
 cask "1password-cli"
-cask "bitwarden"      # 見直し候補: 1Password と併存
+cask "bitwarden"
 
 # --- 入力・操作 ---
 cask "raycast"               # ランチャー
@@ -79,22 +76,33 @@ cask "obsidian"
 cask "anki"
 cask "figma"
 cask "adobe-creative-cloud"
-cask "libreoffice"    # 見直し候補
 
 # --- 開発・インフラ ---
 cask "gcloud-cli"
+cask "docker-desktop"
 cask "cyberduck"      # FTP / S3 クライアント
-cask "local"          # 見直し候補: WordPress ローカル環境。DevKinsta と重複
+cask "local"          # WordPress ローカル環境
 cask "openvpn-connect"
 cask "chrome-remote-desktop-host"
 
 # --- ユーティリティ ---
+cask "google-drive"
+cask "spotify"
 cask "appcleaner"     # アプリを関連ファイルごと削除
-cask "gyazo"          # 見直し候補: 標準スクリーンショットで足りるか
+cask "gyazo"          # スクリーンショット共有。代替を検討中（docs/apps.md）
 
 # ============================================================
 # App Store アプリ（mas）
 # ============================================================
-# mas コマンドの一覧取得がこの Mac で応答しなかったため未記入。
-# 見直し後に `mas list` の ID をもとに追記する。例:
-# mas "LINE", id: 539883307
+# 事前に App Store アプリで Apple アカウントにサインインしておく必要がある
+
+mas "Microsoft Word", id: 462054704
+mas "Microsoft Excel", id: 462058435
+mas "Microsoft PowerPoint", id: 462062816
+mas "Keynote", id: 409183694
+mas "Pages", id: 409201541
+mas "Numbers", id: 409203825
+mas "iMovie", id: 408981434
+mas "LINE", id: 539883307
+mas "Goodnotes", id: 1444383602
+mas "Kindle", id: 302584613

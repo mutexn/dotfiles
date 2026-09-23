@@ -38,5 +38,5 @@ Apple Silicon の Mac では `/opt/homebrew` に入る。PATH への追加は `h
 | アプリ | 入れ方 |
 | --- | --- |
 | e-Gov 電子申請、e-Tax、JPKI 利用者ソフト、ELPKI | 各公式サイトから手動でダウンロード |
-| Microsoft Office、Adobe の各アプリ | Office は Microsoft アカウント、Adobe は Creative Cloud アプリから |
-| Docker Desktop、DevKinsta | 公式サイトから（apps.md の見直し結果に応じて Brewfile へ移す） |
+| Adobe Illustrator / Photoshop | Creative Cloud アプリから |
+| DevKinsta、ovice | 公式サイトから手動でダウンロード |
