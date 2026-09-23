@@ -193,5 +193,6 @@ zsh の設定などはリポジトリへのリンクなので、master に入っ
 | Volta 撤去 | 見送り（2026-09-23）。移行できないプロジェクトがあるため残す | [docs/mise.md](docs/mise.md) |
 | Claude Code の設定を管理 | 完了。CLAUDE.md・settings.json・ステータスライン・自作スキルを管理 | [docs/claude.md](docs/claude.md) |
 | CI で検証 | 完了（2026-09-23） | [docs/ci.md](docs/ci.md) |
+| macOS の設定の追加（拡張子の表示、パスバー、Finder の英語表示、入力の自動変換の停止など 11 項目） | 採用（2026-09-23） | [docs/macos.md](docs/macos.md) |
 | セキュリティ設定（FileVault、ファイアウォール、ステルスモード、Touch ID で sudo） | 完了（2026-09-23）。この Mac で `./install.sh security` を実行し、`check` で確認済み | [docs/macos.md](docs/macos.md#セキュリティ設定macossecuritysh) |
 | バックアップ（Time Machine） | 使わない（2026-09-23 決定） | [docs/macos.md](docs/macos.md) |

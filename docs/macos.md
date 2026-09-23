@@ -20,6 +20,10 @@
 | `-g KeyRepeat` | `2` | リピートの速さ。2 は画面で選べる最速（約 30ms 間隔） | キーボード > キーのリピート速度 |
 | `-g NSAutomaticCapitalizationEnabled` | `false` | 文頭の自動大文字化をしない | キーボード > 入力ソース > 編集 > 文頭を自動的に大文字にする |
 | `-g NSAutomaticPeriodSubstitutionEnabled` | `false` | スペース 2 回でピリオドにしない | キーボード > 入力ソース > 編集 > スペースバーを 2 回押してピリオドを入力 |
+| `-g NSAutomaticQuoteSubstitutionEnabled` | `false` | `"` を “ ” に自動変換しない。コードや設定を書くときに便利 | キーボード > 入力ソース > 編集 > スマート引用符とスマートダッシュを使用 |
+| `-g NSAutomaticDashSubstitutionEnabled` | `false` | `--` を — に自動変換しない | 同上 |
+| `-g NSAutomaticSpellingCorrectionEnabled` | `false` | 英単語のスペルを自動で直さない | キーボード > 入力ソース > 編集 > スペルを自動で修正 |
+| `-g ApplePressAndHoldEnabled` | `false` | キーを押し続けたとき、アクセント記号の候補ではなく同じ文字を連続入力する。vim の移動などで便利。アプリを起動し直すと反映 | 画面設定なし |
 
 旧 dotfiles ではキーリピートを 0 にしていた。0 は画面では選べない値で、
 速すぎて誤入力が増えるため採用していない。
@@ -38,7 +42,13 @@
 | `FXPreferredViewStyle` | `Nlsv` | 既定の表示をリスト表示にする（`icnv` アイコン、`clmv` カラム、`glyv` ギャラリー） | 表示メニュー |
 | `FXDefaultSearchScope` | `SCcf` | 検索の既定範囲を「現在のフォルダ」にする（既定は `SCev` の Mac 全体） | Finder 設定 > 詳細 > 検索実行時 |
 | `NewWindowTarget` / `NewWindowTargetPath` | `PfLo` / iCloud の「ダウンロード」 | 新規ウインドウで開く場所。`PfLo` は「その他の場所」を意味し、実際の場所は `NewWindowTargetPath` で指定する | Finder 設定 > 一般 > 新規 Finder ウインドウで次を表示 |
+| `AppleLanguages` | `(en)` | **Finder だけ**英語表示にする。フォルダ名が Documents・Downloads・Applications などになり、Finder のメニューも英語になる。システムやほかのアプリは日本語のまま。iCloud Drive の「ダウンロード」は実際の名前が日本語なので変わらない | 言語と地域 > アプリケーション |
+| `-g AppleShowAllExtensions` | `true` | すべての拡張子を表示 | Finder 設定 > 詳細 > すべてのファイル名拡張子を表示 |
+| `ShowPathbar` | `true` | 下部に、今いるフォルダの場所（パスバー）を表示 | 表示メニュー > パスバーを表示 |
+| `ShowStatusBar` | `true` | 下部に、項目数と空き容量（状態バー）を表示 | 表示メニュー > ステータスバーを表示 |
+| `FXEnableExtensionChangeWarning` | `false` | 拡張子を書き換えたときの確認を出さない | Finder 設定 > 詳細 > 拡張子を変更する前に警告を表示 |
 | `com.apple.desktopservices DSDontWriteNetworkStores` | `true` | ネットワークドライブに `.DS_Store` を作らない | 画面設定なし |
+| `com.apple.desktopservices DSDontWriteUSBStores` | `true` | USB メモリに `.DS_Store` を作らない | 画面設定なし |
 
 ### Dock
 
@@ -47,6 +57,7 @@
 | `autohide` | `true` | Dock を自動的に隠す | デスクトップと Dock > Dock を自動的に表示/非表示 |
 | `tilesize` | `48` | アイコンの大きさ（ピクセル） | デスクトップと Dock > サイズ |
 | `orientation` | `left` | 画面の左端に表示 | デスクトップと Dock > 画面上の位置 |
+| `show-recents` | `false` | 固定していない、最近使ったアプリを Dock に出さない | デスクトップと Dock > 提案されたアプリケーションと最近使用したアプリケーションを Dock に表示 |
 
 ### スクリーンショット
 
@@ -74,6 +85,17 @@ defaults delete com.apple.dock autohide
 defaults delete com.apple.dock tilesize
 defaults delete com.apple.dock orientation
 defaults delete com.apple.screencapture location   # デスクトップに戻る
+defaults delete -g NSAutomaticQuoteSubstitutionEnabled
+defaults delete -g NSAutomaticDashSubstitutionEnabled
+defaults delete -g NSAutomaticSpellingCorrectionEnabled
+defaults delete -g ApplePressAndHoldEnabled
+defaults delete com.apple.finder AppleLanguages         # Finder がシステムの言語（日本語）に戻る
+defaults delete -g AppleShowAllExtensions
+defaults delete com.apple.finder ShowPathbar
+defaults delete com.apple.finder ShowStatusBar
+defaults delete com.apple.finder FXEnableExtensionChangeWarning
+defaults delete com.apple.desktopservices DSDontWriteUSBStores
+defaults delete com.apple.dock show-recents
 killall Finder Dock SystemUIServer
 ```
 
@@ -93,18 +115,16 @@ defaults read > after.txt
 diff before.txt after.txt
 ```
 
-## 検証中・候補の設定
+## 試して見送った設定（2026-09-23）
 
-実機で試してから採用する（[README](../README.md) の「実機で検証してから標準化」）。
+候補として検討し、今回は採用しなかったもの。使いたくなったら `macos/defaults.sh` に加える。
 
-| 設定 | 意味 | 状態 |
-| --- | --- | --- |
-| `com.apple.desktopservices DSDontWriteUSBStores -bool true` | USB メモリに `.DS_Store` を作らない | 未検証 |
-| `com.apple.dock autohide-delay -float 0` | Dock が出るまでの待ち時間をなくす（旧 dotfiles にあった） | 未検証 |
-| `com.apple.dock show-recents -bool false` | Dock に最近使ったアプリを出さない | 未検証 |
-| `com.apple.finder ShowPathbar -bool true` | Finder 下部にパスバーを表示 | 未検証 |
-| `-g AppleShowAllExtensions -bool true` | すべての拡張子を表示 | 未検証 |
-| `-g NSAutomaticQuoteSubstitutionEnabled -bool false` | `"` を “ ” に自動変換しない。コードを書くときに便利 | 未検証 |
+| 設定 | 意味 |
+| --- | --- |
+| `com.apple.dock autohide-delay -float 0` と `autohide-time-modifier` | Dock が出るまでの待ち時間をなくし、出入りを速くする（旧 dotfiles にあった） |
+| `com.apple.dock mru-spaces -bool false` | よく使う順に操作スペースの順番が入れ替わらないようにする |
+| `com.apple.finder _FXSortFoldersFirst -bool true` | 名前順でフォルダを先頭に並べる |
+| `com.apple.screencapture disable-shadow -bool true` | ウインドウのスクリーンショットの影をなくす |
 
 ## セキュリティ設定（macos/security.sh）
 
