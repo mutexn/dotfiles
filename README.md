@@ -50,8 +50,64 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `Brewfile` | Homebrew のインストール一覧 | [docs/brew.md](docs/brew.md)、[docs/apps.md](docs/apps.md) |
 | `home/vimrc` | リンクしていない | 旧設定。残すか [docs/apps.md](docs/apps.md) で判断中 |
 
-リポジトリ内のファイル名は先頭のドットを外している（`home/zshrc` → `~/.zshrc`）。
-一覧で見やすくするためと、隠しファイルにしないため。
+### ファイル名のドットについて
+
+ドットを外しているのは**リポジトリ内の元ファイルの名前だけ**。
+`install.sh link` を実行すると、実機にはドット付きの隠しファイルとしてリンクが作られる。
+
+```
+リポジトリ内（元ファイル）                 実機（install.sh が作るリンク）
+~/Dev/Github/dotfiles/home/zshrc    ←──   ~/.zshrc
+~/Dev/Github/dotfiles/home/gitconfig ←──  ~/.gitconfig
+```
+
+zsh や git は今までどおり `~/.zshrc` や `~/.gitconfig` を読む。
+リンク先のリポジトリ内ファイルを編集すれば、そのまま実機に反映される。
+リポジトリ側でドットを外しているのは、`ls` や GitHub の画面で隠れずに見えるようにするため。
+
+## スクリプト実行後のディレクトリ構造
+
+`→` はリポジトリ内のファイルへのシンボリックリンク。それ以外は元からあるものか、各ツールが作るもの。
+
+```
+~/
+├── .zshenv    → ~/Dev/Github/dotfiles/home/zshenv
+├── .zprofile  → ~/Dev/Github/dotfiles/home/zprofile
+├── .zshrc     → ~/Dev/Github/dotfiles/home/zshrc
+├── .zshrc.local                   # 秘密情報用。リンクではなく実機だけに置く
+├── .p10k.zsh  → ~/Dev/Github/dotfiles/home/p10k.zsh
+├── .gitconfig → ~/Dev/Github/dotfiles/home/gitconfig
+├── powerlevel10k/                 # install.sh prompt が取得するテーマ本体
+├── .config/
+│   ├── git/ignore        → ~/Dev/Github/dotfiles/config/git/ignore
+│   ├── gh/
+│   │   ├── config.yml    → ~/Dev/Github/dotfiles/config/gh/config.yml
+│   │   └── hosts.yml              # gh auth login が作るログイン情報。リンクしない
+│   ├── mise/config.toml  → ~/Dev/Github/dotfiles/config/mise/config.toml
+│   └── karabiner/        → ~/Dev/Github/dotfiles/config/karabiner/   # フォルダごとリンク
+├── Library/
+│   ├── Application Support/com.mitchellh.ghostty/
+│   │   └── config        → ~/Dev/Github/dotfiles/config/ghostty/config
+│   └── pnpm/                      # install.sh runtime が入れる standalone 版 pnpm
+├── .local/share/mise/             # mise が入れた Node など
+└── Dev/Github/dotfiles/           # このリポジトリ（リンクの実体）
+    ├── install.sh
+    ├── Brewfile
+    ├── macos/defaults.sh
+    ├── home/                      # ホーム直下に置くファイル（ドットなしの名前）
+    ├── config/                    # ~/.config などに置くファイル
+    └── docs/
+```
+
+既存のファイルがあった場所には、退避したファイルが `~/.zshrc.backup-20260923120000` のような名前で残る。
+問題なく動くことを確認したら削除してよい。
+
+リンクになっているかは `ls -la` で確認できる。
+
+```bash
+ls -la ~/.zshrc
+# lrwxr-xr-x ... /Users/mutexn/.zshrc -> /Users/mutexn/Dev/Github/dotfiles/home/zshrc
+```
 
 ## 秘密情報
 
