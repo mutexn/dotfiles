@@ -126,6 +126,12 @@ step_runtime() {
   run mise install
   log "uv で Python をインストールし、既定の python / python3 にする（docs/python.md）"
   run uv python install 3.14 --default
+  log "Claude Code（公式のインストーラ。自動で更新される。docs/claude.md）"
+  if [[ -x "$HOME/.local/bin/claude" ]]; then
+    echo "    インストール済み"
+  else
+    run /bin/bash -c "curl -fsSL https://claude.ai/install.sh | bash"
+  fi
   log "pnpm（standalone 版）"
   if [[ -x "$HOME/Library/pnpm/pnpm" ]]; then
     echo "    インストール済み"

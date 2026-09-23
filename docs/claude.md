@@ -3,6 +3,14 @@
 `~/.claude` には設定のほかに、会話履歴、認証情報、キャッシュ、プロジェクトごとのメモリなどが入っている。
 そのため**フォルダ全体はリンクせず、自分で書いたファイルだけ**をリポジトリで管理する。
 
+## Claude Code 本体
+
+`install.sh runtime` が、公式のインストーラ（`curl -fsSL https://claude.ai/install.sh | bash`）で入れる。
+本体は `~/.local/share/claude/versions/` に置かれ、`~/.local/bin/claude` がそこへのリンクになる。起動のたびに自動で更新される。
+Homebrew では入れない（更新が `brew upgrade` 任せになるため）。Brewfile の `cask "claude"` はデスクトップアプリで、別物。
+
+会社の Claude Code の管理者設定は、会社のリポジトリの手順で入れる。この dotfiles の対象外。
+
 ## ファイルの対応
 
 | リポジトリ | 実機の場所 | 役割 |

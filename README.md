@@ -29,7 +29,7 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `brew` | Homebrew 本体 |
 | `bundle` | Brewfile のアプリとコマンド |
 | `link` | 設定ファイルを実機の場所へリンク（元のファイルは `~/.local/state/dotfiles/backup/<日時>/` に退避） |
-| `runtime` | mise で Node、uv で Python、standalone 版 pnpm |
+| `runtime` | mise で Node、uv で Python、Claude Code、standalone 版 pnpm |
 | `macos` | macOS の設定 |
 | `check` | 実機がリポジトリどおりかを確かめる。何も変更しない。すべてのステップを実行するときには含まれない |
 
