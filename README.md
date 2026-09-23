@@ -181,5 +181,5 @@ ls -la ~/.zshrc
 | ホームのドットファイル集約 | 未着手 | [docs/xdg.md](docs/xdg.md) |
 | Python を uv に集約 | 完了（既存プロジェクト 1 件の仮想環境の作り直しは残り） | [docs/python.md](docs/python.md) |
 | Volta 撤去 | 未着手 | [docs/mise.md](docs/mise.md) |
-| Claude Code の設定を管理 | 一部完了。CLAUDE.md・ステータスライン・自作スキルを管理。settings.json は検討中 | [docs/claude.md](docs/claude.md) |
+| Claude Code の設定を管理 | 完了。CLAUDE.md・settings.json・ステータスライン・自作スキルを管理 | [docs/claude.md](docs/claude.md) |
 | CI で install.sh を検証 | 未着手 | `install.sh check` を CI でも使う予定 |
