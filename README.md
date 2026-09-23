@@ -178,6 +178,6 @@ ls -la ~/.zshrc
 | プロンプトを starship に移行 | 採用（2026-09-23）。Powerlevel10k の見た目を再現し、Powerlevel10k は撤去 | [docs/zsh.md](docs/zsh.md#プロンプトstarship) |
 | ホームのドットファイル集約 | 未着手 | [docs/xdg.md](docs/xdg.md) |
 | Python を uv に集約 | 完了（既存プロジェクト 1 件の仮想環境の作り直しは残り） | [docs/python.md](docs/python.md) |
-| Volta 撤去 | 未着手 | [docs/mise.md](docs/mise.md) |
+| Volta 撤去 | 見送り（2026-09-23）。移行できないプロジェクトがあるため残す | [docs/mise.md](docs/mise.md) |
 | Claude Code の設定を管理 | 完了。CLAUDE.md・settings.json・ステータスライン・自作スキルを管理 | [docs/claude.md](docs/claude.md) |
-| CI で install.sh を検証 | 未着手 | `install.sh check` を CI でも使う予定 |
+| CI で検証 | 完了（2026-09-23） | [docs/ci.md](docs/ci.md) |
