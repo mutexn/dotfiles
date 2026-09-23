@@ -125,6 +125,7 @@ brew uninstall --force openvpn
 | 2026-09-23 | Shottr を採用し Brewfile に追加。Gyazo も残す |
 | 2026-09-23 | `brew upgrade` を実施。Jan を削除 |
 | 2026-09-23 | Chrome リモートデスクトップはアプリを残し、ログイン時の自動起動だけを止めた（普段は使っておらず、遠隔操作の入口を常駐させないため）。Ollama の自動起動設定（`~/Library/LaunchAgents/homebrew.mxcl.ollama.plist`）を退避し、ログイン時に常駐しないようにした |
+| 2026-09-23 | 別の Mac でのセットアップ中に、Keynote・Pages・Numbers の App Store の ID が変わっていて入らないことが分かった。Brewfile を新しい ID（iPhone 版と同じ ID）に更新 |
 
 ### Chrome リモートデスクトップの自動起動を戻すとき
 
