@@ -60,6 +60,7 @@ Volta の pnpm が standalone 版より先に使われる不具合があった�
 | LM Studio の PATH | LM Studio の CLI（`lms`）を使えるようにする |
 | `# pnpm` 〜 `# pnpm end` | standalone 版 pnpm を PATH に追加する。この目印の 2 行は、pnpm のインストーラが既存の設定を見分けるのに使うので変えない |
 | `mise activate zsh` | フォルダ移動のたびに `mise.toml` を見て Node などを切り替える。PATH の先頭を取る必要があるので、PATH を触る設定の中で最後に置く |
+| モダン CLI | fzf、zoxide、delta、eza の別名、zsh-autosuggestions を、入っているときだけ有効にする（[cli-tools.md](cli-tools.md)） |
 | `source ~/.zshrc.local` | 秘密情報やマシン固有の設定を読み込む（ファイルがなければ何もしない） |
 
 ### プロンプトを戻すとき

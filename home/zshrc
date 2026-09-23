@@ -39,5 +39,30 @@ esac
 # mise: Node などのランタイムを cd に合わせて切り替える。PATH の先頭を取るため最後の方で有効化する
 eval "$(mise activate zsh)"
 
+# --- モダン CLI（docs/cli-tools.md）。入っているものだけ有効にする ---
+# zsh-autosuggestions: 過去の履歴から入力候補を薄く表示。→ キーで確定
+[[ -r "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] &&
+  source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+# fzf: ctrl+r で履歴、ctrl+t でファイル、alt+c でフォルダを、あいまい検索で選ぶ
+if (( $+commands[fzf] )); then
+  export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
+  source <(fzf --zsh)
+fi
+
+# zoxide: よく行くフォルダを覚える。z キーワード で移動、zi で一覧から選ぶ
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
+
+# delta: git の差分を色付き・行番号付きで表示
+(( $+commands[delta] )) && export GIT_PAGER=delta
+
+# eza: 既存の ls / ll / la は変えず、別名で使う
+if (( $+commands[eza] )); then
+  alias le='eza -la --git --group-directories-first --icons'   # 一覧 + git の状態
+  alias lt='eza --tree --level=2 --git-ignore --icons'          # フォルダ構造をツリー表示
+fi
+
 # マシン固有の設定・秘密情報（トークン等）。リポジトリには含めない
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local

@@ -1,7 +1,7 @@
 # ツールとパッケージ管理の基本方針
 
 2026-09-23 策定。この Mac で「何を、どの道具で入れるか」の決まりごと。
-個別の詳細は各ページ（[brew.md](brew.md)、[mise.md](mise.md)、[python.md](python.md)）にある。
+個別の詳細は各ページ（[brew.md](brew.md)、[mise.md](mise.md)、[python.md](python.md)、[cli-tools.md](cli-tools.md)）にある。
 
 ## 原則
 
