@@ -113,6 +113,8 @@ step_prompt() {
 step_runtime() {
   log "mise で Node などのランタイムをインストール"
   run mise install
+  log "uv で Python をインストールし、既定の python / python3 にする（docs/python.md）"
+  run uv python install 3.14 --default
   log "pnpm（standalone 版）"
   if [[ -x "$HOME/Library/pnpm/pnpm" ]]; then
     echo "    インストール済み"

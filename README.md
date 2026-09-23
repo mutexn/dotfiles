@@ -29,7 +29,7 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `bundle` | Brewfile のアプリとコマンド |
 | `link` | 設定ファイルを実機の場所へリンク（元のファイルは `*.backup-<日時>` に退避） |
 | `prompt` | プロンプトテーマ Powerlevel10k |
-| `runtime` | mise で Node、standalone 版 pnpm |
+| `runtime` | mise で Node、uv で Python、standalone 版 pnpm |
 | `macos` | macOS の設定 |
 
 ## ファイルの対応表
