@@ -63,7 +63,7 @@ node = "24"
 | Volta | 2 プロジェクトが `volta` キーで Node を固定 | 2 プロジェクトを mise に移して撤去（[mise.md](mise.md)） |
 | `~/.composer` | 2026-09-23 にゴミ箱へ移動済み | 完了 |
 | uv 本体 | 2025-12 の版で古い | `brew upgrade uv` |
-| gini-slides の `.venv` | Homebrew の Python で作られている | uv で作り直す（[python.md](python.md)） |
+| 既存プロジェクト 1 件の `.venv` | Homebrew の Python で作られている | uv で作り直す（[python.md](python.md)） |
 | corepack | mise の Node 24 に同梱されている | 有効にしなければ害はない。何もしない |
 | エディタの拡張機能 | VS Code 2 個、Cursor 10 個。どこにも記録していない | 下記「未決定」 |
 
@@ -84,7 +84,7 @@ node = "24"
 プロジェクト共通の規約は、チームメンバーにも守ってもらう内容。
 個人の dotfiles に置くと、メンバーから見えず、会社の方針として扱いにくい。
 今は置き場所がないため dotfiles に置いているが、会社の開発ガイドライン用のリポジトリができたら移す。
-gini-harness は AI 活用ガイドラインと Claude Code 用のリポジトリで範囲が違うため、移す先には向かない。
+社内の AI 活用ガイドライン用のリポジトリは範囲が違うため、移す先には向かない。
 
 `~/Dev/Github/TOOLCHAIN.md` は [mise.md](mise.md) に統合済み。二重管理を避けるため、
 2026-09-23 に「dotfiles の docs/mise.md に移動した」という案内だけにした。

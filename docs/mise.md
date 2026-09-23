@@ -74,7 +74,7 @@ node = "24"
 
 - brew の node は bitwarden-cli の依存として残る。直接は使わない。PATH で mise が先に来るので影響はない
 - Marp CLI は 2026-09-23 に brew の node の `npm -g` から Homebrew の `marp-cli` に移した
-- Volta も**残している**。旧プロジェクト 2 件が package.json の `volta` キーで Node を固定中。この 2 つを mise 方式に移せば撤去できる
+- Volta も**残している**。旧プロジェクト 2 件が package.json の `volta` キーで Node を固定中。この 2 件を mise 方式に移せば撤去できる
 - corepack の入口ファイル（`/opt/homebrew/bin/pnpm`、`pnpx`）は削除済み
 
 ## トラブルシューティング
