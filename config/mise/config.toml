@@ -1,0 +1,3 @@
+# mise のグローバル設定。プロジェクトに mise.toml がない場所で使われる。詳細は docs/mise.md
+[tools]
+node = "24"
