@@ -105,6 +105,7 @@ LINKS=(
   "config/karabiner|$HOME/.config/karabiner"
   # Claude Code（docs/claude.md）。~/.claude 全体ではなく、自分で書いたものだけをリンクする
   "claude/CLAUDE.md|$HOME/.claude/CLAUDE.md"
+  "claude/settings.json|$HOME/.claude/settings.json"
   "claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
   "claude/skills/setup-claude-settings|$HOME/.claude/skills/setup-claude-settings"
 )
