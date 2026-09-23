@@ -230,7 +230,7 @@ step_macos() {
 }
 
 step_security() {
-  log "セキュリティ設定（ファイアウォール、ステルスモード、Touch ID で sudo）"
+  log "セキュリティ設定（ファイアウォール、ステルスモード、Touch ID で sudo、リモートデスクトップの自動起動停止）"
   if [[ $DRY_RUN -eq 1 ]]; then
     echo "    [dry-run] macos/security.sh を実行（管理者パスワードを聞かれる）"
   else
@@ -348,6 +348,13 @@ step_check() {
   "$fw" --getstealthmode 2>/dev/null | grep -qE 'enabled|is on' && pass "ステルスモードが有効" || fail "ステルスモードが無効（./install.sh security）"
   grep -qE '^auth[[:space:]]+sufficient[[:space:]]+pam_tid\.so' /etc/pam.d/sudo_local 2>/dev/null \
     && pass "Touch ID で sudo が有効" || fail "Touch ID で sudo が無効（./install.sh security）"
+  if [[ -f /Library/LaunchAgents/org.chromium.chromoting.plist ]]; then
+    launchctl print-disabled "gui/$(id -u)" 2>/dev/null | grep -q '"org.chromium.chromoting" => disabled' \
+      && pass "リモートデスクトップの自動起動が停止している" \
+      || fail "リモートデスクトップが自動起動する設定のまま（./install.sh security）"
+  else
+    skip "リモートデスクトップが入っていない"
+  fi
 
   log "Homebrew"
   if command -v brew >/dev/null; then
@@ -430,10 +437,9 @@ main() {
       1. 新しいターミナルを開く（設定を読み込むため）
       2. gh auth login                                        GitHub にログイン
       3. ./install.sh check                                   設定できたかを確かめる
-      4. launchctl disable gui/$(id -u)/org.chromium.chromoting
-                                                              リモートデスクトップの自動起動を止める
-      5. Karabiner-Elements や AltTab を起動し、システム設定で許可する
-      6. Gyazo が未導入なら: open /opt/homebrew/Caskroom/gyazo/*/Gyazo-*.pkg
+      4. Karabiner-Elements や AltTab を起動し、システム設定で許可する
+      5. Gyazo が未導入なら: open /opt/homebrew/Caskroom/gyazo/*/Gyazo-*.pkg
+      6. Slack・Notion・1Password などにログインする
 NEXT
 }
 

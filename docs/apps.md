@@ -129,7 +129,7 @@ brew uninstall --force openvpn
 
 ### Chrome リモートデスクトップの自動起動を戻すとき
 
-止め方：ログイン時に起動する `org.chromium.chromoting`（`/Library/LaunchAgents`）を `launchctl disable` で無効にした。
+止め方：`./install.sh security` が、ログイン時に起動する `org.chromium.chromoting`（`/Library/LaunchAgents`）を `launchctl disable` で無効にする。
 もう 1 つの `org.chromium.chromoting.broker`（`/Library/LaunchDaemons`）は、呼ばれたときだけ起動する作りなので、そのままでも常駐しない。
 
 使うときは、自動起動を有効に戻してから、ブラウザで remotedesktop.google.com/access を開いて遠隔操作を有効にする。
@@ -138,9 +138,5 @@ brew uninstall --force openvpn
 launchctl enable gui/$(id -u)/org.chromium.chromoting
 ```
 
-新しい Mac では、Brewfile で入れたあとに同じ方法で止める。
-
-```bash
-launchctl disable gui/$(id -u)/org.chromium.chromoting
-```
+新しい Mac では `./install.sh security` が自動で止めるため、手作業は不要。
 

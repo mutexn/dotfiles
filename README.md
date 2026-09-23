@@ -41,8 +41,8 @@ gh auth login                   # GitHub にログイン（git push に必要）
 - **App Store のアプリが `No apps found in the App Store for ADAM ID` で入らない。** そのアプリの ID が変わっている。
   `mas search <アプリ名>` で新しい ID を調べ、Brewfile を更新する（2026-09 に Keynote・Pages・Numbers で発生）
 - **Gyazo が入らない。** インストーラを手で開く必要がある。`open /opt/homebrew/Caskroom/gyazo/*/Gyazo-*.pkg`
-- **セットアップ後に手で行うこと。** Chrome リモートデスクトップの自動起動を止める（[docs/apps.md](docs/apps.md)）。
-  Karabiner-Elements や AltTab などは、初回起動時にシステム設定で「入力監視」「アクセシビリティ」を許可する
+- **セットアップ後に手で行うこと。** Karabiner-Elements や AltTab などは、初回起動時にシステム設定で「入力監視」「アクセシビリティ」を許可する。
+  Slack や 1Password などへのログインも手で行う
 
 | ステップ | 内容 |
 | --- | --- |
@@ -53,7 +53,7 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `runtime` | mise で Node、uv で Python、Claude Code、standalone 版 pnpm |
 | `editor` | VS Code と Cursor の拡張機能のうち、足りないものを入れる |
 | `macos` | macOS の設定 |
-| `security` | ファイアウォール、ステルスモード、Touch ID で sudo。管理者パスワードを聞かれる |
+| `security` | ファイアウォール、ステルスモード、Touch ID で sudo、リモートデスクトップの自動起動停止。管理者パスワードを聞かれる |
 | `check` | 実機がリポジトリどおりかを確かめる。何も変更しない。すべてのステップを実行するときには含まれない |
 
 ## 基本方針
@@ -171,7 +171,7 @@ zsh は今までどおり `~/.zshenv` を読む。
 | mise / uv | mise が全体設定を読むか。uv が自分で入れた Python を使うか |
 | アプリ | Ghostty の設定にエラーがないか。Karabiner が設定を読めているか |
 | エディタ | VS Code と Cursor に、一覧の拡張機能がすべて入っているか |
-| セキュリティ | FileVault、ファイアウォール、ステルスモード、Touch ID で sudo が有効か |
+| セキュリティ | FileVault、ファイアウォール、ステルスモード、Touch ID で sudo が有効か。リモートデスクトップが自動起動しないか |
 | Homebrew | Brewfile のコマンドとアプリがすべて入っているか。新しい版があるかどうかは見ない。App Store アプリは、ID が今も有効かを確かめる |
 
 リンクを個別に確かめるときは `ls -la` を使う。
