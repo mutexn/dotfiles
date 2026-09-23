@@ -1,0 +1,41 @@
+# ~/.zshrc — 対話シェル起動時に読まれる。詳細は docs/zsh.md
+
+export PATH="$HOME/.local/bin:$PATH"
+
+# Powerlevel10k の instant prompt。できるだけ先頭に置く。
+# 入力を求める処理（パスワード、y/n 確認など）はこのブロックより上に書く。
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Powerlevel10k テーマ
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+
+# プロンプトの見た目は `p10k configure` か ~/.p10k.zsh で変更する
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# ls の色付き・種別記号付き表示
+alias ls='ls -GF'
+alias ll='ls -lGFh'
+alias la='ls -aGF'
+
+# direnv: ディレクトリごとの .envrc を自動で読み込む
+eval "$(direnv hook zsh)"
+
+# LM Studio CLI (lms)
+export PATH="$PATH:$HOME/.lmstudio/bin"
+
+# pnpm（standalone 版）。"# pnpm" と "# pnpm end" は pnpm setup が既存ブロックを見分ける目印なので変えない
+# pnpm
+export PNPM_HOME="$HOME/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
+
+# mise: Node などのランタイムを cd に合わせて切り替える。PATH の先頭を取るため最後の方で有効化する
+eval "$(mise activate zsh)"
+
+# マシン固有の設定・秘密情報（トークン等）。リポジトリには含めない
+[[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
