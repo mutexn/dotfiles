@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Claude Code のセッション作業ファイル
+.claude/
+
+# マシン固有・秘密情報（リポジトリに含めない）
+config/zsh/local.zsh
+*.local
+
+# install.sh が退避したバックアップ
+*.backup-*
+config/karabiner/automatic_backups/

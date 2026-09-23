@@ -1,86 +1,273 @@
+#!/usr/bin/env bash
+# Mac セットアップスクリプト。何度実行しても安全（冪等）。詳細は README.md
+#
+# 使い方:
+#   ./install.sh                 # すべてのステップを実行
+#   ./install.sh --dry-run       # 実行せずに、行う操作だけを表示
+#   ./install.sh link macos      # 指定したステップだけ実行
+#   ./install.sh check           # 実機がリポジトリどおりかを確かめる（何も変更しない）
+#
+# ステップ: clt brew bundle link prompt runtime macos check
+set -euo pipefail
 
-# mac_setup.sh
-echo"------super user-----------------------------------------------------"
+DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DRY_RUN=0
+BACKUP_SUFFIX="backup-$(date +%Y%m%d%H%M%S)"
+ALL_STEPS=(clt brew bundle link prompt runtime macos)
 
-su
+log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
+warn() { printf '\033[1;33m[warn]\033[0m %s\n' "$*" >&2; }
 
-echo"---------------------------------------------------------------------"
+# dry-run 時は表示のみ、通常時は実行する
+run() {
+  if [[ $DRY_RUN -eq 1 ]]; then
+    printf '    [dry-run] %s\n' "$*"
+  else
+    "$@"
+  fi
+}
 
+# リポジトリ内のファイルを実機の場所へシンボリックリンクする。
+# 既存ファイルがあれば <名前>.backup-<日時> に退避してから置き換える
+link() {
+  local src="$DOTFILES/$1" dest="$2"
+  if [[ ! -e "$src" ]]; then
+    warn "リポジトリに $1 がありません。スキップします"
+    return
+  fi
+  if [[ -L "$dest" && "$(readlink "$dest")" == "$src" ]]; then
+    printf '    ok    %s\n' "$dest"
+    return
+  fi
+  [[ -d "$(dirname "$dest")" ]] || run mkdir -p "$(dirname "$dest")"
+  if [[ -e "$dest" || -L "$dest" ]]; then
+    printf '    backup %s -> %s.%s\n' "$dest" "$dest" "$BACKUP_SUFFIX"
+    run mv "$dest" "$dest.$BACKUP_SUFFIX"
+  fi
+  printf '    link  %s -> %s\n' "$dest" "$src"
+  run ln -s "$src" "$dest"
+}
 
-# mac setup
+step_clt() {
+  log "Xcode Command Line Tools"
+  if xcode-select -p >/dev/null 2>&1; then
+    echo "    インストール済み"
+  else
+    run xcode-select --install
+    warn "ダイアログでインストールを完了してから、もう一度 ./install.sh を実行してください"
+    exit 1
+  fi
+}
 
-echo"------mac setup------------------------------------------------------"
+step_brew() {
+  log "Homebrew"
+  if [[ -x /opt/homebrew/bin/brew ]]; then
+    echo "    インストール済み"
+  else
+    run /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+  if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
+}
 
-defaults write -g InitalKeyRepeat -int 0
-defaults write -g KeyRepeat -int 0
-defaults write com.apple.finder AppleShowAllFiles -bool true
-defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
-defaults write com.apple.Dock autohide-delay -float 0
-defaults write com.apple.desktopservices DSDontWriteNetworkStores True
-killall Finder
-killall Dock
+step_bundle() {
+  log "Brewfile のアプリ・コマンドをインストール"
+  if [[ $DRY_RUN -eq 1 ]]; then
+    brew bundle check --file="$DOTFILES/Brewfile" --verbose || true
+  else
+    brew bundle --file="$DOTFILES/Brewfile"
+  fi
+}
 
-echo"---------------------------------------------------------------------"
+# リンクの一覧。「リポジトリ内のパス|実機の場所」の形で書く。link と check の両方が使う
+LINKS=(
+  # zsh（docs/zsh.md）
+  "home/zshenv|$HOME/.zshenv"
+  "home/zprofile|$HOME/.zprofile"
+  "home/zshrc|$HOME/.zshrc"
+  "home/p10k.zsh|$HOME/.p10k.zsh"
+  # git（docs/git.md）
+  "home/gitconfig|$HOME/.gitconfig"
+  "config/git/ignore|$HOME/.config/git/ignore"
+  # mise（docs/mise.md）
+  "config/mise/config.toml|$HOME/.config/mise/config.toml"
+  # uv（docs/python.md）
+  "config/uv/uv.toml|$HOME/.config/uv/uv.toml"
+  # GitHub CLI。認証情報の hosts.yml はリンクしない（docs/git.md）
+  "config/gh/config.yml|$HOME/.config/gh/config.yml"
+  # Ghostty（docs/terminal-and-input.md）
+  "config/ghostty/config|$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+  # Karabiner-Elements はファイル単位のリンクだと GUI 保存時に壊れるため、ディレクトリごとリンクする
+  "config/karabiner|$HOME/.config/karabiner"
+)
 
+step_link() {
+  log "設定ファイルをリンク"
+  local entry
+  for entry in "${LINKS[@]}"; do
+    link "${entry%%|*}" "${entry#*|}"
+  done
+}
 
-# xcode command line tools install 
+step_prompt() {
+  log "Powerlevel10k"
+  if [[ -d "$HOME/powerlevel10k" ]]; then
+    echo "    インストール済み"
+  else
+    run git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/powerlevel10k"
+  fi
+}
 
-echo"------xcode command line tools install-------------------------------"
+step_runtime() {
+  log "mise で Node などのランタイムをインストール"
+  run mise install
+  log "uv で Python をインストールし、既定の python / python3 にする（docs/python.md）"
+  run uv python install 3.14 --default
+  log "pnpm（standalone 版）"
+  if [[ -x "$HOME/Library/pnpm/pnpm" ]]; then
+    echo "    インストール済み"
+  else
+    run /bin/bash -c "curl -fsSL https://get.pnpm.io/install.sh | sh -"
+  fi
+}
 
-xcode-select --install
+step_macos() {
+  log "macOS の設定"
+  if [[ $DRY_RUN -eq 1 ]]; then
+    echo "    [dry-run] macos/defaults.sh を実行"
+  else
+    "$DOTFILES/macos/defaults.sh"
+  fi
+}
 
-echo"---------------------------------------------------------------------"
+# --- check: 実機がリポジトリどおりになっているかを確かめる（読み取りだけで、何も変更しない）---
+CHECK_FAILED=0
+pass() { printf '    \033[32mok\033[0m    %s\n' "$*"; }
+fail() { printf '    \033[31mNG\033[0m    %s\n' "$*"; CHECK_FAILED=$((CHECK_FAILED + 1)); }
+skip() { printf '    --    %s\n' "$*"; }
 
+# 対話ログインシェルを起動し、コマンドの場所を 1 つ返す。プロンプトの表示などは捨てる
+shell_which() {
+  zsh -lic "print -r -- \"@@\$(command -v $1)\"" 2>/dev/null | sed -n 's/^@@//p' | tail -1
+}
 
-# homebrew install 
+step_check() {
+  log "リンク"
+  local entry src dest
+  for entry in "${LINKS[@]}"; do
+    src="$DOTFILES/${entry%%|*}" dest="${entry#*|}"
+    if [[ -L "$dest" && "$(readlink "$dest")" == "$src" && -e "$dest" ]]; then
+      pass "$dest"
+    else
+      fail "$dest がリポジトリへのリンクになっていない"
+    fi
+  done
 
-echo"------homebrew install-----------------------------------------------"
+  log "zsh"
+  if zsh -n "$DOTFILES/home/zshenv" "$DOTFILES/home/zprofile" "$DOTFILES/home/zshrc"; then
+    pass "設定ファイルの文法"
+  else
+    fail "設定ファイルに文法エラーがある"
+  fi
+  local p
+  p="$(shell_which node)";    [[ "$p" == "$HOME/.local/share/mise/"* ]] && pass "node は mise: $p"    || fail "node が mise ではない: ${p:-見つからない}"
+  p="$(shell_which pnpm)";    [[ "$p" == "$HOME/Library/pnpm/"* ]]      && pass "pnpm は standalone 版: $p" || fail "pnpm が standalone 版ではない: ${p:-見つからない}"
+  p="$(shell_which python3)"; [[ "$p" == "$HOME/.local/bin/"* ]]        && pass "python3 は uv: $p"    || fail "python3 が uv ではない: ${p:-見つからない}"
 
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" 
+  log "git / GitHub CLI"
+  [[ "$(git config --show-origin user.name 2>/dev/null)" == "file:$HOME/.gitconfig"* ]] \
+    && pass "git が ~/.gitconfig を読んでいる" || fail "git が ~/.gitconfig を読んでいない"
+  # 一時的なリポジトリを作り、共通の無視設定が実際に効くかを試す
+  local tmp
+  tmp="$(mktemp -d)"
+  git -C "$tmp" init -q && mkdir -p "$tmp/.claude" && touch "$tmp/.claude/settings.local.json"
+  git -C "$tmp" check-ignore -q .claude/settings.local.json \
+    && pass "共通の無視設定（~/.config/git/ignore）が効いている" || fail "共通の無視設定が効いていない"
+  rm -rf "$tmp"
+  if command -v gh >/dev/null; then
+    [[ "$(gh config get git_protocol 2>/dev/null)" == "https" ]] && pass "gh の設定を読んでいる" || fail "gh の設定を読んでいない"
+  else
+    skip "gh が入っていない"
+  fi
 
-brew update
-brew upgrade
+  log "mise / uv"
+  if command -v mise >/dev/null; then
+    mise config ls 2>/dev/null | grep -q '.config/mise/config.toml' && pass "mise が全体設定を読んでいる" || fail "mise が全体設定を読んでいない"
+  else
+    skip "mise が入っていない"
+  fi
+  if command -v uv >/dev/null; then
+    p="$(uv python find 2>/dev/null)"
+    [[ "$p" == "$HOME/.local/share/uv/python/"* ]] && pass "uv は自分で入れた Python を使う: $p" || fail "uv が Homebrew などの Python を使っている: ${p:-見つからない}"
+  else
+    skip "uv が入っていない"
+  fi
 
-echo"---------------------------------------------------------------------"
+  log "アプリ"
+  local ghostty=/Applications/Ghostty.app/Contents/MacOS/ghostty
+  if [[ -x "$ghostty" ]]; then
+    "$ghostty" +validate-config >/dev/null 2>&1 && pass "Ghostty の設定にエラーがない" || fail "Ghostty の設定にエラーがある（ghostty +validate-config で確認）"
+  else
+    skip "Ghostty が入っていない"
+  fi
+  local kcli="/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli"
+  if [[ -x "$kcli" ]]; then
+    [[ -n "$("$kcli" --show-current-profile-name 2>/dev/null)" ]] && pass "Karabiner が設定を読んでいる" || fail "Karabiner が設定を読んでいない"
+  else
+    skip "Karabiner-Elements が入っていない"
+  fi
 
+  log "Homebrew"
+  if command -v brew >/dev/null; then
+    # 入っているかだけを見る。新しい版があるかどうかは問わない（更新は brew upgrade で別に行う）
+    local kind name missing
+    for kind in formula cask; do
+      missing=""
+      local installed
+      installed=" $(brew list --"$kind" -1 2>/dev/null | tr '\n' ' ') "
+      while read -r name; do
+        [[ -z "$name" ]] && continue
+        [[ "$installed" == *" ${name##*/} "* ]] || missing="$missing ${name}"
+      done < <(grep -E "^${kind/formula/brew} \"" "$DOTFILES/Brewfile" | cut -d'"' -f2)
+      if [[ -z "$missing" ]]; then
+        pass "Brewfile の ${kind} はすべて入っている"
+      else
+        fail "入っていない ${kind}:${missing}"
+      fi
+    done
+    skip "App Store アプリ（mas）は確認しない。mas の一覧取得が応答しないことがあるため"
+  else
+    skip "Homebrew が入っていない"
+  fi
 
-# Brewfile install
+  if [[ $CHECK_FAILED -eq 0 ]]; then
+    log "すべて問題なし"
+  else
+    warn "問題が ${CHECK_FAILED} 件あります"
+    exit 1
+  fi
+}
 
-echo"------Brewfile install-----------------------------------------------"
+main() {
+  local steps=()
+  for arg in "$@"; do
+    case "$arg" in
+      --dry-run) DRY_RUN=1 ;;
+      -h|--help) sed -n '2,10p' "$0"; exit 0 ;;
+      *) steps+=("$arg") ;;
+    esac
+  done
+  [[ ${#steps[@]} -eq 0 ]] && steps=("${ALL_STEPS[@]}")
 
-brew bundle
+  for s in "${steps[@]}"; do
+    if ! declare -F "step_$s" >/dev/null; then
+      warn "不明なステップ: ${s}（使えるもの: ${ALL_STEPS[*]} check）"
+      exit 1
+    fi
+    "step_$s"
+  done
+  [[ " ${steps[*]} " == *" check "* ]] || log "完了。新しいターミナルを開くか exec zsh で反映してください"
+}
 
-echo"---------------------------------------------------------------------"
-
-
-# set zsh default shell
-
-echo"------zsh defaults setup---------------------------------------------"
-
-echo "/usr/local/bin/zsh" | sudo tee /etc/shells
-chsh -s /usr/local//bin/zsh
-
-echo"---------------------------------------------------------------------"
-
-
-# install prezto
-
-echo"------prezto install-------------------------------------------------"
-
-cd ~
-git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.prezto"
-setpot EXTENDED_GLOB
-for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
-  ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
-done
-
-echo"---------------------------------------------------------------------"
-
-
-#set prompt
-
-echo"------prompt install-------------------------------------------------"
-
-zsh -c "$(curl -fsSL https://raw.githubusercontent.com/el1t/statusline/master/prezto/install)"
-
-echo"---------------------------------------------------------------------"
+main "$@"
