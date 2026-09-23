@@ -28,6 +28,9 @@ brew "zoxide"              # よく行くフォルダへ移動（z / zi）
 brew "git-delta"           # git の差分を見やすく表示
 brew "zsh-autosuggestions" # 入力候補を履歴から表示
 
+# --- プロンプト ---
+brew "starship"            # プロンプト（config/starship.toml）
+
 # --- ファイル操作・ターミナル ---
 brew "neovim"         # エディタ
 brew "tmux"           # ターミナル多重化

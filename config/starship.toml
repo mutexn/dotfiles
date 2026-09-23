@@ -1,0 +1,82 @@
+# starship の設定。詳細は docs/zsh.md
+# 以前の Powerlevel10k（classic、dark、2 行、右端に枠線）の見た目を starship の標準機能で再現したもの。
+# 色は Powerlevel10k と同じ 256 色の番号を使っている
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# 1 行目: 濃いグレーの帯（236）に 左=フォルダ・git、右=状態・時刻。間は「·」で埋め、行末は ─╮
+# 2 行目: 入力欄 ❯。行末（right_format）は ─╯
+format = """
+$directory$git_branch$git_status[](fg:236)$fill\
+[](fg:236)$status$cmd_duration$jobs$direnv$python$nodejs$time[─╮](fg:240)
+$character"""
+right_format = "[─╯](fg:240)"
+
+add_newline = false
+command_timeout = 500
+
+[fill]
+symbol = "·"
+style = "fg:240"
+
+# --- 左側 ---
+[directory]
+format = "[ $path ]($style)[$read_only]($read_only_style)"
+style = "fg:31 bg:236"
+repo_root_format = "[ $before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path ]($style)[$read_only]($read_only_style)"
+before_repo_root_style = "fg:103 bg:236"
+repo_root_style = "bold fg:39 bg:236"
+read_only = " "
+read_only_style = "fg:160 bg:236"
+truncation_length = 4
+truncate_to_repo = false
+truncation_symbol = "…/"
+
+[git_branch]
+format = "[](fg:244 bg:236)[ $symbol$branch ]($style)"
+symbol = " "
+style = "fg:76 bg:236"
+
+[git_status]
+format = "([$all_status$ahead_behind ]($style))"
+style = "fg:178 bg:236"
+
+# --- 右側（各項目の後ろに細い区切り  を付ける。時刻は常に最後）---
+[status]
+disabled = false
+format = "[ ✘ $status ]($style)[](fg:244 bg:236)"
+style = "fg:160 bg:236"
+
+[cmd_duration]
+min_time = 3_000
+format = "[ $duration  ]($style)[](fg:244 bg:236)"
+style = "fg:248 bg:236"
+
+[jobs]
+format = "[ $symbol$number ]($style)[](fg:244 bg:236)"
+style = "fg:37 bg:236"
+
+[direnv]
+disabled = false
+format = "[ $symbol$loaded ]($style)[](fg:244 bg:236)"
+style = "fg:178 bg:236"
+
+[python]
+format = '[ ${version}( \($virtualenv\)) $symbol]($style)[](fg:244 bg:236)'
+symbol = ""
+style = "fg:37 bg:236"
+
+[nodejs]
+format = "[ $version $symbol]($style)[](fg:244 bg:236)"
+symbol = ""
+style = "fg:70 bg:236"
+
+[time]
+disabled = false
+format = "[ $time  ]($style)"
+time_format = "%H:%M:%S"
+style = "fg:66 bg:236"
+
+# --- 2 行目 ---
+[character]
+success_symbol = "[❯](fg:76)"
+error_symbol = "[❯](fg:196)"

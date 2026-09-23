@@ -29,7 +29,6 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `brew` | Homebrew 本体 |
 | `bundle` | Brewfile のアプリとコマンド |
 | `link` | 設定ファイルを実機の場所へリンク（元のファイルは `~/.local/state/dotfiles/backup/<日時>/` に退避） |
-| `prompt` | プロンプトテーマ Powerlevel10k |
 | `runtime` | mise で Node、uv で Python、standalone 版 pnpm |
 | `macos` | macOS の設定 |
 | `check` | 実機がリポジトリどおりかを確かめる。何も変更しない。すべてのステップを実行するときには含まれない |
@@ -46,11 +45,11 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `home/zshenv` | `~/.zshenv` | [docs/zsh.md](docs/zsh.md) |
 | `home/zprofile` | `~/.zprofile` | [docs/zsh.md](docs/zsh.md) |
 | `home/zshrc` | `~/.zshrc` | [docs/zsh.md](docs/zsh.md) |
-| `home/p10k.zsh` | `~/.p10k.zsh` | [docs/zsh.md](docs/zsh.md) |
 | `home/gitconfig` | `~/.gitconfig` | [docs/git.md](docs/git.md) |
 | `config/git/ignore` | `~/.config/git/ignore` | [docs/git.md](docs/git.md) |
 | `config/gh/config.yml` | `~/.config/gh/config.yml` | [docs/git.md](docs/git.md) |
 | `config/mise/config.toml` | `~/.config/mise/config.toml` | [docs/mise.md](docs/mise.md) |
+| `config/starship.toml` | `~/.config/starship.toml` | [docs/zsh.md](docs/zsh.md#プロンプトstarship) |
 | `config/uv/uv.toml` | `~/.config/uv/uv.toml` | [docs/python.md](docs/python.md) |
 | `config/ghostty/config` | `~/Library/Application Support/com.mitchellh.ghostty/config` | [docs/terminal-and-input.md](docs/terminal-and-input.md) |
 | `config/karabiner/` | `~/.config/karabiner/` | [docs/terminal-and-input.md](docs/terminal-and-input.md) |
@@ -83,15 +82,14 @@ zsh や git は今までどおり `~/.zshrc` や `~/.gitconfig` を読む。
 ├── .zprofile  → ~/Dev/Github/dotfiles/home/zprofile
 ├── .zshrc     → ~/Dev/Github/dotfiles/home/zshrc
 ├── .zshrc.local                   # 秘密情報用。リンクではなく実機だけに置く
-├── .p10k.zsh  → ~/Dev/Github/dotfiles/home/p10k.zsh
 ├── .gitconfig → ~/Dev/Github/dotfiles/home/gitconfig
-├── powerlevel10k/                 # install.sh prompt が取得するテーマ本体
 ├── .config/
 │   ├── git/ignore        → ~/Dev/Github/dotfiles/config/git/ignore
 │   ├── gh/
 │   │   ├── config.yml    → ~/Dev/Github/dotfiles/config/gh/config.yml
 │   │   └── hosts.yml              # gh auth login が作るログイン情報。リンクしない
 │   ├── mise/config.toml  → ~/Dev/Github/dotfiles/config/mise/config.toml
+│   ├── starship.toml     → ~/Dev/Github/dotfiles/config/starship.toml
 │   ├── uv/uv.toml        → ~/Dev/Github/dotfiles/config/uv/uv.toml
 │   └── karabiner/        → ~/Dev/Github/dotfiles/config/karabiner/   # フォルダごとリンク
 ├── Library/
@@ -177,7 +175,7 @@ ls -la ~/.zshrc
 | アプリの見直し | 完了（Shottr は試用中） | [docs/apps.md](docs/apps.md) |
 | モダン CLI（fzf、zoxide、ripgrep、fd、bat、eza、git-delta、zsh-autosuggestions） | 採用（2026-09-23） | [docs/cli-tools.md](docs/cli-tools.md) |
 | git の推奨設定（既定ブランチ main、pull 時 rebase など） | 未着手 | |
-| プロンプトを starship に移行 | 試用中（2026-09-23 開始）。Powerlevel10k の見た目に合わせて調整済み。設定は実機の `~/.config/starship.toml` だけに置いている | [docs/zsh.md](docs/zsh.md) |
+| プロンプトを starship に移行 | 採用（2026-09-23）。Powerlevel10k の見た目を再現し、Powerlevel10k は撤去 | [docs/zsh.md](docs/zsh.md#プロンプトstarship) |
 | ホームのドットファイル集約 | 未着手 | [docs/xdg.md](docs/xdg.md) |
 | Python を uv に集約 | 完了（既存プロジェクト 1 件の仮想環境の作り直しは残り） | [docs/python.md](docs/python.md) |
 | Volta 撤去 | 未着手 | [docs/mise.md](docs/mise.md) |

@@ -2,19 +2,8 @@
 
 export PATH="$HOME/.local/bin:$PATH"
 
-# プロンプト。~/.config/starship.toml があれば starship、なければ Powerlevel10k を使う（docs/zsh.md）
-if [[ -f ~/.config/starship.toml ]] && (( $+commands[starship] )); then
-  eval "$(starship init zsh)"
-else
-  # Powerlevel10k の instant prompt。できるだけ先頭に置く。
-  # 入力を求める処理（パスワード、y/n 確認など）はこのブロックより上に書く。
-  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-  fi
-  source ~/powerlevel10k/powerlevel10k.zsh-theme
-  # 見た目は `p10k configure` か ~/.p10k.zsh で変更する
-  [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-fi
+# プロンプト: starship。見た目は ~/.config/starship.toml（config/starship.toml）で設定する（docs/zsh.md）
+(( $+commands[starship] )) && eval "$(starship init zsh)"
 
 # ls の色付き・種別記号付き表示
 alias ls='ls -GF'
