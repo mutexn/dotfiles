@@ -32,6 +32,11 @@ gh auth login                   # GitHub にログイン（git push に必要）
 | `runtime` | mise で Node、uv で Python、standalone 版 pnpm |
 | `macos` | macOS の設定 |
 
+## 基本方針
+
+何をどの道具で入れるかは [docs/toolchain.md](docs/toolchain.md) にまとめている。
+新しいアプリやコマンドを入れる前に確認する。
+
 ## ファイルの対応表
 
 | リポジトリ | 実機の場所 | 説明 |
