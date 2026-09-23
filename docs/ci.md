@@ -7,9 +7,9 @@ master への push と、すべてのプルリクエストで自動的に動く�
 
 | ジョブ | 動く環境 | 内容 |
 | --- | --- | --- |
-| 文法・書式の検査 | Ubuntu | `install.sh` と `macos/defaults.sh` を shellcheck で検査（警告以上）。ステータスラインのスクリプトは文法エラーだけ。Karabiner と Claude Code の設定（JSON）、starship・mise・uv の設定（TOML）の書式 |
+| 文法・書式の検査 | Ubuntu | `install.sh`・`macos/defaults.sh`・`macos/security.sh` を shellcheck で検査（警告以上）。ステータスラインのスクリプトは文法エラーだけ。Karabiner と Claude Code の設定（JSON）、starship・mise・uv の設定（TOML）の書式 |
 | 秘密情報の検査 | Ubuntu | gitleaks で、追加されたコミットにトークンや鍵などが含まれていないかを調べる |
-| macOS での動作確認 | macOS | zsh の設定の文法、macOS 標準の bash 3.2 での `install.sh` の文法、Brewfile を Homebrew が読めるか、空のホームで `install.sh link` を 2 回実行して 2 回目に変更が起きないか、全ステップの dry-run |
+| macOS での動作確認 | macOS | zsh の設定の文法、macOS 標準の bash 3.2 での `install.sh` の文法、Brewfile を Homebrew が読めるか、空のホームで `install.sh link` を 2 回実行して 2 回目に変更が起きないか、全ステップの dry-run。dry-run の出力に `check` の確認結果（ok / NG）が混ざっていないか |
 
 ## 確かめていないこと
 
