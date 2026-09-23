@@ -25,7 +25,7 @@
 | デザイン | Adobe XD | Adobe が開発を終了 | 残す | |
 | WordPress 開発 | Local / DevKinsta | 同じ用途が 2 つ | 残す | |
 | VPN | OpenVPN Connect（アプリ） | | 残す | |
-| | openvpn（コマンド） | アプリと重複 | **削除（途中）** | 本体ファイルが root 所有のため、管理者権限での削除が必要。下記「残っている作業」 |
+| | openvpn（コマンド） | アプリと重複 | **削除済み** | 本体ファイルが root 所有だったため、管理者権限で削除 |
 | git の画面操作 | lazygit / gitui / tig | 3 つ併存 | 残す | |
 | ファイラー | nnn / ranger | 2 つ併存 | 残す | |
 | Python | python@3.13（brew） | uv や mise で管理できる | **削除済み** | 依存しているものがないことを確認して 2026-09-23 に削除。Python は uv で管理する（[python.md](python.md)） |
@@ -88,10 +88,10 @@ Homebrew の後始末で既存の Docker.app が削除された。データ（`~
 | --- | --- |
 | Dia | 移行済み |
 | Spotify | 移行済み |
-| Docker Desktop | **失敗し、アプリ本体が削除された**。データは無事。入れ直しが必要 |
-| Google Drive | 失敗。アプリは残っている。管理者パスワードが必要 |
+| Docker Desktop | 失敗してアプリ本体が削除された。データは無事で、手動で入れ直して管理下に入った |
+| Google Drive | 初回は失敗。手動で実行し移行済み |
 
-### 残っている作業（自分のターミナルで実行する）
+### 手動で行った作業（管理者パスワードが必要なもの）
 
 ```bash
 # Docker Desktop を入れ直す（コンテナやイメージのデータはそのまま使われる）
@@ -124,3 +124,4 @@ brew uninstall --force openvpn
 | 2026-09-23 | Shottr の試用を開始 |
 | 2026-09-23 | Python を uv に集約。python@3.13 を削除 |
 | 2026-09-23 | Arc・LibreOffice・flux・FileMaker Pro 18 を削除。Dia・Spotify を Homebrew 管理下へ。Docker Desktop の移行に失敗しアプリが削除された（データは無事） |
+| 2026-09-23 | Docker Desktop を入れ直し、Google Drive を管理下へ移し、openvpn を削除。Brewfile と実機が一致（試用中の Shottr を除く） |
