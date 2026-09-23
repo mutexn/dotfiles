@@ -71,28 +71,20 @@ Volta の pnpm が standalone 版より先に使われる不具合があった�
 トークンや API キーは `home/zshrc` に**絶対に書かない**。書く場合は `~/.zshrc.local` に置く。
 
 ```zsh
-# ~/.zshrc.local の例: 値を直接書かず、コマンドで取り出す
-export GITHUB_PAT="$(gh auth token)"
-# 1Password に保存したものを取り出す場合
+# ~/.zshrc.local の例: 値を直接書かず、1Password から取り出す
 # export SOME_API_KEY="$(op read 'op://Private/Some API/credential')"
 ```
 
-### GITHUB_PAT（2026-09-23 に決定）
+### GITHUB_PAT（2026-09-23 に削除）
 
-`~/.zshrc.local` で、GitHub CLI のログイン情報からトークンを取り出している。
+以前は `~/.zshrc.local` で GitHub のトークンを `GITHUB_PAT` に入れていた。次の理由で削除した。
 
-```zsh
-export GITHUB_PAT="$(gh auth token 2>/dev/null)"
-```
+- この変数を読んでいるツールが見つからなかった（Codex の GitHub プラグインが読むのは別名の `GITHUB_PAT_TOKEN`）
+- 環境変数に入れると、この Mac で動くすべてのプログラム（npm のインストール処理や AI エージェントなど）が読める。
+  GitHub CLI のトークンは全リポジトリへの書き込み権限を持つため、漏れたときの影響が大きい
 
-| 観点 | 内容 |
-| --- | --- |
-| 良い点 | トークンの値がディスクに平文で残らない。値は macOS のキーチェーンにあり、`gh auth login` をやり直しても自動で追従する |
-| 注意点 | 権限は `gh auth login` と同じで、アクセスできる全リポジトリへの読み書き（repo、read:org、gist、workflow）。期限もない。特定のリポジトリだけに絞りたい用途には、別に専用トークンを作る |
-| 起動時間 | シェル起動のたびに約 0.06 秒かかる |
-
-2026-09-23 時点で、`GITHUB_PAT` を読んでいるツールは見つかっていない。
-Codex の GitHub プラグインが読むのは別名の `GITHUB_PAT_TOKEN`。
+GitHub CLI のログイン情報はキーチェーンに保管されたまま使える。トークンが必要なツールが出てきたら、
+そのツールに必要な権限だけを持つ専用トークンを作り、そのツールの設定の中だけで使う。
 
 ## PATH の優先順位（新しいターミナルを開いた直後）
 
