@@ -80,11 +80,47 @@ step_bundle() {
   log "Brewfile のアプリ・コマンドをインストール"
   if [[ $DRY_RUN -eq 1 ]]; then
     brew bundle check --file="$DOTFILES/Brewfile" --verbose || true
-  elif ! brew bundle --file="$DOTFILES/Brewfile"; then
+    return
+  fi
+
+  # Homebrew はダウンロード中に何も表示しないため、別に進捗を出す。
+  # 10 秒ごとに、経過時間とダウンロード済みの容量を 1 行で更新する
+  local total_f total_c cache
+  total_f=$(grep -cE '^brew "' "$DOTFILES/Brewfile")
+  total_c=$(grep -cE '^cask "' "$DOTFILES/Brewfile")
+  cache="$(brew --cache)/downloads"
+  echo "    コマンド ${total_f} 個、アプリ ${total_c} 個（依存も入るため実際はこれより多い）"
+  echo "    全部で 10GB 前後、30 分以上かかることがあります"
+
+  local start=$SECONDS progress_pid=""
+  {
+    while sleep 10; do
+      printf '\r    実行中 %d 分 %02d 秒（ダウンロード済み %s）。止まって見えてもそのまま待つ    ' \
+        $(( (SECONDS - start) / 60 )) $(( (SECONDS - start) % 60 )) \
+        "$(du -sh "$cache" 2>/dev/null | cut -f1 || echo 0B)"
+    done
+  } &
+  progress_pid=$!
+  # brew が終わったら、成否にかかわらず必ず進捗表示を止める
+  stop_progress() {
+    [[ -n "$progress_pid" ]] || return
+    local pid="$progress_pid"
+    progress_pid=""          # 先に空にして、EXIT の trap から二重に呼ばれないようにする
+    kill "$pid" 2>/dev/null || true
+    wait "$pid" 2>/dev/null || true   # kill した子の終了コードは 0 にならないので無視する
+    printf '\r%*s\r' 80 ''
+  }
+  trap 'stop_progress' EXIT INT TERM
+
+  local ok=0
+  brew bundle --file="$DOTFILES/Brewfile" || ok=$?
+  stop_progress
+  trap - EXIT INT TERM
+
+  if [[ $ok -ne 0 ]]; then
     # 1 つの失敗（通信の切断など）で残りの手順まで止めないよう、警告だけ出して先に進む
     FAILED_STEPS+=("bundle")
     warn "Brewfile の一部のインストールに失敗しました。残りの手順は続けます"
-    warn "あとで brew bundle --file=\"$DOTFILES/Brewfile\" を実行し直すと、失敗したものだけ入れ直せます"
   fi
 }
 
@@ -231,10 +267,22 @@ step_check() {
   else
     fail "設定ファイルに文法エラーがある"
   fi
-  local p
-  p="$(shell_which node)";    [[ "$p" == "$HOME/.local/share/mise/"* ]] && pass "node は mise: $p"    || fail "node が mise ではない: ${p:-見つからない}"
-  p="$(shell_which pnpm)";    [[ "$p" == "$HOME/Library/pnpm/"* ]]      && pass "pnpm は standalone 版: $p" || fail "pnpm が standalone 版ではない: ${p:-見つからない}"
-  p="$(shell_which python3)"; [[ "$p" == "$HOME/.local/bin/"* ]]        && pass "python3 は uv: $p"    || fail "python3 が uv ではない: ${p:-見つからない}"
+  # 「入っていない」と「入っているが PATH の順番が違う」を区別して伝える
+  check_runtime() {
+    local name="$1" want_dir="$2" exists_path="$3" p
+    p="$(shell_which "$name")"
+    if [[ "$p" == "$want_dir"* ]]; then
+      pass "${name} は想定どおり: $p"
+    elif [[ ! -e "$exists_path" ]]; then
+      fail "${name} が入っていない。./install.sh runtime を実行する"
+    else
+      fail "${name} は入っているが、今のシェルは別の場所を使っている（${p:-見つからない}）。新しいターミナルを開くか exec zsh を実行する"
+    fi
+  }
+  check_runtime node    "$HOME/.local/share/mise/" "$HOME/.local/share/mise/installs/node"
+  check_runtime pnpm    "$HOME/Library/pnpm/"      "$HOME/Library/pnpm/bin/pnpm"
+  check_runtime python3 "$HOME/.local/bin/"        "$HOME/.local/bin/python3"
+  [[ -x "$HOME/.local/bin/claude" ]] && pass "Claude Code が入っている" || fail "Claude Code が入っていない。./install.sh runtime を実行する"
 
   log "git / GitHub CLI"
   [[ "$(git config --show-origin user.name 2>/dev/null)" == "file:$HOME/.config/git/config"* ]] \
@@ -319,7 +367,19 @@ step_check() {
         fail "入っていない ${kind}:${missing}"
       fi
     done
-    skip "App Store アプリ（mas）は確認しない。mas の一覧取得が応答しないことがあるため"
+    # App Store の ID は変わることがある（2026-09 に Keynote・Pages・Numbers で発生）。
+    # 入っているかではなく、ID が今も App Store にあるかを確かめる
+    if command -v mas >/dev/null; then
+      local bad="" id name
+      while IFS='|' read -r name id; do
+        [[ -z "$id" ]] && continue
+        mas info "$id" >/dev/null 2>&1 || bad="$bad ${name}(${id})"
+      done < <(grep -E '^mas "' "$DOTFILES/Brewfile" | sed -E 's/^mas "([^"]+)", id: ([0-9]+).*/\1|\2/')
+      [[ -z "$bad" ]] && pass "App Store アプリの ID がすべて有効" \
+        || fail "App Store に見つからない ID:${bad}。mas search <アプリ名> で調べて Brewfile を更新する"
+    else
+      skip "mas が入っていない"
+    fi
   else
     skip "Homebrew が入っていない"
   fi
@@ -360,10 +420,21 @@ main() {
     return
   fi
   if [[ ${#FAILED_STEPS[@]} -gt 0 ]]; then
-    warn "一部が失敗しました: ${FAILED_STEPS[*]}。表示されたエラーを確認し、そのステップだけ実行し直してください"
+    warn "一部が失敗しました: ${FAILED_STEPS[*]}"
+    warn "エラーを確認したあと、次でやり直せます: ./install.sh ${FAILED_STEPS[*]}"
     exit 1
   fi
-  log "完了。新しいターミナルを開くか exec zsh で反映してください"
+  log "完了"
+  cat <<'NEXT'
+    このあと手で行うこと:
+      1. 新しいターミナルを開く（設定を読み込むため）
+      2. gh auth login                                        GitHub にログイン
+      3. ./install.sh check                                   設定できたかを確かめる
+      4. launchctl disable gui/$(id -u)/org.chromium.chromoting
+                                                              リモートデスクトップの自動起動を止める
+      5. Karabiner-Elements や AltTab を起動し、システム設定で許可する
+      6. Gyazo が未導入なら: open /opt/homebrew/Caskroom/gyazo/*/Gyazo-*.pkg
+NEXT
 }
 
 main "$@"
