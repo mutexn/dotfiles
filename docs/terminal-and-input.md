@@ -14,7 +14,7 @@ Ghostty は起動時にこのファイルを読む。変更後は ⌘⇧, で再
 | 設定 | 意味 |
 | --- | --- |
 | `theme = TokyoNight` | 配色テーマ。`ghostty +list-themes` で一覧を見られる |
-| `font-family = "BlexMono Nerd Font Mono", "Hiragino Sans"` | 英数字は BlexMono（アイコン記号入り）、日本語はヒラギノ角ゴで表示する。BlexMono は Brewfile の `font-blex-mono-nerd-font` で入る |
+| `font-family = "BlexMono Nerd Font Mono"` と `font-family = "Hiragino Sans"` | 英数字は BlexMono（アイコン記号入り）、日本語はヒラギノ角ゴで表示する。1 行に 1 つずつ書くと上から順に使われる。以前はカンマでつないで 1 行に書いていたため、1 つの長いフォント名として読まれ、ヒラギノが効いていなかった（2026-09-23 に修正）。BlexMono は Brewfile の `font-blex-mono-nerd-font` で入る |
 | `window-padding-x / y = 10` | ウインドウの内側の余白（ピクセル） |
 | `window-padding-balance = true` | 余白を上下左右で均等にする |
 | `quick-terminal-position = top` | クイックターミナルを画面上部から出す |

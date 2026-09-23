@@ -1,9 +1,10 @@
 # テーマ設定
 theme = TokyoNight
 
-# フォント（引用符で囲む）
-# Nerd Font + 日本語フォールバック
-font-family = "BlexMono Nerd Font Mono", "Hiragino Sans"
+# フォント。1 行に 1 つずつ書くと、上から順に使われる（カンマ区切りは 1 つの名前として扱われる）
+# 英数字は Nerd Font、日本語はヒラギノ角ゴ
+font-family = "BlexMono Nerd Font Mono"
+font-family = "Hiragino Sans"
 
 # ウィンドウ内の余白
 window-padding-x = 10
