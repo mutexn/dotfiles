@@ -177,7 +177,6 @@
                 ]
             },
             "name": "JIS",
-            "selected": false,
             "virtual_hid_keyboard": { "keyboard_type_v2": "jis" }
         }
     ]

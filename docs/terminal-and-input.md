@@ -60,6 +60,10 @@ Karabiner は設定画面で変更すると `karabiner.json` を**丸ごと書�
 | `kbd us` | `US` に切り替える |
 | `kbd jis` | `JIS` に切り替える |
 
+切り替えると Karabiner が `karabiner.json` を書き戻すため、`JIS` を選んでいる間は
+`selected` の行だけ git の差分に出る。これは想定どおりなのでコミットしない。
+リポジトリには `US` を選んだ状態を入れてある。
+
 つないでいるキーボードの `vendor_id` / `product_id` は、次のコマンドで調べられる。
 
 ```sh
