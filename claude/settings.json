@@ -180,6 +180,7 @@
   "syntaxHighlightingDisabled": true,
   "tui": "fullscreen",
   "prefersReducedMotion": false,
+  "theme": "dark",
   "autoCompactEnabled": true,
   "showTurnDuration": true,
   "terminalProgressBarEnabled": true,

@@ -319,12 +319,34 @@ step_check() {
   local ghostty=/Applications/Ghostty.app/Contents/MacOS/ghostty
   if [[ -x "$ghostty" ]]; then
     "$ghostty" +validate-config >/dev/null 2>&1 && pass "Ghostty の設定にエラーがない" || fail "Ghostty の設定にエラーがある（ghostty +validate-config で確認）"
+    # 設定に書いた英数字フォントを macOS が登録しているか。ファイルが
+    # ~/Library/Fonts にあっても、フォント登録データベースが古いままだと
+    # Ghostty からは見えず、標準フォントに差し替わる
+    # （+list-fonts は等幅フォントだけを並べるので、日本語用の
+    #   プロポーショナルフォントは対象にしない）
+    local font
+    font="$(sed -n 's/^font-family = "\(.*\)"$/\1/p' "$DOTFILES/config/ghostty/config" | head -1)"
+    if [[ -z "$font" ]]; then
+      skip "Ghostty の設定に font-family がない"
+    elif "$ghostty" +list-fonts 2>/dev/null | grep -qxF "$font"; then
+      pass "フォント「$font」が使える"
+    else
+      fail "フォント「$font」を macOS が登録していない。Brewfile のフォントを入れたうえで atsutil databases -removeUser && killall fontd を実行し、Ghostty を開き直す"
+    fi
   else
     skip "Ghostty が入っていない"
   fi
   local kcli="/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli"
   if [[ -x "$kcli" ]]; then
     [[ -n "$("$kcli" --show-current-profile-name 2>/dev/null)" ]] && pass "Karabiner が設定を読んでいる" || fail "Karabiner が設定を読んでいない"
+    # 仮想キーボードの種別（ansi / jis）はプロファイル単位でしか持てないので、
+    # US と JIS のプロファイルを分けている（docs/terminal-and-input.md）
+    local names profile missing_profiles=""
+    names="$("$kcli" --list-profile-names 2>/dev/null)"
+    for profile in US JIS; do
+      grep -qxF "$profile" <<<"$names" || missing_profiles+="$profile "
+    done
+    [[ -z "${missing_profiles// /}" ]] && pass "Karabiner に US と JIS のプロファイルがある" || fail "Karabiner にないプロファイル: ${missing_profiles}（./install.sh link で karabiner.json を置き直す）"
   else
     skip "Karabiner-Elements が入っていない"
   fi

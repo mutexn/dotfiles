@@ -1,9 +1,100 @@
 {
     "global": {
-        "ask_for_confirmation_before_quitting": false,
-        "enable_notification_window": false
+        "enable_notification_window": false,
+        "show_in_menu_bar": false
     },
     "profiles": [
+        {
+            "complex_modifications": {
+                "rules": [
+                    {
+                        "description": "Caps_lockを、英数・かなのトグルに変更する",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "input_sources": [{ "language": "ja" }],
+                                        "type": "input_source_if"
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "japanese_eisuu" }],
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "input_sources": [{ "language": "en" }],
+                                        "type": "input_source_if"
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "japanese_kana" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "caps_lock + hjkl to arrow keys Vim",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "h",
+                                    "modifiers": {
+                                        "mandatory": ["caps_lock"],
+                                        "optional": ["any"]
+                                    }
+                                },
+                                "to": [{ "key_code": "left_arrow" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "j",
+                                    "modifiers": {
+                                        "mandatory": ["caps_lock"],
+                                        "optional": ["any"]
+                                    }
+                                },
+                                "to": [{ "key_code": "down_arrow" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "k",
+                                    "modifiers": {
+                                        "mandatory": ["caps_lock"],
+                                        "optional": ["any"]
+                                    }
+                                },
+                                "to": [{ "key_code": "up_arrow" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "l",
+                                    "modifiers": {
+                                        "mandatory": ["caps_lock"],
+                                        "optional": ["any"]
+                                    }
+                                },
+                                "to": [{ "key_code": "right_arrow" }],
+                                "type": "basic"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "name": "US",
+            "selected": true,
+            "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
+        },
         {
             "complex_modifications": {
                 "rules": [
@@ -14,76 +105,44 @@
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
-                                        "mandatory": [
-                                            "left_control"
-                                        ],
-                                        "optional": [
-                                            "any"
-                                        ]
+                                        "mandatory": ["left_control"],
+                                        "optional": ["any"]
                                     }
                                 },
-                                "to": [
-                                    {
-                                        "key_code": "left_arrow"
-                                    }
-                                ],
+                                "to": [{ "key_code": "left_arrow" }],
                                 "type": "basic"
                             },
                             {
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": {
-                                        "mandatory": [
-                                            "left_control"
-                                        ],
-                                        "optional": [
-                                            "any"
-                                        ]
+                                        "mandatory": ["left_control"],
+                                        "optional": ["any"]
                                     }
                                 },
-                                "to": [
-                                    {
-                                        "key_code": "down_arrow"
-                                    }
-                                ],
+                                "to": [{ "key_code": "down_arrow" }],
                                 "type": "basic"
                             },
                             {
                                 "from": {
                                     "key_code": "k",
                                     "modifiers": {
-                                        "mandatory": [
-                                            "left_control"
-                                        ],
-                                        "optional": [
-                                            "any"
-                                        ]
+                                        "mandatory": ["left_control"],
+                                        "optional": ["any"]
                                     }
                                 },
-                                "to": [
-                                    {
-                                        "key_code": "up_arrow"
-                                    }
-                                ],
+                                "to": [{ "key_code": "up_arrow" }],
                                 "type": "basic"
                             },
                             {
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": {
-                                        "mandatory": [
-                                            "left_control"
-                                        ],
-                                        "optional": [
-                                            "any"
-                                        ]
+                                        "mandatory": ["left_control"],
+                                        "optional": ["any"]
                                     }
                                 },
-                                "to": [
-                                    {
-                                        "key_code": "right_arrow"
-                                    }
-                                ],
+                                "to": [{ "key_code": "right_arrow" }],
                                 "type": "basic"
                             }
                         ]
@@ -94,66 +153,37 @@
                             {
                                 "conditions": [
                                     {
-                                        "input_sources": [
-                                            {
-                                                "language": "ja"
-                                            }
-                                        ],
+                                        "input_sources": [{ "language": "ja" }],
                                         "type": "input_source_if"
                                     }
                                 ],
-                                "from": {
-                                    "key_code": "japanese_kana"
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "japanese_eisuu"
-                                    }
-                                ],
+                                "from": { "key_code": "japanese_kana" },
+                                "to": [{ "key_code": "japanese_eisuu" }],
                                 "type": "basic"
                             },
                             {
                                 "conditions": [
                                     {
-                                        "input_sources": [
-                                            {
-                                                "language": "ja"
-                                            }
-                                        ],
+                                        "input_sources": [{ "language": "ja" }],
                                         "type": "input_source_unless"
                                     }
                                 ],
-                                "from": {
-                                    "key_code": "japanese_eisuu"
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "japanese_kana"
-                                    }
-                                ],
+                                "from": { "key_code": "japanese_eisuu" },
+                                "to": [{ "key_code": "japanese_kana" }],
                                 "type": "basic"
                             }
                         ]
                     }
                 ]
             },
-            "name": "Default profile",
-            "selected": true,
+            "name": "JIS",
             "simple_modifications": [
                 {
-                    "from": {
-                        "key_code": "japanese_kana"
-                    },
-                    "to": [
-                        {
-                            "key_code": "right_shift"
-                        }
-                    ]
+                    "from": { "key_code": "japanese_kana" },
+                    "to": [{ "key_code": "right_shift" }]
                 }
             ],
-            "virtual_hid_keyboard": {
-                "keyboard_type_v2": "jis"
-            }
+            "virtual_hid_keyboard": { "keyboard_type_v2": "jis" }
         }
     ]
 }
