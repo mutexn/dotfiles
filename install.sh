@@ -319,6 +319,20 @@ step_check() {
   local ghostty=/Applications/Ghostty.app/Contents/MacOS/ghostty
   if [[ -x "$ghostty" ]]; then
     "$ghostty" +validate-config >/dev/null 2>&1 && pass "Ghostty の設定にエラーがない" || fail "Ghostty の設定にエラーがある（ghostty +validate-config で確認）"
+    # 設定に書いた英数字フォントを macOS が登録しているか。ファイルが
+    # ~/Library/Fonts にあっても、フォント登録データベースが古いままだと
+    # Ghostty からは見えず、標準フォントに差し替わる
+    # （+list-fonts は等幅フォントだけを並べるので、日本語用の
+    #   プロポーショナルフォントは対象にしない）
+    local font
+    font="$(sed -n 's/^font-family = "\(.*\)"$/\1/p' "$DOTFILES/config/ghostty/config" | head -1)"
+    if [[ -z "$font" ]]; then
+      skip "Ghostty の設定に font-family がない"
+    elif "$ghostty" +list-fonts 2>/dev/null | grep -qxF "$font"; then
+      pass "フォント「$font」が使える"
+    else
+      fail "フォント「$font」を macOS が登録していない。Brewfile のフォントを入れたうえで atsutil databases -removeUser && killall fontd を実行し、Ghostty を開き直す"
+    fi
   else
     skip "Ghostty が入っていない"
   fi
