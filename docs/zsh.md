@@ -72,7 +72,7 @@ Volta の pnpm が standalone 版より先に使われる不具合があった�
 見た目は以前の Powerlevel10k（classic、dark、2 行、右端に枠線）を、starship の標準機能だけで再現している。
 
 ```
- ~/Dev/Github/dotfiles   master ·························· ✘ 1  5s   18:53:37  ─╮
+ ~/.dotfiles   master ·························· ✘ 1  5s   18:53:37  ─╮
 ❯                                                                                  ─╯
 ```
 

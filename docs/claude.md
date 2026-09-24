@@ -68,5 +68,5 @@ Claude Code が書き換えるときに、リンクを普通のファイルに�
 
 `settings.json` の許可ルールでは `~/.zshrc` や `~/.gitconfig` の編集を禁止している。ただし zsh と git の設定は今は `~/.config/zsh/` と `~/.config/git/` にあり、このルールには当たらない。
 しかし実機のこれらのファイルは、このリポジトリのファイルへのリンクになっている。
-リポジトリ側のパス（`~/Dev/Github/dotfiles/home/zshrc` など）への編集は禁止ルールに当たらない。
+リポジトリ側のパス（`~/.dotfiles/home/zshrc` など）への編集は禁止ルールに当たらない。
 Claude Code にこのリポジトリを編集させるときは、変更内容を `git diff` で必ず確認する。

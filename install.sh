@@ -12,6 +12,9 @@
 set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# 設定のリンク元。リンク先は install.sh を置いた場所から決まるので、
+# 別の場所から実行すると実機の設定が二重管理になる（README.md）
+DOTFILES_HOME="$HOME/.dotfiles"
 DRY_RUN=0
 # 置き換える前のファイルの退避先。元の場所の隣に置くと、ツールが読み込んでしまうことがあるため 1 か所にまとめる
 BACKUP_DIR="$HOME/.local/state/dotfiles/backup/$(date +%Y%m%d%H%M%S)"
@@ -159,6 +162,10 @@ LINKS=(
 
 step_link() {
   log "設定ファイルをリンク"
+  if [[ "$DOTFILES" != "$DOTFILES_HOME" ]]; then
+    warn "このリポジトリが $DOTFILES にあります。リンク先もここになります"
+    warn "想定の置き場所は $DOTFILES_HOME です。別の場所のまま続けると設定が二重管理になります"
+  fi
   # tig は ~/.local/share/tig があると、履歴をそこに保存する（docs/xdg.md）
   [[ -d "$HOME/.local/share/tig" ]] || run mkdir -p "$HOME/.local/share/tig"
   local entry
@@ -251,6 +258,9 @@ shell_which() {
 
 step_check() {
   log "リンク"
+  [[ "$DOTFILES" == "$DOTFILES_HOME" ]] \
+    && pass "リポジトリが $DOTFILES_HOME にある" \
+    || fail "リポジトリが $DOTFILES にある。$DOTFILES_HOME へ移して ./install.sh link をやり直す"
   local entry src dest
   for entry in "${LINKS[@]}"; do
     src="$DOTFILES/${entry%%|*}" dest="${entry#*|}"

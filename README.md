@@ -8,13 +8,17 @@ mutexn の Mac（Apple Silicon）のセットアップ一式。
 
 ```bash
 xcode-select --install          # git を使えるようにする。ダイアログで完了を待つ
-git clone https://github.com/mutexn/dotfiles.git ~/Dev/Github/dotfiles
-cd ~/Dev/Github/dotfiles
+git clone https://github.com/mutexn/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
 ./install.sh --dry-run          # 何が行われるかを確認
 ./install.sh                    # 実行
 gh auth login                   # GitHub にログイン（git push に必要）
 ./install.sh check              # 正しく設定されたかを確かめる
 ```
+
+置き場所は `~/.dotfiles` に固定する。`install.sh` はリンク先を自分自身の場所から決めるため、
+別の場所から実行するとリンクがそちらに張り替わり、設定が二重管理になる。
+別の場所にある状態で `link` を実行すると警告が出て、`check` では NG になる。
 
 `./install.sh` は 1 時間ほどかかる。アプリのインストール中は、経過時間とダウンロード済みの容量を 10 秒ごとに表示する。
 途中でアプリのインストーラが管理者パスワードを求めるので、ときどき画面を見る。
@@ -89,8 +93,8 @@ gh auth login                   # GitHub にログイン（git push に必要）
 
 ```
 リポジトリ内（元ファイル）                 実機（install.sh が作るリンク）
-~/Dev/Github/dotfiles/home/zshenv   ←──   ~/.zshenv
-~/Dev/Github/dotfiles/config/git/config ←──  ~/.config/git/config
+~/.dotfiles/home/zshenv   ←──   ~/.zshenv
+~/.dotfiles/config/git/config ←──  ~/.config/git/config
 ```
 
 zsh は今までどおり `~/.zshenv` を読む。
@@ -103,32 +107,32 @@ zsh は今までどおり `~/.zshenv` を読む。
 
 ```
 ~/
-├── .zshenv    → ~/Dev/Github/dotfiles/home/zshenv   # ホームに残す zsh のファイルはこれだけ
+├── .zshenv    → ~/.dotfiles/home/zshenv   # ホームに残す zsh のファイルはこれだけ
 ├── .config/
 │   ├── zsh/
-│   │   ├── .zprofile     → ~/Dev/Github/dotfiles/home/zprofile
-│   │   ├── .zshrc        → ~/Dev/Github/dotfiles/home/zshrc
+│   │   ├── .zprofile     → ~/.dotfiles/home/zprofile
+│   │   ├── .zshrc        → ~/.dotfiles/home/zshrc
 │   │   └── local.zsh              # 秘密情報・マシン固有の設定用。リンクではなく実機だけに置く
 │   ├── git/
-│   │   ├── config        → ~/Dev/Github/dotfiles/config/git/config
-│   │   └── ignore        → ~/Dev/Github/dotfiles/config/git/ignore
+│   │   ├── config        → ~/.dotfiles/config/git/config
+│   │   └── ignore        → ~/.dotfiles/config/git/ignore
 │   ├── gh/
-│   │   ├── config.yml    → ~/Dev/Github/dotfiles/config/gh/config.yml
+│   │   ├── config.yml    → ~/.dotfiles/config/gh/config.yml
 │   │   └── hosts.yml              # gh auth login が作るログイン情報。リンクしない
-│   ├── mise/config.toml  → ~/Dev/Github/dotfiles/config/mise/config.toml
-│   ├── starship.toml     → ~/Dev/Github/dotfiles/config/starship.toml
-│   ├── uv/uv.toml        → ~/Dev/Github/dotfiles/config/uv/uv.toml
-│   └── karabiner/        → ~/Dev/Github/dotfiles/config/karabiner/   # フォルダごとリンク
+│   ├── mise/config.toml  → ~/.dotfiles/config/mise/config.toml
+│   ├── starship.toml     → ~/.dotfiles/config/starship.toml
+│   ├── uv/uv.toml        → ~/.dotfiles/config/uv/uv.toml
+│   └── karabiner/        → ~/.dotfiles/config/karabiner/   # フォルダごとリンク
 ├── .claude/                       # Claude Code。自分で書いたものだけリンク
-│   ├── CLAUDE.md         → ~/Dev/Github/dotfiles/claude/CLAUDE.md
-│   ├── settings.json     → ~/Dev/Github/dotfiles/claude/settings.json
-│   ├── statusline-command.sh → ~/Dev/Github/dotfiles/claude/statusline-command.sh
-│   └── skills/setup-claude-settings/ → ~/Dev/Github/dotfiles/claude/skills/setup-claude-settings/
+│   ├── CLAUDE.md         → ~/.dotfiles/claude/CLAUDE.md
+│   ├── settings.json     → ~/.dotfiles/claude/settings.json
+│   ├── statusline-command.sh → ~/.dotfiles/claude/statusline-command.sh
+│   └── skills/setup-claude-settings/ → ~/.dotfiles/claude/skills/setup-claude-settings/
 ├── Library/
 │   ├── Application Support/
-│   │   ├── com.mitchellh.ghostty/config → ~/Dev/Github/dotfiles/config/ghostty/config
-│   │   ├── Code/User/settings.json など   → ~/Dev/Github/dotfiles/config/vscode/
-│   │   └── Cursor/User/settings.json など → ~/Dev/Github/dotfiles/config/cursor/
+│   │   ├── com.mitchellh.ghostty/config → ~/.dotfiles/config/ghostty/config
+│   │   ├── Code/User/settings.json など   → ~/.dotfiles/config/vscode/
+│   │   └── Cursor/User/settings.json など → ~/.dotfiles/config/cursor/
 │   └── pnpm/                      # install.sh runtime が入れる standalone 版 pnpm
 ├── .local/
 │   ├── bin/
@@ -142,7 +146,7 @@ zsh は今までどおり `~/.zshenv` を読む。
 │       ├── zsh/history            # zsh のコマンド履歴
 │       ├── less_history など       # 各ツールの履歴
 │       └── dotfiles/backup/       # install.sh link が退避したファイル
-└── Dev/Github/dotfiles/           # このリポジトリ（リンクの実体）
+└── .dotfiles/                     # このリポジトリ（リンクの実体）
     ├── install.sh
     ├── Brewfile
     ├── macos/                     # defaults.sh（macOS の設定）、security.sh（セキュリティ設定）
@@ -178,7 +182,7 @@ zsh は今までどおり `~/.zshenv` を読む。
 
 ```bash
 ls -la ~/.zshenv
-# lrwxr-xr-x ... /Users/mutexn/.zshenv -> /Users/mutexn/Dev/Github/dotfiles/home/zshenv
+# lrwxr-xr-x ... /Users/mutexn/.zshenv -> /Users/mutexn/.dotfiles/home/zshenv
 ```
 
 ## 秘密情報
