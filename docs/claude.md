@@ -18,6 +18,7 @@ Homebrew では入れない（更新が `brew upgrade` 任せになるため）�
 | `claude/CLAUDE.md` | `~/.claude/CLAUDE.md` | すべてのプロジェクトに適用される指示（応答言語、実装前の手順、Git のルールなど） |
 | `claude/statusline-command.sh` | `~/.claude/statusline-command.sh` | 画面下部のステータスライン。フォルダ、モデル名、コンテキストの使用率、トークン数などを表示する |
 | `claude/skills/setup-claude-settings/`（フォルダごと） | `~/.claude/skills/setup-claude-settings/` | 自作スキル。`/setup-claude-settings` でプロジェクト用の Claude Code 設定を作る |
+| `claude/skills/toolchain/`（フォルダごと） | `~/.claude/skills/toolchain/` | 自作スキル。何をどの道具で入れるかの方針（[toolchain.md](toolchain.md)）。パッケージ・コマンド・ランタイムを入れるときに読み込まれる |
 | `claude/settings.json` | `~/.claude/settings.json` | 全体の設定。許可・禁止ルール、サンドボックス、モデル、ステータスライン、プラグインなど |
 
 ### ステータスラインについて

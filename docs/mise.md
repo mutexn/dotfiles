@@ -1,6 +1,6 @@
 # mise と Node.js / pnpm の管理方針
 
-`~/Dev/Github/TOOLCHAIN.md`（2026-07-21 決定）の内容を dotfiles 向けにまとめたもの。
+ツールチェーンの方針（2026-07-21 決定）を dotfiles 向けにまとめたもの。
 
 ## ファイルの対応
 

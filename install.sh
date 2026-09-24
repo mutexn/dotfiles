@@ -158,6 +158,7 @@ LINKS=(
   "claude/settings.json|$HOME/.claude/settings.json"
   "claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
   "claude/skills/setup-claude-settings|$HOME/.claude/skills/setup-claude-settings"
+  "claude/skills/toolchain|$HOME/.claude/skills/toolchain"
 )
 
 step_link() {
