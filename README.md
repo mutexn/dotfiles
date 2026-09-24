@@ -208,6 +208,8 @@ ls -la ~/.zshenv
 
 zsh の設定などはリポジトリへのリンクなので、master に入った変更は `git pull` した時点で実機のシェルに反映される。
 他の Mac で `git pull` するときは、先に `git log -p HEAD..origin/master` で差分を確認する。
+ただし `install.sh` の `LINKS` に新しい行が増えたときは、`git pull` だけではリンクが張られない。
+`./install.sh link` を実行してから `check` で確かめる。
 
 ## 実機で検証してから標準化する
 
