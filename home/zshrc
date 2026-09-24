@@ -57,5 +57,22 @@ if (( $+commands[eza] )); then
   alias lt='eza --tree --level=2 --git-ignore --icons'          # フォルダ構造をツリー表示
 fi
 
+# Karabiner のプロファイル切り替え（docs/terminal-and-input.md）。
+# 仮想キーボードの種別（ansi / jis）はプロファイル単位でしか持てないため、
+# 外付けの US キーボードと MacBook 内蔵の JIS キーボードで切り替える
+kbd() {
+  local cli="/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli"
+  if [[ ! -x "$cli" ]]; then
+    print -u2 "Karabiner-Elements が入っていない"
+    return 1
+  fi
+  case "${1:-}" in
+    us)  "$cli" --select-profile US ;;
+    jis) "$cli" --select-profile JIS ;;
+    "")  "$cli" --show-current-profile-name ;;
+    *)   print -u2 "使い方: kbd [us|jis]（引数なしで現在のプロファイルを表示）"; return 1 ;;
+  esac
+}
+
 # マシン固有の設定・秘密情報（トークン等）。リポジトリには含めない
 [[ ! -f "$ZDOTDIR/local.zsh" ]] || source "$ZDOTDIR/local.zsh"

@@ -339,6 +339,14 @@ step_check() {
   local kcli="/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli"
   if [[ -x "$kcli" ]]; then
     [[ -n "$("$kcli" --show-current-profile-name 2>/dev/null)" ]] && pass "Karabiner が設定を読んでいる" || fail "Karabiner が設定を読んでいない"
+    # 仮想キーボードの種別（ansi / jis）はプロファイル単位でしか持てないので、
+    # US と JIS のプロファイルを分けている（docs/terminal-and-input.md）
+    local names profile missing_profiles=""
+    names="$("$kcli" --list-profile-names 2>/dev/null)"
+    for profile in US JIS; do
+      grep -qxF "$profile" <<<"$names" || missing_profiles+="$profile "
+    done
+    [[ -z "${missing_profiles// /}" ]] && pass "Karabiner に US と JIS のプロファイルがある" || fail "Karabiner にないプロファイル: ${missing_profiles}（./install.sh link で karabiner.json を置き直す）"
   else
     skip "Karabiner-Elements が入っていない"
   fi
