@@ -71,6 +71,7 @@ cask "typeless"       # 音声入力
 cask "lm-studio"      # ローカル LLM
 
 # --- パスワード管理 ---
+cask "1password"
 cask "1password-cli"
 cask "bitwarden"
 
@@ -105,6 +106,7 @@ cask "spotify"
 cask "appcleaner"     # アプリを関連ファイルごと削除
 cask "gyazo"          # スクリーンショットを撮ってすぐ URL で共有
 cask "shottr"         # スクリーンショットの撮影・注釈・文字認識
+cask "ankerwork"      # Anker のマイク・カメラの設定
 
 # ============================================================
 # App Store アプリ（mas）
