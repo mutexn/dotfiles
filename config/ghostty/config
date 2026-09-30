@@ -7,6 +7,9 @@ theme = TokyoNight
 font-family = "BlexMono Nerd Font Mono"
 font-family = "Hiragino Sans"
 
+# 起動時の作業ディレクトリ
+working-directory = ~/Dev
+
 # ウィンドウ内の余白
 window-padding-x = 10
 window-padding-y = 10
@@ -24,8 +27,9 @@ keybind = global:ctrl+@=toggle_quick_terminal
 # 非アクティブペインを暗く
 unfocused-split-opacity = 0.7
 
-# タブに自動で採番する
-macos-titlebar-style = tabs
+# タイトルバーの描画方式。macOS ネイティブのタブバーに任せる
+# （tabs は Ghostty の自前描画で、macOS 27 ではタブ名が空欄や "..." になる）
+macos-titlebar-style = transparent
 macos-titlebar-proxy-icon = hidden
 
 # デスクトップ通知
