@@ -161,3 +161,4 @@ launchctl enable gui/$(id -u)/org.chromium.chromoting   # リモートデスク�
 - **FileVault**（ディスクの暗号化）：システム設定 > プライバシーとセキュリティ。`fdesetup status` で確認。`./install.sh check` でも確認する
 - **画面ロック**：システム設定 > ロック画面。画面が消えたらすぐパスワードを求める設定にする
 - **バックアップ**：Time Machine は使わない（2026-09-23 決定）。コードは GitHub、設定はこの dotfiles にある
+- **既定のブラウザ**：システム設定 > デスクトップと Dock > デフォルトの Web ブラウザ を Chrome にする。LaunchServices の管理下にあり `defaults write` では設定できない（[apps.md](apps.md)）

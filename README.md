@@ -235,3 +235,4 @@ zsh の設定などはリポジトリへのリンクなので、master に入っ
 | macOS の設定の追加（拡張子の表示、パスバー、Finder の英語表示、入力の自動変換の停止など 11 項目） | 採用（2026-09-23） | [docs/macos.md](docs/macos.md) |
 | セキュリティ設定（FileVault、ファイアウォール、ステルスモード、Touch ID で sudo） | 完了（2026-09-23）。この Mac で `./install.sh security` を実行し、`check` で確認済み | [docs/macos.md](docs/macos.md#セキュリティ設定macossecuritysh) |
 | バックアップ（Time Machine） | 使わない（2026-09-23 決定） | [docs/macos.md](docs/macos.md) |
+| ブラウザの選定 | 採用（2026-09-24）。既定を Dia から Chrome へ移し、Claude 拡張を使う。Dia は保留 | [docs/apps.md](docs/apps.md) |
