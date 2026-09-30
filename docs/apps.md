@@ -109,8 +109,8 @@ brew uninstall --force openvpn
 | AI | Claude、ChatGPT、Typeless（音声入力） |
 | 入力・操作 | Raycast、AltTab、Karabiner-Elements、KeyboardCleanTool、Google 日本語入力 |
 | 仕事 | Slack、Zoom、Notion、Obsidian、Anki、Figma、Adobe Creative Cloud |
-| 開発 | gcloud CLI、Cyberduck、Chrome Remote Desktop（自動起動は停止）、gh、mise、direnv、uv、neovim、tmux、libpq、poppler |
-| ユーティリティ | AppCleaner、1Password CLI |
+| 開発 | gcloud CLI、Cyberduck、Chrome Remote Desktop（自動起動は停止）、gh、mise、direnv、uv、neovim、tmux、libpq、poppler、Contentful CLI |
+| ユーティリティ | AppCleaner、1Password（本体・CLI）、AnkerWork |
 
 ## 見直しの記録
 
@@ -126,6 +126,7 @@ brew uninstall --force openvpn
 | 2026-09-23 | `brew upgrade` を実施。Jan を削除 |
 | 2026-09-23 | Chrome リモートデスクトップはアプリを残し、ログイン時の自動起動だけを止めた（普段は使っておらず、遠隔操作の入口を常駐させないため）。Ollama の自動起動設定（`~/Library/LaunchAgents/homebrew.mxcl.ollama.plist`）を退避し、ログイン時に常駐しないようにした |
 | 2026-09-23 | 別の Mac でのセットアップ中に、Keynote・Pages・Numbers の App Store の ID が変わっていて入らないことが分かった。Brewfile を新しい ID（iPhone 版と同じ ID）に更新 |
+| 2026-09-30 | Contentful CLI を Homebrew の `contentful-cli` で追加。あわせて実機にあるのに Brewfile に載っていなかった 1Password（本体）と AnkerWork を宣言した。herdr は入れたばかりのため試用中 |
 
 ### Chrome リモートデスクトップの自動起動を戻すとき
 
