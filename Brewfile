@@ -55,9 +55,9 @@ cask "cmux"           # AI エージェント向けターミナル
 cask "warp"
 
 # --- ブラウザ ---
-cask "google-chrome"
-cask "thebrowsercompany-dia"  # Dia
-cask "firefox"
+cask "google-chrome"          # 既定のブラウザ。Claude 拡張と Claude Code の --chrome 連携に使う（docs/apps.md）
+cask "thebrowsercompany-dia"  # Dia。既定を Chrome に移したため保留中（docs/apps.md）
+cask "firefox"                # 表示確認用
 
 # --- エディタ / AI IDE ---
 cask "visual-studio-code"

@@ -471,8 +471,10 @@ main() {
       2. gh auth login                                        GitHub にログイン
       3. ./install.sh check                                   設定できたかを確かめる
       4. Karabiner-Elements や AltTab を起動し、システム設定で許可する
-      5. Gyazo が未導入なら: open /opt/homebrew/Caskroom/gyazo/*/Gyazo-*.pkg
-      6. Slack・Notion・1Password などにログインする
+      5. 既定のブラウザを Chrome にする（システム設定 > デスクトップと Dock）
+      6. Chrome に Claude 拡張を入れ、docs/apps.md のとおり chrome://settings を設定する
+      7. Gyazo が未導入なら: open /opt/homebrew/Caskroom/gyazo/*/Gyazo-*.pkg
+      8. Slack・Notion・1Password などにログインする
 NEXT
 }
 
