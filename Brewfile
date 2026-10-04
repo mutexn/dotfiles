@@ -42,6 +42,8 @@ brew "ollama"         # ローカル LLM の実行環境
 brew "poppler"        # PDF ツール（pdftotext など）
 brew "marp-cli"       # Markdown からスライドを作る
 brew "contentful-cli" # Contentful の CLI
+brew "sanity"         # Sanity の CLI
+brew "cloudflare-wrangler" # Cloudflare Workers の CLI（wrangler）
 brew "bitwarden-cli"  # Bitwarden の CLI
 brew "mas"            # App Store アプリをコマンドで入れる
 
