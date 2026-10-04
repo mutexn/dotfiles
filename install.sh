@@ -238,7 +238,7 @@ step_macos() {
 }
 
 step_security() {
-  log "セキュリティ設定（ファイアウォール、ステルスモード、Touch ID で sudo、リモートデスクトップの自動起動停止）"
+  log "セキュリティ設定（ファイアウォール、ステルスモード、Touch ID で sudo）"
   if [[ $DRY_RUN -eq 1 ]]; then
     echo "    [dry-run] macos/security.sh を実行（管理者パスワードを聞かれる）"
   else
@@ -381,13 +381,6 @@ step_check() {
   "$fw" --getstealthmode 2>/dev/null | grep -qE 'enabled|is on' && pass "ステルスモードが有効" || fail "ステルスモードが無効（./install.sh security）"
   grep -qE '^auth[[:space:]]+sufficient[[:space:]]+pam_tid\.so' /etc/pam.d/sudo_local 2>/dev/null \
     && pass "Touch ID で sudo が有効" || fail "Touch ID で sudo が無効（./install.sh security）"
-  if [[ -f /Library/LaunchAgents/org.chromium.chromoting.plist ]]; then
-    launchctl print-disabled "gui/$(id -u)" 2>/dev/null | grep -q '"org.chromium.chromoting" => disabled' \
-      && pass "リモートデスクトップの自動起動が停止している" \
-      || fail "リモートデスクトップが自動起動する設定のまま（./install.sh security）"
-  else
-    skip "リモートデスクトップが入っていない"
-  fi
 
   log "Homebrew"
   if command -v brew >/dev/null; then

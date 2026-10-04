@@ -100,7 +100,6 @@ cask "docker-desktop"
 cask "cyberduck"      # FTP / S3 クライアント
 cask "local"          # WordPress ローカル環境
 cask "openvpn-connect"
-cask "chrome-remote-desktop-host"  # 遠隔操作の受け側。ログイン時の自動起動は止めている（docs/apps.md）
 
 # --- ユーティリティ ---
 cask "google-drive"
@@ -125,3 +124,4 @@ mas "iMovie", id: 408981434
 mas "LINE", id: 539883307
 mas "Goodnotes", id: 1444383602
 mas "Kindle", id: 302584613
+mas "Jump Desktop (RDP, VNC, Fluid)", id: 524141863  # 遠隔操作する側。買い切り。受け側の Connect は docs/apps.md

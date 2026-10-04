@@ -147,6 +147,86 @@ iPhone の既定は Safari のままにし、Chrome は同期のために併用�
 
 Chrome のピンは Arc や Dia と違い、リンクを踏んで移動しても元の URL に戻らない。挙動の差はここだけ。
 
+### 遠隔操作の選定（2026-10-04 決定）
+
+MacBook からこの Mac mini の画面を操作する手段として **Jump Desktop** を採用し、
+**Chrome リモートデスクトップは削除した**。遠隔操作の入口は 1 つに絞る。
+
+Mac mini がメインの作業機で、MacBook は外出先での臨時利用という前提での判断。
+
+#### 構成
+
+| 役割 | アプリ | 入れ方 |
+| --- | --- | --- |
+| 操作する側（クライアント） | Jump Desktop | `Brewfile` の `mas`（App Store の買い切り） |
+| 操作される側（ホスト） | Jump Desktop Connect | **`Brewfile` に入れない。**下記「ホスト側を宣言しない理由」 |
+
+個人利用なら無料プランで接続数に制限はなく、クライアントの買い切りだけで足りる。
+
+#### 比較した候補
+
+| 候補 | 判断 | 理由 |
+| --- | --- | --- |
+| **Jump Desktop** | **採用** | 独自の Fluid プロトコルが劣悪な回線向けに作られている。外出先という本命用途に合う。iPad からも使える |
+| Chrome リモートデスクトップ | **削除** | 実機で比べて Jump Desktop の方が良かった。常駐の入口を 2 つ持つ理由がない |
+| macOS 標準の画面共有 | 併用 | 家庭内 LAN では無料で最高画質。ただし高パフォーマンス画面共有は 4K で有線 75Mbps 程度を前提にしており、外出先の回線では実用にならない |
+| Screens 5 | 見送り | Mac ネイティブで作りは良いが VNC ベース。外出先の回線では Fluid に劣る見込み |
+| NoMachine | 見送り | 高速だが、キーボード配列の設定を持たない（公式フォーラムで明言） |
+
+用途の棲み分けはこうなる。
+
+| 用途 | 使うもの |
+| --- | --- |
+| 家庭内 LAN での画面共有 | macOS 標準の画面共有 |
+| 外出先からの画面共有 | Jump Desktop |
+| ターミナル作業 | SSH（画面を転送しないので、キーボード変換の問題が出ない） |
+
+#### ホスト側を宣言しない理由
+
+`Brewfile` はマシンを区別しないため、`jump-desktop-connect` を書くと
+**持ち歩く MacBook にも遠隔操作の受け側が常駐する**。これは避けたい。
+
+[toolchain.md](toolchain.md) の「管理しない + docs に手順」のカテゴリとして扱う。
+新しい Mac mini を建てるときは手で入れる。
+
+```bash
+brew install --cask jump-desktop-connect
+```
+
+入れたあと、アプリを起動してサインインし、システム設定 > プライバシーとセキュリティ で
+**画面収録**と**アクセシビリティ**を許可する。
+
+#### 常駐の仕組み
+
+Chrome リモートデスクトップより踏み込んだ常駐になる。
+
+| | `/Library/LaunchAgents` の Agent | `/Library/LaunchDaemons` の Service |
+| --- | --- | --- |
+| `RunAtLoad` | `false`（通知で呼ばれたときだけ） | **`true`** |
+| `KeepAlive` | なし | **`true`**（落ちても再起動される） |
+
+止めたい場合は次のとおり。
+
+```bash
+sudo launchctl disable system/com.p5sys.jump.connect.service
+```
+
+#### クライアントは App Store 版を使う
+
+Homebrew にも `jump-desktop` cask があるが、**App Store 版より大きく遅れている**
+（2026-10 時点で cask 9.1.9 に対して App Store 10.15.31）。
+有料アプリでライセンスが Apple アカウントに紐づく点でも、`mas` が正しい。
+
+#### キーボードショートカットについて
+
+Jump Desktop には **`macOS Shortcuts`** というセッション単位のトグルがあり、
+`Cmd+Tab` や `Ctrl+Space` などのシステムショートカットをホストへ送るかを決める。
+Mac 宛ては既定で ON。メニューの Remote > macOS Shortcuts、または `Ctrl+Cmd+←` で切り替える。
+
+入力ソースの切り替えは、Karabiner で状態を判定せず `Ctrl+Space` を送る形にしている
+（[terminal-and-input.md](terminal-and-input.md)）。判定を接続先の OS に任せるため、
+ローカル・ユニバーサルコントロール・Jump Desktop のすべてで同じ動作になる。
+
 ## Homebrew 以外で入れていたもの
 
 | アプリ | 今の入れ方 | 判断 | Brewfile での記述 |
@@ -207,7 +287,7 @@ brew uninstall --force openvpn
 | AI | Claude、ChatGPT、Typeless（音声入力） |
 | 入力・操作 | Raycast、AltTab、Karabiner-Elements、KeyboardCleanTool、Google 日本語入力 |
 | 仕事 | Slack、Zoom、Notion、Obsidian、Anki、Figma、Adobe Creative Cloud |
-| 開発 | gcloud CLI、Cyberduck、Chrome Remote Desktop（自動起動は停止）、gh、mise、direnv、uv、neovim、tmux、libpq、poppler、Contentful CLI |
+| 開発 | gcloud CLI、Cyberduck、Jump Desktop（遠隔操作）、gh、mise、direnv、uv、neovim、tmux、libpq、poppler、Contentful CLI |
 | ユーティリティ | AppCleaner、1Password（本体・CLI）、AnkerWork |
 
 ## 見直しの記録
@@ -226,17 +306,6 @@ brew uninstall --force openvpn
 | 2026-09-23 | 別の Mac でのセットアップ中に、Keynote・Pages・Numbers の App Store の ID が変わっていて入らないことが分かった。Brewfile を新しい ID（iPhone 版と同じ ID）に更新 |
 | 2026-09-24 | 既定のブラウザを Dia から Chrome に変更。Claude 拡張と Claude Code の連携を使うため。Dia は畳まず保留（「ブラウザの選定」） |
 | 2026-09-30 | Contentful CLI を Homebrew の `contentful-cli` で追加。あわせて実機にあるのに Brewfile に載っていなかった 1Password（本体）と AnkerWork を宣言した。herdr は入れたばかりのため試用中 |
+| 2026-10-04 | 遠隔操作を Jump Desktop に一本化し、Chrome リモートデスクトップを削除。自動起動を止める処理と検査も不要になったため `macos/security.sh` と `install.sh check` から外した（「遠隔操作の選定」） |
 
-### Chrome リモートデスクトップの自動起動を戻すとき
-
-止め方：`./install.sh security` が、ログイン時に起動する `org.chromium.chromoting`（`/Library/LaunchAgents`）を `launchctl disable` で無効にする。
-もう 1 つの `org.chromium.chromoting.broker`（`/Library/LaunchDaemons`）は、呼ばれたときだけ起動する作りなので、そのままでも常駐しない。
-
-使うときは、自動起動を有効に戻してから、ブラウザで remotedesktop.google.com/access を開いて遠隔操作を有効にする。
-
-```bash
-launchctl enable gui/$(id -u)/org.chromium.chromoting
-```
-
-新しい Mac では `./install.sh security` が自動で止めるため、手作業は不要。
 
