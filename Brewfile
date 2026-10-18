@@ -37,6 +37,10 @@ brew "tmux"           # ターミナル多重化
 brew "nnn"            # ファイラー
 brew "ranger"         # ファイラー
 
+# --- 遠隔アクセス（docs/apps.md「遠隔操作の選定」）---
+brew "tailscale"      # 拠点をまたぐ VPN。外出先から Mac mini に繋ぐ
+brew "mosh"           # 切れない SSH。回線が変わっても繋ぎ直らない
+
 # --- AI / その他 ---
 brew "ollama"         # ローカル LLM の実行環境
 brew "poppler"        # PDF ツール（pdftotext など）
