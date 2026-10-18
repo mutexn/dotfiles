@@ -39,7 +39,7 @@ zsh は macOS 標準のシェル。起動の種類に応じて、決まった順
 | `SHELL_SESSIONS_DISABLE=1` | macOS 標準のターミナル用のセッション保存（`~/.zsh_sessions`）を使わない |
 | `typeset -U path PATH` | PATH の重複を自動で取り除く。`exec zsh` や tmux でシェルを入れ子に起動しても PATH が伸びない |
 | `VOLTA_HOME` と `path+=(...)` | Volta を PATH の**末尾**に追加する。Volta は package.json の `volta` キーで Node を固定している旧プロジェクト用。撤去は見送り（[mise.md](mise.md)） |
-| `path=(/opt/homebrew/bin /opt/homebrew/sbin $path)` | Homebrew を**非ログインシェルにも**通す。下記「ssh 越しのコマンド実行で Homebrew が見つからない」 |
+| `path=("$XDG_DATA_HOME/mise/shims" /opt/homebrew/bin /opt/homebrew/sbin $path)` | mise の shims と Homebrew を**非ログインシェルにも**通す。下記「ssh 越しのコマンド実行で Homebrew が見つからない」 |
 
 Volta を末尾に置く理由：以前は先頭に追加していた。そのため `exec zsh` でシェルを開き直すと、
 Volta の pnpm が standalone 版より先に使われる不具合があった（2026-09-23 に修正）。
@@ -59,6 +59,23 @@ sshd が渡す PATH を再現すると、こうなる。
 env -i HOME="$HOME" USER="$USER" PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin \
   /bin/zsh -c 'echo $PATH; command -v mosh-server'
 ```
+
+#### mise の shims を Homebrew より前に置く
+
+Homebrew の PATH だけを足すと、今度は `node` `npm` `npx` `python3` が
+**Homebrew 版に奪われる**。非ログインシェルでは `mise activate` が走らないためである。
+
+| | `ssh host 'node -v'` |
+| --- | --- |
+| Homebrew だけを足した場合 | Homebrew の Node（`config/mise/config.toml` の指定と違う） |
+| shims を前に置いた場合 | mise の Node（指定どおり） |
+
+失敗が静かになる方向の変化で、[toolchain.md](toolchain.md) が退けた 2026-07 の pnpm 障害と同じ形になる。
+`~/.local/share/mise/shims` は、まさに非対話の実行のために mise が用意している仕組みなので、
+これを Homebrew より前に置く。対話シェルでは `mise activate` が `installs/` を先頭に差すため、
+shims が使われることはなく、優先順位も変わらない。
+
+#### brew shellenv を .zshenv に移してはいけない
 
 `.zshenv` で PATH を補って解決した。**`brew shellenv` 自体をこちらに移すのは駄目である。**
 `/etc/zprofile` の `path_helper` が PATH を組み直すとき、既にあった項目を
