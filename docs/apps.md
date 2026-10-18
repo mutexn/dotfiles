@@ -211,6 +211,41 @@ Chrome リモートデスクトップより踏み込んだ常駐になる。
 sudo launchctl disable system/com.p5sys.jump.connect.service
 ```
 
+#### 仮想オーディオドライバは外す（2026-10-15 決定）
+
+Connect は CoreAudio の HAL プラグインを 2 つ入れる。
+
+| ドライバ | 役割 |
+| --- | --- |
+| `JumpAudio.driver` | ホストが鳴らす音を横取りしてクライアントへ送る |
+| `JumpAudioMic.driver` | クライアントのマイクをホスト側のアプリにマイクとして見せる |
+
+macOS にはシステムの音声出力をそのまま録る API がないため、遠隔操作ソフトは
+仮想デバイスを作ってそこに音を流させ、それを横取りして送る。
+横取りするには**そのデバイスが既定の出力になっている必要がある**。
+つまり既定が `JumpAudio` に変わるのは不具合ではなく仕組みそのもので、
+切断時の戻しが失敗すると、接続していないときもスピーカーから音が出なくなる。
+
+音声が必要なのは、遠隔操作中に向こう側の音を聞くか、向こう側のアプリにマイクを渡すときだけ。
+席にいるときは Mac mini のスピーカーで直接聞き、外出時はターミナルを SSH と mosh で触るため、
+どちらの用途もない。外出先の通話も、Mac mini を経由させず MacBook から直接出るほうが遅延が少ない。
+
+```bash
+sudo rm -rf /Library/Audio/Plug-Ins/HAL/JumpAudio.driver \
+            /Library/Audio/Plug-Ins/HAL/JumpAudioMic.driver
+sudo killall coreaudiod
+```
+
+`coreaudiod` の再起動で一瞬すべての音が途切れるため、再生中・通話中は避ける。
+画面共有・キーボード・マウス・クリップボードには影響しない。
+戻したいときは `brew reinstall --cask jump-desktop-connect`。
+
+同じディレクトリの `ParrotAudioPlugin.driver` は `com.apple.audio` の Apple 製で、
+Jump とは無関係なので触らない。
+
+**`jump-desktop-connect` は `auto_updates` 付きで自己更新する。**
+更新のあとで既定の出力が再び `JumpAudio` になっていたら、上のコマンドをもう一度実行する。
+
 #### クライアントは App Store 版を使う
 
 Homebrew にも `jump-desktop` cask があるが、**App Store 版より大きく遅れている**
@@ -307,5 +342,6 @@ brew uninstall --force openvpn
 | 2026-09-24 | 既定のブラウザを Dia から Chrome に変更。Claude 拡張と Claude Code の連携を使うため。Dia は畳まず保留（「ブラウザの選定」） |
 | 2026-09-30 | Contentful CLI を Homebrew の `contentful-cli` で追加。あわせて実機にあるのに Brewfile に載っていなかった 1Password（本体）と AnkerWork を宣言した。herdr は入れたばかりのため試用中 |
 | 2026-10-04 | 遠隔操作を Jump Desktop に一本化し、Chrome リモートデスクトップを削除。自動起動を止める処理と検査も不要になったため `macos/security.sh` と `install.sh check` から外した（「遠隔操作の選定」） |
+| 2026-10-15 | Jump Desktop Connect の仮想オーディオドライバ 2 つを削除。既定の出力デバイスを奪われるのを止めた。音声転送は使わないため（「遠隔操作の選定」） |
 
 
