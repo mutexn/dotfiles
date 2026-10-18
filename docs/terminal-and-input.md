@@ -26,6 +26,45 @@ Ghostty は起動時にこのファイルを読む。変更後は ⌘⇧, で再
 | `macos-titlebar-style = tabs` | タブをタイトルバーに統合する |
 | `macos-titlebar-proxy-icon = hidden` | タイトルバーのフォルダアイコンを隠す |
 | `desktop-notifications = true` | ターミナル内のプログラムから macOS の通知を出せるようにする |
+| `shell-integration-features = ssh-env,ssh-terminfo` | SSH 先で TERM が壊れないようにする。既定では両方とも無効（下の「SSH 先でキー入力が壊れる問題」） |
+
+### SSH 先でキー入力が壊れる問題（2026-10-19 解決）
+
+MacBook から `ssh` で Mac mini に入ると、**履歴の候補がそのまま文字として入ってしまい、
+Delete キーも誤動作する**状態だった。
+
+原因は terminfo の置き場所にある。Ghostty は `TERM=xterm-ghostty` を使うが、
+その定義は**アプリバンドルの中にしかない**。
+
+```
+TERMINFO=/Applications/Ghostty.app/Contents/Resources/terminfo
+```
+
+この `TERMINFO` を設定するのは Ghostty がシェルを起動するときだけで、
+sshd が起動するシェルには引き継がれない。一方 `ssh` は `TERM` だけを接続先に送る。
+
+| 段階 | 状態 |
+| --- | --- |
+| 手元の Ghostty | `TERM=xterm-ghostty`、`TERMINFO` も設定済み |
+| `ssh` が送るもの | **`TERM` だけ** |
+| 接続先のシェル | `TERM=xterm-ghostty` だが `TERMINFO` がなく、`/usr/share/terminfo` にも定義がない |
+
+定義が引けないと、zle はキー送出と画面制御の能力を判断できない。
+zsh-autosuggestions の薄い表示を消せなくなり（候補が確定文字のように見える）、
+`kbs` と `kdch1` が不明なため Delete キーも狂う。
+
+Ghostty 1.3.1 には対策が 2 つあり、**どちらも既定では無効**になっている。
+
+| 機能 | 働き |
+| --- | --- |
+| `ssh-terminfo` | 接続先に定義がなければ `infocmp` と `tic` で転送して入れる。一度入れたら記録して繰り返さない |
+| `ssh-env` | `TERM` を `xterm-256color` に変換して送る。`COLORTERM` なども引き継ぐ |
+
+公式の説明どおり**併用する**。`ssh-terminfo` が定義を入れて `xterm-ghostty` をそのまま使い、
+失敗したら `ssh-env` が `xterm-256color` に落とす。前提の `infocmp`（手元）と `tic`（接続先）は
+どちらも macOS の `/usr/bin` にある。
+
+転送の記録は `ghostty +ssh-cache` で確認・削除できる。
 
 ## Karabiner-Elements（config/karabiner/）
 

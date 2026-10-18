@@ -27,6 +27,11 @@ keybind = global:ctrl+@=toggle_quick_terminal
 # 非アクティブペインを暗く
 unfocused-split-opacity = 0.7
 
+# SSH 先で TERM が壊れないようにする（docs/terminal-and-input.md）
+# xterm-ghostty の定義は Ghostty.app の中にしかなく、ssh は TERM しか送らない。
+# ssh-terminfo が接続先に定義を転送し、失敗したら ssh-env が xterm-256color に落とす
+shell-integration-features = ssh-env,ssh-terminfo
+
 # タイトルバーの描画方式。macOS ネイティブのタブバーに任せる
 # （tabs は Ghostty の自前描画で、macOS 27 ではタブ名が空欄や "..." になる）
 macos-titlebar-style = transparent
