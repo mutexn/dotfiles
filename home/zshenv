@@ -25,3 +25,10 @@ export SHELL_SESSIONS_DISABLE=1
 # mise と standalone pnpm を優先するため、PATH の末尾に追加する
 export VOLTA_HOME="$HOME/.volta"
 path+=("$VOLTA_HOME/bin")
+
+# mise の shims と Homebrew の bin を、非ログインシェルにも通す（docs/zsh.md）
+# ssh 経由のコマンド実行では .zprofile も .zshrc も読まれないため、
+# Homebrew（mosh-server など）も mise activate も効かない。
+# shims を Homebrew より前に置かないと、node が Homebrew 版に奪われる。
+# brew shellenv をここに移すのは駄目で、path_helper に末尾へ飛ばされる
+path=("$XDG_DATA_HOME/mise/shims" /opt/homebrew/bin /opt/homebrew/sbin $path)

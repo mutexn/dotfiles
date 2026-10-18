@@ -179,7 +179,7 @@ Mac mini がメインの作業機で、MacBook は外出先での臨時利用と
 | --- | --- |
 | 家庭内 LAN での画面共有 | macOS 標準の画面共有 |
 | 外出先からの画面共有 | Jump Desktop |
-| ターミナル作業 | SSH（画面を転送しないので、キーボード変換の問題が出ない） |
+| ターミナル作業 | Tailscale + mosh（画面を転送しないので、キーボード変換の問題が出ない。下記「ターミナルは Tailscale と mosh で繋ぐ」） |
 
 #### ホスト側を宣言しない理由
 
@@ -195,6 +195,46 @@ brew install --cask jump-desktop-connect
 
 入れたあと、アプリを起動してサインインし、システム設定 > プライバシーとセキュリティ で
 **画面収録**と**アクセシビリティ**を許可する。
+
+#### ターミナルは Tailscale と mosh で繋ぐ（2026-10-19）
+
+画面を転送しないので、キーボード配列の変換も遅延も関係ない。
+外出先での開発はこちらが本線で、Jump Desktop は Figma やブラウザなど
+**GUI でしかできない作業に限る**。
+
+| 層 | 使うもの | 役割 |
+| --- | --- | --- |
+| 経路 | `tailscale` | 固定 IP もポート開放もなしに拠点をまたぐ。WireGuard ベース |
+| 接続 | `mosh` | UDP で繋ぎ、ローカルエコーで打鍵を即座に描く。回線が変わっても繋ぎ直さない |
+| 画面 | `herdr` | 接続が切れてもセッションは残る。`herdr machine` で別マシンから繋ぎ直せる |
+
+`ssh` ではなく `mosh` を使う理由は 2 つある。打鍵のたびに往復を待たないので
+体感が速いこと、スリープや回線切り替えでセッションが落ちないことである。
+
+##### mosh が「見つからない」と言われたら
+
+**`mosh-server` が PATH にないのが原因**で、これに 1 度はまった（2026-10-19 に解決）。
+
+`mosh` は接続先で `zsh -c 'mosh-server new ...'` を実行する。
+これは**非ログイン・非対話**のシェルなので `.zprofile` も `.zshrc` も読まれない。
+`/opt/homebrew/bin` は `home/zprofile` の `brew shellenv` でしか通っていなかったため、
+`mosh-server` が見つからなかった。
+
+`.zshenv` は読まれるので、そこで PATH を補って解決した（[zsh.md](zsh.md)）。
+`brew shellenv` 自体を `.zshenv` に移すのは駄目で、`/etc/zprofile` の `path_helper` が
+PATH を組み直すときに Homebrew が末尾へ飛ばされる。
+
+それでも繋がらない場合は、ファイアウォールで **UDP 60000〜61000** が塞がれていないかを見る。
+
+##### tailscale の更新には手作業が必要
+
+`brew services` で常駐させると、`tailscaled` の関連ファイルが `root:admin` 所有になる。
+そのため `brew upgrade` と `brew uninstall` が権限で失敗することがあり、
+`sudo rm` で手で片付ける必要がある。常駐の解除は次のとおり。
+
+```bash
+sudo brew services stop tailscale
+```
 
 #### 常駐の仕組み
 
@@ -343,5 +383,6 @@ brew uninstall --force openvpn
 | 2026-09-30 | Contentful CLI を Homebrew の `contentful-cli` で追加。あわせて実機にあるのに Brewfile に載っていなかった 1Password（本体）と AnkerWork を宣言した。herdr は入れたばかりのため試用中 |
 | 2026-10-04 | 遠隔操作を Jump Desktop に一本化し、Chrome リモートデスクトップを削除。自動起動を止める処理と検査も不要になったため `macos/security.sh` と `install.sh check` から外した（「遠隔操作の選定」） |
 | 2026-10-15 | Jump Desktop Connect の仮想オーディオドライバ 2 つを削除。既定の出力デバイスを奪われるのを止めた。音声転送は使わないため（「遠隔操作の選定」） |
+| 2026-10-19 | 外出先のターミナル経路を Tailscale + mosh + herdr に定め、`tailscale` と `mosh` を Brewfile に宣言。あわせて `mosh-server` が PATH で見つからない問題と、SSH 先で terminfo が引けない問題を直した（「遠隔操作の選定」、[terminal-and-input.md](terminal-and-input.md)） |
 
 
